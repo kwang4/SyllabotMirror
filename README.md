@@ -1,3 +1,3 @@
 # Syllabot
 
-*Initialized with basic discord bot skeleton, one registered ping command
+* Initialized with basic discord bot skeleton, one registered ping command
