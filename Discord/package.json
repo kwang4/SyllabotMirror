@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kwang4/SusBot#readme",
   "dependencies": {
+    "axios": "^1.5.0",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1"
   }

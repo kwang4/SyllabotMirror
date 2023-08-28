@@ -33,8 +33,9 @@ for(const folder of commandFolders)
 const rest = new REST().setToken(token);
 (async () => {
 	try {
-    console.log("Refreshing slash commands...");
+    console.log("Refreshing slash commands...");    
     const data = await rest.put(Routes.applicationCommands(clientId),{body:commands});
+    
 
     console.log(`Successfully reloaded ${data.length} application (/) commands!`);
 }
