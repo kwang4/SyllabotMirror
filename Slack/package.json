@@ -1,0 +1,15 @@
+{
+  "name": "slack_syllabot",
+  "version": "1.0.0",
+  "description": "Slack bot for Syllabot project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/bolt": "^3.13.3",
+    "dotenv": "^16.3.1"
+  }
+}
