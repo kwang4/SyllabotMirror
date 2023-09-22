@@ -6,7 +6,13 @@ const router = express.Router();
 
 router.use(express.json());
 
-// get a specific section of a course
+/** 
+ * Get a specific section of a course, with the given section id and course id
+ * params: 
+ *  courseid
+ *  sectionid
+ * returns  section of course with given sectionid and courseid
+ */ 
 router.get("/:sectionid",(req,res,next)=>{
     res.send("This section request")
 })

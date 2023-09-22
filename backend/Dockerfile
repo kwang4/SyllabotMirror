@@ -19,10 +19,10 @@ COPY ./package*.json .
 
 RUN npm install
 
-ENV PORT 8000
+ENV PORT 3000
 
 # Copy all files from current directory to working dir in image
 COPY . .  
 
-EXPOSE 8000
+EXPOSE 3000
 CMD [ "npm", "start"]

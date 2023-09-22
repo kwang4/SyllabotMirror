@@ -5,6 +5,7 @@ const courseRouter = require('./api/courseAPI.js');
 
 const app = express();
 const PORT = process.env.PORT;
+app.use(express.json())
 
 app.use('/course/:courseid/section', sectionRouter);
 app.use('/course', courseRouter);
