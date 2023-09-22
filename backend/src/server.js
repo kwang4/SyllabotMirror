@@ -1,17 +1,18 @@
-'use strict';
-
 const express = require('express');
+
+const sectionRouter = require('./api/sectionAPI.js');
+const courseRouter = require('./api/courseAPI.js');
 
 const app = express();
 const PORT = process.env.PORT;
 
-const apiRouter = require('./APIRoutes');
-app.use(apiRouter);
+app.use('/course/:courseid/section', sectionRouter);
+app.use('/course', courseRouter);
 
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!');
   })
       
 
