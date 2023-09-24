@@ -1,14 +1,15 @@
 const express = require('express');
 
-const sectionRouter = require('./api/sectionAPI.js');
-const courseRouter = require('./api/courseAPI.js');
-
+// const sectionRouter = require('./api/sectionAPI.js');
+// const courseRouter = require('./api/courseAPI.js');
+const apirouter = require('./APIRoutes.js');
 const app = express();
 const PORT = process.env.PORT;
-app.use(express.json())
+app.use(express.json());
+app.use('/api', apirouter)
 
-app.use('/course/:courseid/section', sectionRouter);
-app.use('/course', courseRouter);
+// app.use('/course/:courseid/section', sectionRouter);
+// app.use('/course', courseRouter);
 
 app.use(express.urlencoded({extended: true}));
 
