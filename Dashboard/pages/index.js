@@ -1,40 +1,43 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
+import NcsuHeader from '../components/NcsuHeader.js';
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Kwang App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>Syllabot</title>
+        <link rel="icon" href="/react.ico" />
       </Head>
+      <NcsuHeader>Syllabot</NcsuHeader>
+      <main className={styles.mainStyle}>
+        
+        <h2 className={styles.title}>
+          Courses
+        </h2>
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js! HEE HEE HAW</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
+            <h3>CSC 492 &rarr;</h3>
+            <p>I.Dominguez, M. Heil</p>
           </a>
 
           <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+            <h3>CSC 342</h3>
+            <p>I. Dominguez</p>
           </a>
 
           <a
             href="https://github.com/vercel/next.js/tree/canary/examples"
             className={styles.card}
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
+            <h3>CSC 316 &rarr;</h3>
+            <p>IDK. King</p>
           </a>
 
           <a
@@ -46,6 +49,25 @@ export default function Home() {
               Instantly deploy your Next.js site to a public URL with Vercel.
             </p>
           </a>
+          <a
+            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            className={styles.card}
+          >
+            <h3>Deploy &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+          <a
+            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            className={styles.card}
+          >
+            <h3>Deploy &rarr;</h3>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+          
         </div>
       </main>
 
@@ -56,7 +78,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
+          <img src="/react.png" alt="Big Chungus" className={styles.logo} />
         </a>
       </footer>
 
