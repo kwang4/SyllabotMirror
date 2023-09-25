@@ -27,11 +27,12 @@ app.command('/ask', async({command, ack, say}) => {
     // Perform an API call
     //console.log(JSON.stringify(command))
     await say(`Q: ${command.text}\n\nA: This is the answer to your question!`)
-  } catch {
+  } catch(e) {
     try {
+      console.log(`Error 1: ${e}`)
       await say("There was an error sending your message, please try again");
-    } catch {
-      console.log('Error')
+    } catch(e) {
+      console.log(`Error 2: ${e}`)
     }
   }
 });
