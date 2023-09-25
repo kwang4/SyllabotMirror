@@ -4,6 +4,9 @@ import Link from 'next/link';
 import NcsuHeader from '../components/NcsuHeader.js';
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function Home() {
   const router = useRouter();
@@ -19,7 +22,6 @@ export default function Home() {
         <h2 className={styles.title}>
           Courses
         </h2>
-
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
@@ -40,33 +42,24 @@ export default function Home() {
             <p>IDK. King</p>
           </a>
 
+          <a href="https://nextjs.org/docs" className={styles.card}>
+            <h3>CSC 492 &rarr;</h3>
+            <p>I.Dominguez, M. Heil</p>
+          </a>
+
+          <a href="https://nextjs.org/learn" className={styles.card}>
+            <h3>CSC 342</h3>
+            <p>I. Dominguez</p>
+          </a>
+
           <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://github.com/vercel/next.js/tree/canary/examples"
             className={styles.card}
           >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
+            <h3>CSC 316 &rarr;</h3>
+            <p>IDK. King</p>
           </a>
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+
           
         </div>
       </main>
