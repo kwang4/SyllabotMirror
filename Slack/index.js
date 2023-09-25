@@ -20,3 +20,18 @@ const app = new App({
 app.message('hello', async ({message, say}) => {
   await say(`Hello <@${message.user}>!`);
 })
+
+app.command('/ask', async({command, ack, say}) => {
+  try {
+    ack();
+    // Perform an API call
+    //console.log(JSON.stringify(command))
+    await say(`Q: ${command.text}\n\nA: This is the answer to your question!`)
+  } catch {
+    try {
+      await say("There was an error sending your message, please try again");
+    } catch {
+      console.log('Error')
+    }
+  }
+});
