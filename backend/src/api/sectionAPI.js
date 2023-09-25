@@ -13,8 +13,8 @@ router.use(express.json());
  *  sectionid
  * returns  section of course with given sectionid and courseid
  */ 
-router.get("/:sectionid",(req,res,next)=>{
-    res.send("This section request")
+router.get("/:sectionid/course/:courseid",(req,res,next)=>{
+    res.json({'sectionid':req.params.sectionid, 'courseid':req.params.courseid});
 })
 
 // remove a specific section of a course
