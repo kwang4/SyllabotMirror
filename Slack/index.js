@@ -16,23 +16,22 @@ const app = new App({
   console.log('App is running');
 })();
 
-// Response to messages that contain hello
-app.message('hello', async ({message, say}) => {
-  await say(`Hello <@${message.user}>!`);
-})
+app.command('/ask', async({command, ack, client}) => {
 
-app.command('/ask', async({command, ack, say}) => {
-  try {
-    ack();
-    // Perform an API call
-    //console.log(JSON.stringify(command))
-    await say(`Q: ${command.text}\n\nA: This is the answer to your question!`)
-  } catch(e) {
-    try {
-      console.log(`Error 1: ${e}`)
-      await say("There was an error sending your message, please try again");
-    } catch(e) {
-      console.log(`Error 2: ${e}`)
-    }
-  }
+  // Need to add try/catch error handling scenarios, but this is good skeleton
+  // Reworked from using built in say/respond functions to using client
+
+  // The parameter is what prevents user message from being deleted
+  await ack({response_type: 'in_channel'});
+
+  // TODO Make API call to get response
+
+  //console.log(JSON.stringify(command))
+  var responseMessage = `This is the answer to your question!`
+
+  // Send message back
+  await client.chat.postMessage({
+    channel: command.channel_id,
+    text: responseMessage
+  });
 });
