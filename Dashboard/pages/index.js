@@ -2,66 +2,48 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 import NcsuHeader from '../components/NcsuHeader.js';
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import ClassCard from '../components/ClassCard';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
   const router = useRouter();
+
+  const classData = [ 
+      {name: 'CSC 492',instructor:'M. Heil, I. Dominguez'},
+      {name: 'CSC 342', instructor: 'I. Dominguez'},
+      {name: 'CSC 316', instructor: 'J. King'},
+      {name: 'CSC 492',instructor:'M. Heil, I. Dominguez'},
+      {name: 'CSC 342', instructor: 'I. Dominguez'},
+      {name: 'CSC 316', instructor: 'J. King'}, 
+  ];
+
+
   return (
     <div className={styles.container}>
       <Head>
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>Syllabot</title>
         <link rel="icon" href="/react.ico" />
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
-      <main className={styles.mainStyle}>
-        
-        <h2 className={styles.title}>
+      <h2 className={styles.title}>
           Courses
         </h2>
+      <main className={styles.mainStyle}>
+        
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>CSC 492 &rarr;</h3>
-            <p>I.Dominguez, M. Heil</p>
-          </a>
+<Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>CSC 342</h3>
-            <p>I. Dominguez</p>
-          </a>
+    {classData.map((card,index)=>(
+      <Grid key={index} xs={6} sm={4}>
+          <ClassCard classTitle={card.name} classInstructors={card.instructor}></ClassCard>
+        </Grid>
+    ))}
+</Grid>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>CSC 316 &rarr;</h3>
-            <p>IDK. King</p>
-          </a>
 
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>CSC 492 &rarr;</h3>
-            <p>I.Dominguez, M. Heil</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>CSC 342</h3>
-            <p>I. Dominguez</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>CSC 316 &rarr;</h3>
-            <p>IDK. King</p>
-          </a>
-
-          
-        </div>
       </main>
 
       <footer>
@@ -76,8 +58,8 @@ export default function Home() {
       </footer>
 
       <style jsx>{`
+      
         main {
-          padding: 5rem 0;
           flex: 1;
           display: flex;
           flex-direction: column;

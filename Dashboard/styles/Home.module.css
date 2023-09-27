@@ -1,8 +1,9 @@
 .mainStyle {
   padding: 0px;
   width:100%;
-  background-color: rgb(237, 237, 237);
 }
+
+
 
 .container {
   min-height: 100vh;
@@ -96,4 +97,19 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+.cardStyle{
+  width:25vh;
+  height:25vh;
+  align-items: center;
+  border-radius: 50px;
+  padding: 2rem;
+}
+
+.cardGrid{
+  width: 100%;
+  margin: 0 auto;
+  padding:4rem;
+  justify-content: center;
 }
