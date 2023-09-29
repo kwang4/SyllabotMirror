@@ -2,7 +2,7 @@
  * Endpoints to maintain a section and its roster
  */
 const express = require('express');
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
 router.use(express.json());
 
@@ -13,12 +13,14 @@ router.use(express.json());
  *  sectionid
  * returns  section of course with given sectionid and courseid
  */ 
-router.get("/:sectionid/course/:courseid",(req,res,next)=>{
-    res.json({'sectionid':req.params.sectionid, 'courseid':req.params.courseid});
+router.get("/:sectionNum",(req,res,next)=>{
+    console.log("URL: " + req.originalUrl)
+    console.log("Request parameters: " + JSON.stringify(req.params))
+    res.json({'sectionNum':req.params.sectionNum, 'courseid':req.params.courseid});
 })
 
 // remove a specific section of a course
-router.delete("/:sectionid", (req,res,next)=>{
+router.delete("/:sectionNum", (req,res,next)=>{
     res.send("This section request")
 })
 
@@ -31,7 +33,7 @@ router.post('/'), (req,res) => {
 /**
  * param: csv file
  */
-router.post("/:sectionid/roster", (req,res,next)=>{
+router.post("/:sectionNum/roster", (req,res,next)=>{
     res.send("Set my roster")
 })
 
@@ -39,7 +41,7 @@ router.post("/:sectionid/roster", (req,res,next)=>{
 /**
  * param csv file
  */
-router.put("/:sectionid/roster", (req,res,next)=>{
+router.put("/:sectionNum/roster", (req,res,next)=>{
     res.send("Set my roster")
 })
 
