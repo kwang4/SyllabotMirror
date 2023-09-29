@@ -1,23 +1,28 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
+const axios = require('axios');
 import NcsuHeader from '../components/NcsuHeader.js';
 import ClassCard from '../components/ClassCard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
   const router = useRouter();
+  const [classDat,setClassDat] = useState([]);
 
-  const classData = [ 
-      {name: 'CSC 492',instructor:'M. Heil, I. Dominguez'},
-      {name: 'CSC 342', instructor: 'I. Dominguez'},
-      {name: 'CSC 316', instructor: 'J. King'},
-      {name: 'CSC 492',instructor:'M. Heil, I. Dominguez'},
-      {name: 'CSC 342', instructor: 'I. Dominguez'},
-      {name: 'CSC 316', instructor: 'J. King'}, 
-  ];
+  useEffect(()=>{
+
+    async function fetchClassData()
+    {
+      const response = await axios.get('http://localhost:8000/api/semesters/1/courses').catch(error=>{console.log(error)});
+    setClassDat(response.data);
+    console.log(response.data);
+    }
+    fetchClassData();
+  },[]);
+
 
 
   return (
@@ -36,11 +41,11 @@ export default function Home() {
 
 <Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-    {classData.map((card,index)=>(
-      <Grid key={index} xs={6} sm={4}>
-          <ClassCard classTitle={card.name} classInstructors={card.instructor}></ClassCard>
-        </Grid>
-    ))}
+{classDat.map((card, index) => (
+            <Grid key={index} xs={6} sm={4}>
+              <ClassCard classTitle={card.CourseName} classInstructors={card.instructor}></ClassCard>
+            </Grid>
+          ))}
 </Grid>
 
 
