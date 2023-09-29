@@ -3,6 +3,8 @@ import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 import NcsuHeader from '../components/NcsuHeader.js';
 import OptionCard from '../components/OptionCard';
+import DiscordCard from '../components/DiscordCard';
+import SlackCard from '../components/SlackCard';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -30,7 +32,7 @@ export default function Home() {
           Course Info  
         </h2>
         <h2>
-          <Link href="/">Back Home</Link>
+          <Link href="/">Go Back</Link>
         </h2>
       <main className={styles.mainStyle}>
         
@@ -43,6 +45,10 @@ export default function Home() {
         </Grid>
     ))}
 </Grid>
+<h2></h2>
+<DiscordCard></DiscordCard>
+<h2></h2>
+<SlackCard></SlackCard>
 
 
       </main>
