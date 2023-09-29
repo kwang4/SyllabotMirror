@@ -24,7 +24,7 @@ router.get("/:courseid",(req,res,next)=>{
     console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
-    res.json({'CourseName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023'});
+    res.json({'CourseName':'CSC 492', 'courseid':req.params.courseid, 'semester':{'season':'fall', 'year':'2023'}});
 })
 
 /**

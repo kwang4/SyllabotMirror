@@ -19,19 +19,22 @@ router.get("/:sectionNum",(req,res,next)=>{
     res.json({'sectionNum':req.params.sectionNum, 'courseid':req.params.courseid});
 })
 
-// remove a specific section of a course
+/**
+ * remove a specific section of a course
+ */
 router.delete("/:sectionNum", (req,res,next)=>{
     res.send("This section request")
 })
 
-// add a section to a course
+/**
+ * Add a section to a course with the specified section number
+ */
 router.post('/'), (req,res) => {
     res.json(req.body);
 }
 
-// add a roster to a section
 /**
- * param: csv file
+ * Add a roster to a course given a specific section
  */
 router.post("/:sectionNum/roster", (req,res,next)=>{
     res.send("Set my roster")
@@ -39,7 +42,7 @@ router.post("/:sectionNum/roster", (req,res,next)=>{
 
 // update a roster for a course
 /**
- * param csv file
+ * Update a roster for a course specific course
  */
 router.put("/:sectionNum/roster", (req,res,next)=>{
     res.send("Set my roster")
