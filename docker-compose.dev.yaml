@@ -1,0 +1,23 @@
+services:
+  proxy:
+    build: ./proxy
+    restart: unless-stopped
+    volumes:
+      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
+    ports:
+      - "443:443"
+      - "80:80"
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    volumes:
+      - /app/src:./backend/src
+    environment:
+      - PORT=80
+    env_file: 
+      - .env 
+    ports:
+    - "443:443"
+    - "80:80"
+  
