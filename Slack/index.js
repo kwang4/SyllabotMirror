@@ -29,7 +29,7 @@ app.command('/ask', async({command, ack, client}) => {
   //console.log(JSON.stringify(command))
   var responseMessage = `This is the answer to your question!`
 
-  // Send message back
+  // Send message back 
   await client.chat.postMessage({
     channel: command.channel_id,
     text: responseMessage
