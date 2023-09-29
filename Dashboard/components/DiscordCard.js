@@ -8,23 +8,24 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-export default function OptionCard({optionTitle}) {
+export default function DiscordCard() {
     return (
       <Card variant='outlined' sx={{
         display:'flex', 
-        minWidth:180,
+        minWidth:14/18,
         minHeight:80,
         borderRadius:'90px', 
         padding:'0.3rem',
         alignItems:'center',
         textAlign:'center',
-        outlineWidth:'5px'
+        outlineWidth:'5px',
+        backgroundColor:'#7289d9'
          }}>
         <CardActionArea>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {optionTitle}
-            </Typography>
+            <CardMedia sx={{ height: 75, width: 75, ml: 1/2}} image="/discordicon.png"><Typography gutterBottom variant="h5" component="div" color="white" sx={{minWidth: 500, ml:40, pt:2.5}}>
+              Add Bot to Discord
+            </Typography></CardMedia>
           </CardContent>
         </CardActionArea>
       </Card>
