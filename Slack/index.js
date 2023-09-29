@@ -27,7 +27,7 @@ app.command('/ask', async({command, ack, client}) => {
   // TODO Make API call to get response
 
   //console.log(JSON.stringify(command))
-  var responseMessage = `This is the answer to your question!`
+  var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question!`
 
   // Send message back 
   await client.chat.postMessage({
