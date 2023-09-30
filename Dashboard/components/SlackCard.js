@@ -11,21 +11,22 @@ import '@fontsource/roboto/700.css';
 export default function DiscordCard() {
     return (
       <Card variant='outlined' sx={{
-        display:'flex', 
-        minWidth:14/18,
-        minHeight:80,
-        borderRadius:'90px', 
-        padding:'0.3rem',
-        alignItems:'center',
-        textAlign:'center',
-        outlineWidth:'5px',
-        backgroundColor:'white'
+        display: 'flex', 
+        minWidth: 14/18,
+        minHeight: 80,
+        borderRadius: '90px', 
+        padding: '0.3rem',
+        alignItems: 'center',
+        textAlign: 'center',
+        outlineWidth: '5px',
+        backgroundColor: 'white'
          }}>
         <CardActionArea>
-          <CardContent>
-            <CardMedia sx={{ height: 70, width: 70, ml: 2}} image="/slackicon.png"><Typography gutterBottom variant="h5" component="div" color="black" sx={{minWidth: 500, ml:39, pt:2.5}}>
+          <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
+            <CardMedia sx={{ height: 70, width: 70}} image="/slackicon.png"/>
+            <Typography gutterBottom variant="h5" component="div" color="black" sx={{ ml: 2, flexGrow: 1 }}>
               Add Bot to Slack
-            </Typography></CardMedia>
+            </Typography>
           </CardContent>
         </CardActionArea>
       </Card>

@@ -1,16 +1,17 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import styles from '../../styles/Home.module.css';
 import Link from 'next/link';
-import NcsuHeader from '../components/NcsuHeader.js';
-import OptionCard from '../components/OptionCard';
-import DiscordCard from '../components/DiscordCard';
-import SlackCard from '../components/SlackCard';
+import NcsuHeader from '../../components/NcsuHeader.js';
+import OptionCard from '../../components/OptionCard';
+import DiscordCard from '../../components/DiscordCard';
+import SlackCard from '../../components/SlackCard';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Home() {
   const router = useRouter();
+  const { courseName } = router.query;
 
   const optionData = [ 
       {name: 'Manage Resources'},
@@ -29,7 +30,7 @@ export default function Home() {
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
       <h2 className={styles.title}>
-          Course Info  
+          Course Info {courseName} 
         </h2>
         <h2>
           <Link href="/">Go Back</Link>
@@ -59,7 +60,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{' '} 
           <img src="/react.png" alt="Big Chungus" className={styles.logo} />
         </a>
       </footer>

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
-import Link from 'next/link';
 const axios = require('axios');
+import Link from 'next/link'
 import NcsuHeader from '../components/NcsuHeader.js';
 import ClassCard from '../components/ClassCard';
 import { useEffect, useState } from 'react';
@@ -11,7 +11,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 export default function Home() {
   const router = useRouter();
   const [classDat,setClassDat] = useState([]);
-
   useEffect(()=>{
 
     async function fetchClassData()
@@ -42,10 +41,12 @@ export default function Home() {
 <Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
 {classDat.map((card, index) => (
-            <Grid key={index} xs={6} sm={4}>
-              <ClassCard classTitle={card.CourseName} classInstructors={card.instructor}></ClassCard>
-            </Grid>
-          ))}
+  <Grid key={index} xs={6} sm={4}>
+    <Link href={`/course-info/${card.CourseName}`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle={card.CourseName} classInstructors={card.instructor} />
+    </Link>
+  </Grid>
+))}
 </Grid>
 
 
