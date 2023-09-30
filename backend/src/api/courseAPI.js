@@ -5,6 +5,8 @@
 const express = require('express');
 const router = express.Router();
 
+let courses = require('../data/courses.json')
+
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
@@ -22,9 +24,17 @@ router.use(express.urlencoded({ extended: true }));
 router.get("/:courseid",(req,res,next)=>{
     console.log("URL: " + req.originalUrl)
     console.log("Request parameters: " + JSON.stringify(req.params))
+
+    const courseId = req.params.courseid; // Get call parameter
+    let course = courses.find(course => course.courseid == courseId); // Check for courseid in db, stops at first instance
+    if (course) {
+        res.json(course);
+    } else {
+        res.status(404).json({error: "Course not found"})
+    }
     // Check if id exists
     // else return 404 error
-    res.json({'CourseName':'CSC 492', 'courseid':req.params.courseid, 'semester':{'season':'fall', 'year':'2023'}});
+    //res.json({'CourseName':'CSC 492', 'courseid':req.params.courseid, 'semester':{'season':'fall', 'year':'2023'}});
 })
 
 /**
@@ -33,11 +43,7 @@ router.get("/:courseid",(req,res,next)=>{
 router.get("/",(req,res,next)=>{
     // Check if id exists
     // else return 404 error
-    list_of_courses = [{'CourseName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor':'Ignacio X. Domínguez'},
-    {'CourseName':'CSC 316', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. King'},
-    {'CourseName':'CSC 246', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Sturgill'},
-    {'CourseName':'CSC 326', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Heckman'}]
-    res.json(list_of_courses);
+    res.json(courses);
 })
 
 /**
@@ -51,11 +57,19 @@ router.get("/",(req,res,next)=>{
  */
 router.post("/",function(req,res){
     const course=req.body;
-    if (course && course.CourseName && course.period && course.semester){
-        res.json({'CourseName':course.CourseName, 'courseid':'1', 'period':course.period, 'semester':course.semester});
-    } else {
-        res.status(404).json({error: "Course must have values for /'CourseName/', /'period/', and /'semester/'"});
+
+    try {
+        courses.push(course); // This will be another method that checks a sql query and fails on invalid params
+        res.json(course);
+    } catch(e) {
+        res.json({error: `${e}`})
     }
+    
+    // if (course && course.CourseName && course.period && course.semester){
+    //     res.json({'CourseName':course.CourseName, 'courseid':'1', 'period':course.period, 'semester':course.semester});
+    // } else {
+    //     res.status(404).json({error: "Course must have values for /'CourseName/', /'period/', and /'semester/'"});
+    // }
 })
 
 /**

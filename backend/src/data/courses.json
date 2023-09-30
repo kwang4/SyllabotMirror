@@ -1,0 +1,30 @@
+[
+    {
+        "CourseName":"CSC 492",
+        "courseid":1,
+        "period":"fall",
+        "semester":"2023",
+        "instructor":"Ignacio X. Domínguez"
+    },
+    {
+        "CourseName":"CSC 316",
+        "courseid":2,
+        "period":"fall",
+        "semester":"2023",
+        "instructor": "Dr. King"
+    },
+    {
+        "CourseName":"CSC 246",
+        "courseid":3,
+        "period":"fall",
+        "semester":"2023",
+        "instructor": "Dr. Sturgill"
+    },
+    {
+        "CourseName":"CSC 326",
+        "courseid":4,
+        "period":"fall",
+        "semester":"2023",
+        "instructor": "Dr. Heckman"
+    }
+]
