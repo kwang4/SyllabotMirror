@@ -1,7 +1,6 @@
 /**
  * Endpoints required for maintaining a course
  */
-
 const express = require('express');
 const router = express.Router();
 
@@ -81,7 +80,16 @@ router.post("/",function(req,res){
 router.delete("/:courseid",(req,res,next)=>{
     // Check if id exists
     // else return 404 error
-    res.json({'CouresName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023'})
+    const courseId = req.params.courseid; // Get call parameter
+    let course = courses.find(course => course.courseid == courseId); // Check for courseid in db, stops at first instance
+    let courseIndex = courses.indexOf(course);
+    if (courseIndex !== -1) {
+        courses.splice(courseIndex, 1);
+        res.json(course);
+    } else {
+        res.status(404).json({error: "Course not found"})
+    }
+    //res.json({'CouresName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023'})
 })
 
 

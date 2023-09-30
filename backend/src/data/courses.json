@@ -4,27 +4,155 @@
         "courseid":1,
         "period":"fall",
         "semester":"2023",
-        "instructor":"Ignacio X. Domínguez"
+        "instructor":"Ignacio X. Domínguez",
+        "sections": [
+            {
+                "sectionNum":1,
+                "resources":[
+                    {
+                        "name": "Syllabus1",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template2",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            },
+            {
+                "sectionNum":2,
+                "resources":[
+                    {
+                        "name": "Syllabus3",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template4",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            }
+        ]
     },
     {
         "CourseName":"CSC 316",
         "courseid":2,
         "period":"fall",
         "semester":"2023",
-        "instructor": "Dr. King"
+        "instructor": "Dr. King",
+        "sections": [
+            {
+                "sectionNum":3,
+                "resources":[
+                    {
+                        "name": "Syllabus5",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template6",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            },
+            {
+                "sectionNum":4,
+                "resources":[
+                    {
+                        "name": "Syllabus7",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template8",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            }
+        ]
     },
     {
         "CourseName":"CSC 246",
         "courseid":3,
         "period":"fall",
         "semester":"2023",
-        "instructor": "Dr. Sturgill"
+        "instructor": "Dr. Sturgill",
+        "sections": [
+            {
+                "sectionNum":1,
+                "resources":[
+                    {
+                        "name": "Syllabus9",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template10",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            },
+            {
+                "sectionNum":2,
+                "resources":[
+                    {
+                        "name": "Syllabus11",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template12",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            }
+        ]
     },
     {
         "CourseName":"CSC 326",
         "courseid":4,
         "period":"fall",
         "semester":"2023",
-        "instructor": "Dr. Heckman"
+        "instructor": "Dr. Heckman",
+        "sections": [
+            {
+                "sectionNum":3,
+                "resources":[
+                    {
+                        "name": "Syllabus13",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template14",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            },
+            {
+                "sectionNum":4,
+                "resources":[
+                    {
+                        "name": "Syllabus15",
+                        "type": "pdf",
+                        "file_contents" :"Syllabus.pdf"
+                    },
+                    {
+                        "name": "IPR-template16",
+                        "type": "docx",
+                        "file_contents": "IPR-template.docx"
+                    }
+                ]
+            }
+        ]
     }
 ]
