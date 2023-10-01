@@ -1,24 +1,25 @@
 import Head from 'next/head';
-import styles from '../../styles/Home.module.css';
-import Link from 'next/link';
-import NcsuHeader from '../../components/NcsuHeader.js';
-import OptionCard from '../../components/OptionCard';
-import DiscordCard from '../../components/DiscordCard';
-import SlackCard from '../../components/SlackCard';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import styles from '@styles/Home.module.css';
+const axios = require('axios');
+import Link from 'next/link'
+import NcsuHeader from '@components/NcsuHeader.js';
+import ClassCard from '@components/ClassCard';
+import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 
-export default function Home() {
-  const router = useRouter();
-  const { courseName } = router.query;
+export default function Home() {                    
+  const [classDat,setClassDat] = useState([]);
+  useEffect(()=>{
 
-  const optionData = [ 
-      {name: 'Manage Resources'},
-      {name: 'Manage Roster'},
-      {name: 'View Log'},
-      {name: 'Settings'},
-  ];
+    async function fetchClassData()
+    {
+      const response = await axios.get('http://localhost:8000/api/semesters/1/courses').catch(error=>{console.log(error)});
+    setClassDat(response.data);
+    console.log(response.data);
+    }
+    fetchClassData();
+  },[]);
+
 
 
   return (
@@ -30,26 +31,21 @@ export default function Home() {
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
       <h2 className={styles.title}>
-          Course Info {courseName} 
-        </h2>
-        <h2>
-          <Link href="/">Go Back</Link>
+          Courses
         </h2>
       <main className={styles.mainStyle}>
         
 
 <Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-    {optionData.map((card,index)=>(
-      <Grid key={index} xs={6} sm={3}>
-          <OptionCard optionTitle={card.name}></OptionCard>
-        </Grid>
-    ))}
+{classDat.map((card, index) => (
+  <Grid key={index} xs={6} sm={4}>
+    <Link href={`/course/${card.CourseName}`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle={card.CourseName} classInstructors={card.instructor} />
+    </Link>
+  </Grid>
+))}
 </Grid>
-<h2></h2>
-<DiscordCard></DiscordCard>
-<h2></h2>
-<SlackCard></SlackCard>
 
 
       </main>
@@ -60,7 +56,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '} 
+          Powered by{' '}
           <img src="/react.png" alt="Big Chungus" className={styles.logo} />
         </a>
       </footer>
