@@ -1,12 +1,14 @@
 services:
-  proxy:
-    build: ./proxy
-    restart: unless-stopped
-    volumes:
-      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template
+  apacheshib:
+    image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
     ports:
-      - "443:443"
-      - "80:80"
+      - 80:80
+      - 443:443
+    volumes:
+      - ./logs:/var/log/apache2
+    environment:
+      - SERVER_NAME=example.ncsu.edu
+      - LOGIN_PATH=/ # Make it so that all requests to the frontend are authenticated
 
   backend:
     build: ./backend
@@ -17,7 +19,13 @@ services:
       - PORT=80
     env_file: 
       - .env 
-    ports:
-    - "443:443"
-    - "80:80"
+  
+  database:
+    image: 'mariadb:latest'
+    volumes:
+      - ./database/schema:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/mysql
+    env_file:
+      - .env # in root, configure db, backend, etc
+  frontend:
   
