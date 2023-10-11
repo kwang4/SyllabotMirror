@@ -1,0 +1,35 @@
+services:
+  apacheshib:
+    image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./logs:/var/log/apache2
+    environment:
+      - SERVER_NAME=example.ncsu.edu
+      - LOGIN_PATH=/ # Make it so that all requests to the frontend are authenticated
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app/src
+    environment:
+      - PORT=80
+    env_file: 
+      - .env 
+  
+  database:
+    image: 'mariadb:latest'
+    volumes:
+      - ./database/schema:/docker-entrypoint-initdb.d
+      - ./database/data:/var/lib/mysql
+    env_file:
+      - .env # in root, configure db, backend, etc
+    ports:
+      - 3307:3306
+
+  # app: # frontend
+  #   build: ./Dashboard
+  
