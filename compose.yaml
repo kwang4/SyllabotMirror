@@ -10,7 +10,7 @@ services:
       - SERVER_NAME=example.ncsu.edu
       - LOGIN_PATH=/ # Make it so that all requests to the frontend are authenticated
 
-  backend:
+  api:
     build: ./backend
     restart: unless-stopped
     volumes:
@@ -30,5 +30,6 @@ services:
     ports:
       - 3307:3306
 
-  #frontend:
+  # app: # frontend
+  #   build: ./Dashboard
   
