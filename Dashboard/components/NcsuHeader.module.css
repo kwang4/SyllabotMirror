@@ -1,0 +1,35 @@
+.header {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  justify-content: space-between;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 10vh;
+  background-color: rgb(233, 33, 33);
+  padding: 10px 20px;
+  text-align: left;
+  color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profileImage {
+  max-width: 10vh;
+  max-height: 10vh;
+  border-width: 5px;
+  border-color: black;
+  border-radius: 10px;
+}
+
+.profileName {
+  font-size: small;
+  text-align: center;
+  align-items: center;
+  display: flex;
+}
+
+.profileWrapper {
+  display: flex;
+}
