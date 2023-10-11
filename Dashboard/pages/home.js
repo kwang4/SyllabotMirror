@@ -13,7 +13,7 @@ export default function Home() {
 
     async function fetchClassData()
     {
-      const response = await axios.get('http://localhost:8000/api/semesters/1/courses').catch(error=>{console.log(error)});
+      const response = await axios.get('https://localhost/api/semesters/1/courses').catch(error=>{console.log(error)});
     setClassDat(response.data);
     console.log(response.data);
     }
