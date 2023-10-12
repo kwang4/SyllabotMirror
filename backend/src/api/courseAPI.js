@@ -8,6 +8,8 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
+const CourseDAO = require('.././data/CourseDAO.js');
+
 
 /**
  * Currently, these endpoints are just mock endpoints 
@@ -33,11 +35,18 @@ router.get("/:courseid",(req,res,next)=>{
 router.get("/",(req,res,next)=>{
     // Check if id exists
     // else return 404 error
-    list_of_courses = [{'CourseName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor':'Ignacio X. Domínguez'},
-    {'CourseName':'CSC 316', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. King'},
-    {'CourseName':'CSC 246', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Sturgill'},
-    {'CourseName':'CSC 326', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Heckman'}]
-    res.json(list_of_courses);
+    // list_of_courses = [{'CourseName':'CSC 492', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor':'Ignacio X. Domínguez'},
+    // {'CourseName':'CSC 316', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. King'},
+    // {'CourseName':'CSC 246', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Sturgill'},
+    // {'CourseName':'CSC 326', 'courseid':req.params.courseid, 'period':'fall', 'semester':'2023', 'instructor': 'Dr. Heckman'}]
+    // res.json(list_of_courses);
+    CourseDAO.getCourses().then(courses => {
+        if (courses) {
+            res.json(courses)
+        } else {
+            res.status(404).json({error: 'Courses not found'})
+        }
+    })
 })
 
 /**
