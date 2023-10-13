@@ -7,6 +7,13 @@ function getCourses() {
   })
 }
 
+function getCourse(semesterID, courseID){
+  return db.query('SELECT * FROM course WHERE semesterID = ? and courseID = ?', [semesterID, courseID]).then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+
 module.exports = {
-  getCourses: getCourses
+  getCourses: getCourses,
+  getCourse: getCourse
 }

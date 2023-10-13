@@ -3,10 +3,11 @@
  */
 
 const express = require('express');
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
+
 
 const CourseDAO = require('.././data/CourseDAO.js');
 
@@ -26,7 +27,13 @@ router.get("/:courseid",(req,res,next)=>{
     console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
-    res.json({'CourseName':'CSC 492', 'courseid':req.params.courseid, 'semester':{'season':'fall', 'year':'2023'}});
+    CourseDAO.getCourse(req.params.semesterid, req.params.courseid).then(course => {
+        if (course) {
+            res.json(course)
+        } else {
+            res.json(404).json({error: 'Course not found'})
+        }
+    })
 })
 
 /**

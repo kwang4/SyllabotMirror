@@ -3,6 +3,7 @@
  */
 const express = require('express');
 const router = express.Router({mergeParams: true});
+const SectionDAO = require('../data/SectionDAO.js');
 
 router.use(express.json());
 
@@ -16,7 +17,16 @@ router.use(express.json());
 router.get("/:sectionNum",(req,res,next)=>{
     console.log("URL: " + req.originalUrl)
     console.log("Request parameters: " + JSON.stringify(req.params))
-    res.json({'sectionNum':req.params.sectionNum, 'courseid':req.params.courseid});
+    
+    SectionDAO.getSection(req.params.courseid, req.params.sectionNum).then(section => {
+        if (section) {
+            res.json(section)
+        } else {
+            res.json(404).json({error: 'Section not found'})
+        }
+    })
+
+    
 })
 
 /**
