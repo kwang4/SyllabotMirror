@@ -2,8 +2,8 @@ import Head from 'next/head';
 import styles from '@styles/Home.module.css';
 import Link from 'next/link';
 import NcsuHeader from '@components/NcsuHeader.js';
-import AddNewStudentCard from '@components/AddNewStudentCard';
-import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Unstable_Grid2';
 import List from '@mui/material/List';
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText';;
@@ -22,7 +22,12 @@ export default function Roster() {
       {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
       {name: 'Brandon Partin', unityId: 'blpartin'},
       {name: 'Collin Riggs', unityId: 'cmriggs'},
-      {name: 'Kai-En Wang', unityId: 'kwang23'}
+      {name: 'Kai-En Wang', unityId: 'kwang23'},
+      {name: 'Jackson Hall', unityId: 'jdhall9'},
+      {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
+      {name: 'Brandon Partin', unityId: 'blpartin'},
+      {name: 'Collin Riggs', unityId: 'cmriggs'},
+      {name: 'Kai-En Wang', unityId: 'kwang23'},
   ];
 
 
@@ -41,21 +46,38 @@ export default function Roster() {
           <Link href={`/course/${courseName}`}>Go Back</Link>
         </h2>
       <main className={styles.mainStyle}>
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: '#cfcfcf', border: 1, borderRadius: '10%' }}>
-        <List>
-            <ListItem><ListItemText primary="Name"/><ListItemText primary="Unity ID"/></ListItem>
-        {studentData.map((student,index)=>(
+    
+    <List
+      sx={{
+        width: '100%',
+        maxWidth: '60vw',
+        bgcolor: 'lightgray',
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: '50vh',
+        borderRadius:'2%',
+        '& ul': { padding: 0 },
+      }}
+    >
+      {studentData.map((student,index)=>(
             <ListItem key={index}>
               <ListItemText primary={student.name}/>
               <ListItemText primary = {student.unityId}/>
               <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
             </ListItem>
         ))}
-        </List>
-    </Box>
+    </List>
     <h2></h2>
-    <AddNewStudentCard></AddNewStudentCard>
-
+    <Grid container spacing={5} sx={{flexGrow: 1}}>
+        <Grid xs={10} md={6}>
+        <Button variant="contained" sx={{whiteSpace:'nowrap'}}>Add Student</Button>
+        </Grid>
+        <Grid xs={10} md={6}>
+        <Button variant="contained">Upload CSV</Button>
+        </Grid>
+    </Grid>
+    
+    
 
       </main>
 

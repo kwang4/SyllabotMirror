@@ -14,8 +14,10 @@ export default function Home() {
     async function fetchClassData()
     {
       const response = await axios.get('https://localhost/api/semesters/1/courses').catch(error=>{console.log(error)});
-    setClassDat(response.data);
-    console.log(response.data);
+      if(response?.data != null)
+      {
+        setClassDat(response.data);
+      }
     }
     fetchClassData();
   },[]);
@@ -45,6 +47,11 @@ export default function Home() {
     </Link>
   </Grid>
 ))}
+  <Grid key={0} xs={6} sm={4}>
+    <Link href={`/course/addCourse`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle='Add Course' />
+    </Link>
+  </Grid>
 </Grid>
 
 
