@@ -66,13 +66,17 @@ router.get("/",(req,res,next)=>{
  * 
  */
 router.post("/",function(req,res){
-    const course=req.body;
-    if (course && course.CourseName && course.period && course.semester){
-        res.json({'CourseName':course.CourseName, 'courseid':'1', 'period':course.period, 'semester':course.semester});
-    } else {
-        res.status(404).json({error: "Course must have values for /'CourseName/', /'period/', and /'semester/'"});
-    }
-})
+    const course = req.body;
+    CourseDAO.createCourse(course.semesterID, course.courseName).then(c => {
+        res.json(c);
+    });
+    // const course=req.body;
+    // if (course && course.CourseName && course.period && course.semester){
+    //     res.json({'CourseName':course.CourseName, 'courseid':'1', 'period':course.period, 'semester':course.semester});
+    // } else {
+    //     res.status(404).json({error: "Course must have values for /'CourseName/', /'period/', and /'semester/'"});
+    // }
+});
 
 /**
  * Deletes course with the given Course ID

@@ -13,7 +13,16 @@ function getCourse(semesterID, courseID){
   })
 }
 
+function createCourse(semesterID, courseName) {
+  return db.query('INSERT INTO course (courseID, semesterID, courseName) VALUES (NULL, ?, ?)',
+  [semesterID, courseName]).then(({ results }) => {
+    console.log(results)
+    return getCourse(semesterID, results.insertId)
+  })
+}
+
 module.exports = {
   getCourses: getCourses,
-  getCourse: getCourse
+  getCourse: getCourse,
+  createCourse: createCourse
 }
