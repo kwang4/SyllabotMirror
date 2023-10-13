@@ -1,7 +1,7 @@
 module.exports = class {
     constructor(data){
-        this.courseID = data.cID;
-        this.sectionID = data.semesterID;
+        this.courseID = data.courseID;
+        this.sectionID = data.sectionID;
         this.sectionNumber = data.sectionNumber;
     }
 };

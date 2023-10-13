@@ -29,6 +29,7 @@ router.get("/:courseid",(req,res,next)=>{
     // else return 404 error
     CourseDAO.getCourse(req.params.semesterid, req.params.courseid).then(course => {
         if (course) {
+            // get list of instructors for course
             res.json(course)
         } else {
             res.json(404).json({error: 'Course not found'})
@@ -49,6 +50,7 @@ router.get("/",(req,res,next)=>{
     // res.json(list_of_courses);
     CourseDAO.getCourses().then(courses => {
         if (courses) {
+            // get list of courses for each course
             res.json(courses)
         } else {
             res.status(404).json({error: 'Courses not found'})
