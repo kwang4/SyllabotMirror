@@ -115,7 +115,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Senior Design'),(4,4,'Network Security'),(5,5,'Software DEvelopment');
+INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Senior Design'),(4,4,'Network Security'),(5,5,'Software Development');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,18 +253,21 @@ DROP TABLE IF EXISTS `roster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roster` (
-  `rosterID` int NOT NULL,
+  `rosterID` int NOT NULL AUTO_INCREMENT,
   `userID` int NOT NULL,
-  `sectionID` int NOT NULL,
+  `sectionNum` int NOT NULL,
   `roleID` int NOT NULL,
+  `courseID` int NOT NULL,
   PRIMARY KEY (`rosterID`),
-  KEY `sectionID_idx` (`sectionID`),
   KEY `roleID_idx` (`roleID`),
+  KEY `section_num_course_id_idx` (`sectionNum`),
+  KEY `course_id_idx` (`courseID`),
   KEY `userID` (`userID`),
+  CONSTRAINT `course_num_roster` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
   CONSTRAINT `roleID` FOREIGN KEY (`roleID`) REFERENCES `role` (`roleID`),
-  CONSTRAINT `roster_section_sectionID` FOREIGN KEY (`sectionID`) REFERENCES `section` (`sectionID`),
+  CONSTRAINT `section_num_roster` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`),
   CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +276,7 @@ CREATE TABLE `roster` (
 
 LOCK TABLES `roster` WRITE;
 /*!40000 ALTER TABLE `roster` DISABLE KEYS */;
-INSERT INTO `roster` VALUES (1,1,1,1),(2,2,1,2),(3,3,2,3),(4,4,3,4),(5,5,4,5);
+INSERT INTO `roster` VALUES (1,1,1,1,1),(2,2,2,2,1),(3,3,3,3,2),(4,4,100,4,3),(5,5,100,5,4);
 /*!40000 ALTER TABLE `roster` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,13 +288,12 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `sectionID` int NOT NULL AUTO_INCREMENT,
   `courseID` int NOT NULL,
-  `sectionNumber` int DEFAULT NULL,
-  PRIMARY KEY (`sectionID`),
+  `sectionNum` int NOT NULL,
+  PRIMARY KEY (`sectionNum`,`courseID`),
   KEY `courseID_idx` (`courseID`),
   CONSTRAINT `section_course_courseID` FOREIGN KEY (`courseID`) REFERENCES `course` (`courseID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -300,7 +302,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,1,1),(2,2,1),(3,3,2),(4,4,3),(5,5,100);
+INSERT INTO `section` VALUES (1,1),(2,1),(3,2),(4,3),(5,100);
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -313,7 +315,8 @@ DROP TABLE IF EXISTS `section_resource`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section_resource` (
   `section_resource_ID` varchar(45) NOT NULL,
-  `sectionID` int NOT NULL,
+  `sectionNum` int NOT NULL,
+  `courseID` int NOT NULL,
   `fileID` int DEFAULT NULL,
   `calendarID` int DEFAULT NULL,
   `apiID` int DEFAULT NULL,
@@ -323,11 +326,13 @@ CREATE TABLE `section_resource` (
   KEY `calendarID_idx` (`calendarID`),
   KEY `websiteID_idx` (`websiteID`),
   KEY `apiID_idx` (`apiID`),
-  KEY `sectID` (`sectionID`),
+  KEY `section_num_resource_idx` (`sectionNum`),
+  KEY `course_id_resource_idx` (`courseID`),
   CONSTRAINT `apiID` FOREIGN KEY (`apiID`) REFERENCES `api` (`apiID`),
   CONSTRAINT `calendarID` FOREIGN KEY (`calendarID`) REFERENCES `calendar` (`calendarID`),
+  CONSTRAINT `course_id_resource` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
   CONSTRAINT `fileID` FOREIGN KEY (`fileID`) REFERENCES `file` (`fileID`),
-  CONSTRAINT `sectID` FOREIGN KEY (`sectionID`) REFERENCES `section` (`sectionID`),
+  CONSTRAINT `section_num_resource` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`),
   CONSTRAINT `websiteID` FOREIGN KEY (`websiteID`) REFERENCES `website` (`websiteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -338,7 +343,7 @@ CREATE TABLE `section_resource` (
 
 LOCK TABLES `section_resource` WRITE;
 /*!40000 ALTER TABLE `section_resource` DISABLE KEYS */;
-INSERT INTO `section_resource` VALUES ('1',1,1,NULL,NULL,NULL),('2',1,NULL,1,NULL,NULL),('3',2,NULL,NULL,1,NULL),('4',2,NULL,NULL,NULL,1),('5',3,2,NULL,NULL,NULL);
+INSERT INTO `section_resource` VALUES ('1',1,1,1,NULL,NULL,NULL),('2',2,1,NULL,1,NULL,NULL),('3',3,2,NULL,NULL,1,NULL),('4',100,2,NULL,NULL,NULL,1),('5',100,3,2,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `section_resource` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,12 +357,15 @@ DROP TABLE IF EXISTS `section_syllabot`;
 CREATE TABLE `section_syllabot` (
   `sect_syl_ID` varchar(45) NOT NULL,
   `deployID` int NOT NULL,
-  `sectionID` int NOT NULL,
+  `sectionNum` int NOT NULL,
+  `courseID` int NOT NULL,
   PRIMARY KEY (`sect_syl_ID`),
-  KEY `sectionID_idx` (`sectionID`),
+  KEY `section_num_join_idx` (`sectionNum`),
+  KEY `course_id_join_idx` (`courseID`),
   KEY `deployID` (`deployID`),
+  CONSTRAINT `course_id_join` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
   CONSTRAINT `deployID` FOREIGN KEY (`deployID`) REFERENCES `deploy` (`deployID`),
-  CONSTRAINT `sectionsyllabot_section_secID` FOREIGN KEY (`sectionID`) REFERENCES `section` (`sectionID`)
+  CONSTRAINT `section_num_join` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -367,7 +375,7 @@ CREATE TABLE `section_syllabot` (
 
 LOCK TABLES `section_syllabot` WRITE;
 /*!40000 ALTER TABLE `section_syllabot` DISABLE KEYS */;
-INSERT INTO `section_syllabot` VALUES ('1',1,1),('2',2,2),('3',3,3),('4',4,4),('5',5,5);
+INSERT INTO `section_syllabot` VALUES ('1',1,1,1),('2',2,2,2),('3',3,3,3),('4',4,100,4),('5',5,100,5);
 /*!40000 ALTER TABLE `section_syllabot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -462,6 +470,7 @@ CREATE TABLE `user` (
   `userID` int NOT NULL AUTO_INCREMENT,
   `is_admin` tinyint NOT NULL,
   `name` varchar(75) NOT NULL,
+  `unityid` varchar(45) NOT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -472,7 +481,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Brandon Lee Partin'),(2,0,'Collin Riggs'),(3,0,'Kai-En Wang'),(4,0,'Jackson Hall'),(5,0,'Daniel Buchanan');
+INSERT INTO `user` VALUES (1,1,'Brandon Lee Partin','blpartin'),(2,0,'Collin Riggs','cmriggs'),(3,0,'Kai-En Wang','kwang23'),(4,0,'Jackson Hall','jphall'),(5,0,'Daniel Buchanan','dsbuchanan');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -509,4 +518,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-13 10:53:29
+-- Dump completed on 2023-10-15 13:59:09
