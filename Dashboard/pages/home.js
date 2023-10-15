@@ -19,18 +19,19 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Home() {                    
   const [classDat,setClassDat] = useState([]);
+  const [semesterData,setSemesterData] = useState([]);
   const [dialogStatus,setDialogStatus] = useState(false);
   const [semesterSelector,setSemesterSelector] = useState('');
 
   //MOCK DATA
-  const semesterData = [ 
-    {semesterID: 1, season: 'Maymester',year:2023},
-    {semesterID: 2, season: 'Summer 1',year:2023},
-    {semesterID: 3, season: 'Summer 2',year:2023},
-    {semesterID: 4, season: 'Fall',year:2024},
-    {semesterID: 5, season: 'Spring',year:2024},
-    {semesterID: 6, season: 'Fall',year:2025},
-];
+//   const semesterData = [ 
+//     {semesterID: 1, season: 'Maymester',year:2023},
+//     {semesterID: 2, season: 'Summer 1',year:2023},
+//     {semesterID: 3, season: 'Summer 2',year:2023},
+//     {semesterID: 4, season: 'Fall',year:2024},
+//     {semesterID: 5, season: 'Spring',year:2024},
+//     {semesterID: 6, season: 'Fall',year:2025},
+// ];
 
   useEffect(()=>{
 
@@ -42,6 +43,15 @@ export default function Home() {
         setClassDat(response.data);
       }
     }
+    async function fetchSemesterData()
+    {
+      const response = await axios.get('https://localhost/api/semesters').catch(error=>{console.log(error)});
+      if(response?.data != null)
+      {
+        setSemesterData(response.data);
+      }
+    }
+    fetchSemesterData();
     fetchClassData();
   },[]);
 
@@ -74,8 +84,8 @@ const handleSemesterChange = (event) =>{
 
 {classDat.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
-    <Link href={`/course/${card.CourseName}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.CourseName} classInstructors={card.instructor} />
+    <Link href={`/course/${card.courseName}`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle={card.courseName} classInstructors={card.courseName} />
     </Link>
   </Grid>
 ))}

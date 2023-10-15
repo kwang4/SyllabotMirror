@@ -13,6 +13,13 @@ function getCourse(semesterID, courseID){
   })
 }
 
+//Not TESTED
+function setCourse(semesterID, courseName){
+  return db.query('INSERT INTO course WHERE semesterID = ? and courseName = ?', [courseID, courseName]).then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+
 module.exports = {
   getCourses: getCourses,
   getCourse: getCourse
