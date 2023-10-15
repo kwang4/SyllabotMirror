@@ -13,18 +13,18 @@ export default function ClassCard({classTitle,classInstructors}) {
       <Card variant='outlined' sx={{
         display:'flex', 
         minWidth:180,
-        borderRadius:'90px', 
+        borderRadius:'900px', 
         padding:'0.3rem',
         alignItems:'center',
         textAlign:'center',
-        outlineWidth:'5px'
+        outlineWidth:'5px',
          }}>
         <CardActionArea>
           <CardContent>
-            <Typography gutterBottom variant="h4" component="div">
+            <Typography gutterBottom sx={{ typography: { md: 'h5', s: 'body1' } }} component="div">
               {classTitle}
             </Typography>
-            <Typography variant="body1  " color="text.secondary">
+            <Typography variant="body1" color="text.secondary">
              {classInstructors}
             </Typography>
           </CardContent>

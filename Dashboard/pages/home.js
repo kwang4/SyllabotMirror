@@ -22,6 +22,8 @@ export default function Home() {
   const [semesterData,setSemesterData] = useState([]);
   const [dialogStatus,setDialogStatus] = useState(false);
   const [semesterSelector,setSemesterSelector] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [sectionNum, setSectionNum] = useState('');
 
   //MOCK DATA
 //   const semesterData = [ 
@@ -55,6 +57,19 @@ export default function Home() {
     fetchClassData();
   },[]);
 
+  async function createCourse()
+  {
+    const courseData  = {
+      'courseName': courseName,
+      'sectionNum': sectionNum,
+      'semesterId': semesterSelector
+    }
+    const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,courseData).catch(error=>{console.log(error)});
+
+    console.log(response);
+    window.location.reload();
+  }
+
 function toggleCourseDialog()
 {
   if(dialogStatus)
@@ -64,6 +79,12 @@ function toggleCourseDialog()
 }
 const handleSemesterChange = (event) =>{
   setSemesterSelector(event.target.value);
+}
+const handleCourseName = (event) =>{
+  setCourseName(event.target.value);
+}
+const handleSectionNum = (event) =>{
+  setSectionNum(event.target.value);
 }
 
   return (
@@ -85,13 +106,13 @@ const handleSemesterChange = (event) =>{
 {classDat.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
     <Link href={`/course/${card.courseName}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.courseName} classInstructors={card.courseName} />
+        <ClassCard classTitle={card.courseName} classInstructors={'I. Dominguez'} />
     </Link>
   </Grid>
 ))}
   <Grid key={0} xs={6} sm={4}>
     <div onClick={toggleCourseDialog}>
-        <ClassCard classTitle='Add Course'/>
+        <ClassCard classTitle='Add Course' classInstructors={' '}/>
         </div>
   </Grid>
 </Grid>
@@ -105,24 +126,26 @@ const handleSemesterChange = (event) =>{
               autoFocus
               fullWidth
               margin="dense"
-              id="course"
+              id="courseName"
               label="Course Name"
               variant="standard"
+              onChange={handleCourseName}
             />
           </Grid>
           <Grid>
             <TextField
               margin="dense"
               fullWidth
-              id="section"
+              id="sectionNum"
               label="Section"
               variant="standard"
               type="number"
+              onChange={handleSectionNum}
             />
           </Grid>
           <Grid>
             <FormControl fullWidth>
-              <InputLabel id="semester">Semester</InputLabel>
+              <InputLabel id="semesterId">Semester</InputLabel>
               <Select labelId="select-semester" id="select-semester" value={semesterSelector} label="Semester" onChange={handleSemesterChange}>
                 {semesterData.map((semester,index)=>(
                   <MenuItem key={index} value={semester.semesterID}>{semester.season + " " + semester.year}</MenuItem>
@@ -134,7 +157,7 @@ const handleSemesterChange = (event) =>{
   </DialogContent>
     <DialogActions>
       <Button onClick={toggleCourseDialog} color="secondary">Cancel</Button>
-      <Button onClick={toggleCourseDialog} color="primary">Add</Button>
+      <Button onClick={createCourse} color="primary">Add</Button>
     </DialogActions>
   
 </Dialog>
