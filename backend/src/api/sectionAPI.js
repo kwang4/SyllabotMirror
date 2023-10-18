@@ -35,6 +35,10 @@ router.get("/:sectionNum",(req,res,next)=>{
     
 })
 
+router.get("/:userID",(req,res,next)=>{
+    console.log("Test");
+})
+
 /**
  * remove a specific section of a course
  */

@@ -34,9 +34,18 @@ function setCourse(semesterID, courseName){
   })
 }
 
+function getInstructors(courseID, sectionNum){
+  // courseID = 1
+    return db.query('SELECT u.userID, u.name FROM user u NATURAL JOIN roster r WHERE r.courseID = ? AND r.sectionNum = ? AND r.roleID = 2;', [courseID, sectionNum]).then(({ results }) => {
+        return results.map(user => new User(user));
+      })
+
+}
+
 module.exports = {
   getCourses: getCourses,
   getCourse: getCourse,
   createCourse: createCourse,
-  checkIfCourseExists: checkIfCourseExists
+  checkIfCourseExists: checkIfCourseExists,
+  getInstructors: getInstructors
 }
