@@ -8,7 +8,11 @@ function NcsuHeader(props) {
     async function fetchUserData()
     {
       const response = await axios.get('https://localhost/api/shib').catch(error=>{console.log(error)});
-      setUserID(response.data.first_name + " " + response.data.last_name);
+      if(response?.data != null)
+      {
+        setUserID(response.data.first_name + " " + response.data.last_name);
+      }
+      
     }
     fetchUserData();
   },[]);

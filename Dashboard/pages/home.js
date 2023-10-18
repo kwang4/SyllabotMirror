@@ -4,23 +4,88 @@ const axios = require('axios');
 import Link from 'next/link'
 import NcsuHeader from '@components/NcsuHeader.js';
 import ClassCard from '@components/ClassCard';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 
 export default function Home() {                    
   const [classDat,setClassDat] = useState([]);
+  const [semesterData,setSemesterData] = useState([]);
+  const [dialogStatus,setDialogStatus] = useState(false);
+  const [semesterSelector,setSemesterSelector] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [sectionNum, setSectionNum] = useState('');
+
+  //MOCK DATA
+//   const semesterData = [ 
+//     {semesterID: 1, season: 'Maymester',year:2023},
+//     {semesterID: 2, season: 'Summer 1',year:2023},
+//     {semesterID: 3, season: 'Summer 2',year:2023},
+//     {semesterID: 4, season: 'Fall',year:2024},
+//     {semesterID: 5, season: 'Spring',year:2024},
+//     {semesterID: 6, season: 'Fall',year:2025},
+// ];
+
   useEffect(()=>{
 
     async function fetchClassData()
     {
       const response = await axios.get('https://localhost/api/semesters/1/courses').catch(error=>{console.log(error)});
-    setClassDat(response.data);
-    console.log(response.data);
+      if(response?.data != null)
+      {
+        setClassDat(response.data);
+      }
     }
+    async function fetchSemesterData()
+    {
+      const response = await axios.get('https://localhost/api/semesters').catch(error=>{console.log(error)});
+      if(response?.data != null)
+      {
+        setSemesterData(response.data);
+      }
+    }
+    fetchSemesterData();
     fetchClassData();
   },[]);
 
+  async function createCourse()
+  {
+    const courseData  = {
+      'courseName': courseName,
+      'sectionNum': sectionNum,
+      'semesterId': semesterSelector
+    }
+    const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,courseData).catch(error=>{console.log(error)});
 
+    console.log(response);
+    window.location.reload();
+  }
+
+function toggleCourseDialog()
+{
+  if(dialogStatus)
+    setDialogStatus(false);
+  else
+    setDialogStatus(true);
+}
+const handleSemesterChange = (event) =>{
+  setSemesterSelector(event.target.value);
+}
+const handleCourseName = (event) =>{
+  setCourseName(event.target.value);
+}
+const handleSectionNum = (event) =>{
+  setSectionNum(event.target.value);
+}
 
   return (
     <div className={styles.container}>
@@ -40,13 +105,62 @@ export default function Home() {
 
 {classDat.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
-    <Link href={`/course/${card.CourseName}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.CourseName} classInstructors={card.instructor} />
+    <Link href={`/course/${card.courseName}`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle={card.courseName} classInstructors={'I. Dominguez'} />
     </Link>
   </Grid>
 ))}
+  <Grid key={0} xs={6} sm={4}>
+    <div onClick={toggleCourseDialog}>
+        <ClassCard classTitle='Add Course' classInstructors={' '}/>
+        </div>
+  </Grid>
 </Grid>
 
+<Dialog fullWidth open={dialogStatus} onClose={toggleCourseDialog}>
+  <DialogTitle id="add-course-dialog">Add Course</DialogTitle>
+  <DialogContent dividers>
+  <Grid container direction="column" spacing={2}>
+          <Grid>
+            <TextField
+              autoFocus
+              fullWidth
+              margin="dense"
+              id="courseName"
+              label="Course Name"
+              variant="standard"
+              onChange={handleCourseName}
+            />
+          </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="sectionNum"
+              label="Section"
+              variant="standard"
+              type="number"
+              onChange={handleSectionNum}
+            />
+          </Grid>
+          <Grid>
+            <FormControl fullWidth>
+              <InputLabel id="semesterId">Semester</InputLabel>
+              <Select labelId="select-semester" id="select-semester" value={semesterSelector} label="Semester" onChange={handleSemesterChange}>
+                {semesterData.map((semester,index)=>(
+                  <MenuItem key={index} value={semester.semesterID}>{semester.season + " " + semester.year}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleCourseDialog} color="secondary">Cancel</Button>
+      <Button onClick={createCourse} color="primary">Add</Button>
+    </DialogActions>
+  
+</Dialog>
 
       </main>
 

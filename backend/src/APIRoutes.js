@@ -4,7 +4,14 @@ const apiRouter = express.Router({mergeParams: true});
 const sectionRouter = require('./api/sectionAPI.js');
 const courseRouter = require('./api/courseAPI.js');
 const resourceRouter = require('./api/resourceAPI.js');
+const semesterRouter = require('./api/semesterAPI.js');
+const rosterRouter = require('./api/rosterAPI.js');
 const shibRouter = require('./api/shibAPI.js')
+
+// NOT TESTED
+apiRouter.use('/semesters', semesterRouter);
+// NOT TESTED
+apiRouter.use('/semesters/:semesterid/courses/:courseid/sections/:sectionid/roster', rosterRouter);
 
 apiRouter.use('/semesters/:semesterid/courses/:courseid/sections', sectionRouter);
 apiRouter.use('/semesters/:semesterid/courses', courseRouter);

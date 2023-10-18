@@ -15,14 +15,20 @@ router.use(express.json());
  * returns  section of course with given sectionid and courseid
  */ 
 router.get("/:sectionNum",(req,res,next)=>{
-    console.log("URL: " + req.originalUrl)
-    console.log("Request parameters: " + JSON.stringify(req.params))
     
     SectionDAO.getSection(req.params.courseid, req.params.sectionNum).then(section => {
-        if (section) {
-            res.json(section)
+        if (section && section.length != 0) {
+            SectionDAO.getInstructors(req.params.courseid, req.params.sectionNum).then(instructors => {
+                if(instructors) {
+                    section[0].instructors = instructors;
+                } 
+                else {
+                    res.status(404).send({error: 'Section does not have instructors'})
+                }
+                res.json(section)
+            })
         } else {
-            res.json(404).json({error: 'Section not found'})
+            res.status(404).send({error: 'Section not found'})
         }
     })
 
