@@ -42,6 +42,7 @@ export default function Home() {
       const response = await axios.get('https://localhost/api/semesters/1/courses').catch(error=>{console.log(error)});
       if(response?.data != null)
       {
+        console.log(response.data);
         setClassDat(response.data);
       }
     }
