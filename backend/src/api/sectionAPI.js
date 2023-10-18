@@ -35,23 +35,24 @@ router.get("/:sectionNum",(req,res,next)=>{
     
 })
 
-router.get("/users/:userID",(req,res,next)=>{
+router.get("/users/:userID", async (req, res, next) => {
     const userID = req.params.userID;
-    SectionDAO.getSectionsByUserID(userID).then(sections => {
-        sections.forEach((section) => {
-            console.log(section)
-            SectionDAO.getInstructors(section.courseid, section.sectionNum).then(instructors => {
-                console.log(sections)
-                console.log(instructors);
+    try {
+        const sections = await SectionDAO.getSectionsByUserID(userID);
+        const validSections = await Promise.all(
+            sections.map(async (section) => {
+                const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
                 if(instructors) {
-                    section['instructors'] = instructors;
-                } 
+                    section['instructorName'] = instructors[0].name;
+                }
+                return section;
             })
-        });
-        res.json(sections);
-    })
-
-})
+        );
+        res.json(validSections);
+    } catch (error) {
+        res.status(404).send({error: 'Section not found'})
+    }
+});
 
 /**
  * remove a specific section of a course
