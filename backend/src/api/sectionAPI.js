@@ -38,16 +38,17 @@ router.get("/:sectionNum",(req,res,next)=>{
 router.get("/users/:userID",(req,res,next)=>{
     const userID = req.params.userID;
     SectionDAO.getSectionsByUserID(userID).then(sections => {
-        for (var i = 0; i < sections.length; i++) {
-            SectionDAO.getInstructors(sections[i].courseid, sections[i].sectionNum).then(instructors => {
+        sections.forEach((section) => {
+            console.log(section)
+            SectionDAO.getInstructors(section.courseid, section.sectionNum).then(instructors => {
+                console.log(sections)
                 console.log(instructors);
-                console.log(sections);
                 if(instructors) {
-                    sections[i]['instructors'] = instructors;
+                    section['instructors'] = instructors;
                 } 
             })
-        }
-        res.json(sections)
+        });
+        res.json(sections);
     })
 
 })
