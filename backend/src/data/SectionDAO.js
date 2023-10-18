@@ -2,14 +2,14 @@ const db = require('./DBConnection')
 const Section = require('./models/Section')
 const User = require('./models/User')
 
-function getSectionByCourse(courseID, sectionNumber) {
+function getSectionsByCourse(courseID, sectionNumber) {
 
     return db.query('SELECT * FROM section WHERE courseID = ? AND sectionNum = ?;', [courseID, sectionNumber]).then(({ results }) => {
       return results.map(section => new Section(section));
     })
   }
 
-function getSectionByUserID(userID) {
+function getSectionsByUserID(userID) {
 
     return db.query('SELECT * FROM section S JOIN roster R ON S.courseID = R.courseID WHERE userID = ? AND roleID = 2;', [userID]).then(({ results }) => {
       return results.map(section => new Section(section));
@@ -34,7 +34,8 @@ function createSection(courseID, sectionNum){
 }
 
 module.exports = {
-    getSection: getSection,
+    getSectionsByCourse: getSectionsByCourse,
+    getSectionsByUserID: getSectionsByUserID,
     getInstructors: getInstructors,
     createSection: createSection
   }
