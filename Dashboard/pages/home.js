@@ -20,6 +20,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 export default function Home() {                    
   const [classDat,setClassDat] = useState([]);
   const [semesterData,setSemesterData] = useState([]);
+  const [instructorData,setInstructorData] = useState([]);
   const [dialogStatus,setDialogStatus] = useState(false);
   const [semesterSelector,setSemesterSelector] = useState('');
   const [courseName, setCourseName] = useState('');
@@ -54,8 +55,18 @@ export default function Home() {
         setSemesterData(response.data);
       }
     }
+    async function fetchInstructorData()
+    {
+      const response = await axios.get('https://localhost/api/semesters/1/courses/1/sections/users/2').catch(error=>{console.log(error)});
+      if(response?.data != null)
+      {
+        console.log(response.data);
+        setClassDat(response.data);
+      }
+    }
     fetchSemesterData();
     fetchClassData();
+    fetchInstructorData();
   },[]);
 
   async function createCourse()
