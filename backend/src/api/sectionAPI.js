@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const SectionDAO = require('../data/SectionDAO.js');
+const CourseDAO = require('../data/CourseDAO.js')
 
 router.use(express.json());
 
@@ -41,6 +42,10 @@ router.get("/users/:userID", async (req, res, next) => {
         const sections = await SectionDAO.getSectionsByUserID(userID);
         const validSections = await Promise.all(
             sections.map(async (section) => {
+                const course = await CourseDAO.getCourseByID(section.courseID);
+                if(course) {
+                    section['course'] = course[0];
+                }
                 const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
                 if(instructors) {
                     section['instructorName'] = instructors[0].name;

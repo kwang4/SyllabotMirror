@@ -13,6 +13,12 @@ function getCourse(semesterID, courseID){
   })
 }
 
+function getCourseByID(courseID){
+  return db.query('SELECT * FROM course WHERE courseID = ?', [courseID]).then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+
 function checkIfCourseExists(semesterID, courseName){
   return db.query('SELECT * FROM course WHERE semesterID = ? and courseName= ?', [semesterID, courseName]).then(({ results }) => {
     return results.map(course => new Course(course));
@@ -45,6 +51,7 @@ function getInstructors(courseID, sectionNum){
 module.exports = {
   getCourses: getCourses,
   getCourse: getCourse,
+  getCourseByID: getCourseByID,
   createCourse: createCourse,
   checkIfCourseExists: checkIfCourseExists,
   getInstructors: getInstructors
