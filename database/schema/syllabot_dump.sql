@@ -115,7 +115,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Senior Design'),(4,4,'Network Security'),(5,5,'Software Development');
+INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Benior Besign'),(4,4,'Network Security'),(5,5,'Software Development');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +276,7 @@ CREATE TABLE `roster` (
 
 LOCK TABLES `roster` WRITE;
 /*!40000 ALTER TABLE `roster` DISABLE KEYS */;
-INSERT INTO `roster` VALUES (1,1,1,1,1),(2,2,2,2,1),(3,3,3,3,2),(4,4,100,4,3),(5,5,100,5,4);
+INSERT INTO `roster` VALUES (1,1,1,2,1),(2,2,2,2,1),(3,3,3,3,2),(4,4,100,4,3),(5,5,100,5,4),(6,3,1,2,2);
 /*!40000 ALTER TABLE `roster` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,7 +303,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,1,'001'),(2,1,'001'),(3,2,'002'),(4,3,'003'),(5,100,'100');
+INSERT INTO `section` VALUES (1,1,'001'),(2,1,'001'),(3,2,'002'),(4,3,'003'),(5,100,'100'),(1,2,'002');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -484,7 +484,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,0,'Collin','Riggs','criggs'),(3,0,'Kai-En','Wang','kwang'),(4,0,'Jackson','Hall','jhall'),(5,0,'Daniel','Buchanan','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,1,'Collin','Riggs','criggs'),(3,1,'Kai-En','Wang','kwang23'),(4,1,'Jackson','Hall','jhall'),(5,1,'Daniel','Buchanan','dbuchanan'),(6,0,'Ignacio','Dominguez','ixdoming'),(7,0,'Margaret','Heil','mheil');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
