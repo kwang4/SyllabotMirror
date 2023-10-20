@@ -9,12 +9,12 @@ function getSectionByCourse(sec_crs_id, sec_number) {
     })
   }
 
-  function getSectionsByCourse(sec_crs_id) {
+function getSectionsByCourse(sec_crs_id) {
 
-    return db.query('SELECT * FROM section WHERE sec_crs_id = ?;', [sec_crs_id]).then(({ results }) => {
-      return results.map(section => new Section(section));
-    })
-  }
+  return db.query('SELECT * FROM section WHERE sec_crs_id = ?;', [sec_crs_id]).then(({ results }) => {
+    return results.map(section => new Section(section));
+  })
+}
 
 function getSectionsByUserID(ros_usr_id) {
 
