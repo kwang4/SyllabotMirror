@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `api`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `api` (
-  `apiID` int NOT NULL,
-  `link` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`apiID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `api_id` int NOT NULL AUTO_INCREMENT,
+  `api_link` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`api_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,10 +47,10 @@ DROP TABLE IF EXISTS `calendar`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `calendar` (
-  `calendarID` int NOT NULL,
-  `link` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`calendarID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `cdr_id` int NOT NULL AUTO_INCREMENT,
+  `cdr_link` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`cdr_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,14 +71,14 @@ DROP TABLE IF EXISTS `conversation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `conversation` (
-  `convID` int NOT NULL AUTO_INCREMENT,
-  `userID` int NOT NULL,
-  `questionID` int NOT NULL,
-  PRIMARY KEY (`convID`),
-  KEY `questionID_idx` (`questionID`),
-  KEY `conversation_roster_userID_idx` (`userID`),
-  CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`),
-  CONSTRAINT `questionID` FOREIGN KEY (`questionID`) REFERENCES `question` (`questionID`)
+  `con_id` int NOT NULL AUTO_INCREMENT,
+  `con_usr_id` int NOT NULL,
+  `con_qst_id` int NOT NULL,
+  PRIMARY KEY (`con_id`),
+  KEY `questionID_idx` (`con_qst_id`),
+  KEY `conversation_roster_userID_idx` (`con_usr_id`),
+  CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`con_usr_id`) REFERENCES `user` (`usr_id`),
+  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -100,12 +100,12 @@ DROP TABLE IF EXISTS `course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `course` (
-  `courseID` int NOT NULL AUTO_INCREMENT,
-  `semesterID` int NOT NULL,
-  `courseName` varchar(100) NOT NULL,
-  PRIMARY KEY (`courseID`),
-  KEY `semesterID_idx` (`semesterID`),
-  CONSTRAINT `semesterID` FOREIGN KEY (`semesterID`) REFERENCES `semester` (`semesterID`)
+  `crs_id` int NOT NULL AUTO_INCREMENT,
+  `crs_sem_id` int NOT NULL,
+  `crs_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`crs_id`),
+  KEY `semesterID_idx` (`crs_sem_id`),
+  CONSTRAINT `semesterID` FOREIGN KEY (`crs_sem_id`) REFERENCES `semester` (`sem_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -127,15 +127,15 @@ DROP TABLE IF EXISTS `deploy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deploy` (
-  `deployID` int NOT NULL AUTO_INCREMENT,
-  `syllabotID` int NOT NULL,
-  `typeID` int NOT NULL,
-  `primaryToken` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`deployID`),
-  KEY `typeID_idx` (`typeID`),
-  KEY `syllabotID_idx` (`syllabotID`),
-  CONSTRAINT `syllabotID` FOREIGN KEY (`syllabotID`) REFERENCES `syllabot` (`syllabotID`),
-  CONSTRAINT `typeID` FOREIGN KEY (`typeID`) REFERENCES `type` (`typeID`)
+  `dep_id` int NOT NULL AUTO_INCREMENT,
+  `dep_syl_id` int NOT NULL,
+  `dep_typ_id` int NOT NULL,
+  `dep_primary_token` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`dep_id`),
+  KEY `typeID_idx` (`dep_typ_id`),
+  KEY `syllabotID_idx` (`dep_syl_id`),
+  CONSTRAINT `syllabotID` FOREIGN KEY (`dep_syl_id`) REFERENCES `syllabot` (`syl_id`),
+  CONSTRAINT `typeID` FOREIGN KEY (`dep_typ_id`) REFERENCES `type` (`typ_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -157,10 +157,10 @@ DROP TABLE IF EXISTS `file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `file` (
-  `fileID` int NOT NULL,
-  `link` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`fileID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `fil_id` int NOT NULL AUTO_INCREMENT,
+  `fil_link` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`fil_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,8 +181,8 @@ DROP TABLE IF EXISTS `period`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `period` (
-  `season` varchar(45) NOT NULL,
-  PRIMARY KEY (`season`)
+  `per_season` varchar(45) NOT NULL,
+  PRIMARY KEY (`per_season`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -204,10 +204,10 @@ DROP TABLE IF EXISTS `question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `question` (
-  `questionID` int NOT NULL AUTO_INCREMENT,
-  `question` varchar(5000) DEFAULT NULL,
-  `response` varchar(5000) DEFAULT NULL,
-  PRIMARY KEY (`questionID`)
+  `qst_id` int NOT NULL AUTO_INCREMENT,
+  `qst_question` varchar(5000) NOT NULL,
+  `qst_response` varchar(5000) NOT NULL,
+  PRIMARY KEY (`qst_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -229,9 +229,9 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
-  `roleID` int NOT NULL,
-  `roleName` varchar(45) NOT NULL,
-  PRIMARY KEY (`roleID`)
+  `rol_id` int NOT NULL,
+  `rol_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`rol_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -253,20 +253,20 @@ DROP TABLE IF EXISTS `roster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roster` (
-  `rosterID` int NOT NULL AUTO_INCREMENT,
-  `userID` int NOT NULL,
-  `sectionNum` int NOT NULL,
-  `roleID` int NOT NULL,
-  `courseID` int NOT NULL,
-  PRIMARY KEY (`rosterID`),
-  KEY `roleID_idx` (`roleID`),
-  KEY `section_num_course_id_idx` (`sectionNum`),
-  KEY `course_id_idx` (`courseID`),
-  KEY `userID` (`userID`),
-  CONSTRAINT `course_num_roster` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
-  CONSTRAINT `roleID` FOREIGN KEY (`roleID`) REFERENCES `role` (`roleID`),
-  CONSTRAINT `section_num_roster` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`),
-  CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
+  `ros_id` int NOT NULL AUTO_INCREMENT,
+  `ros_usr_id` int NOT NULL,
+  `ros_sec_number` int NOT NULL,
+  `ros_rol_id` int NOT NULL,
+  `ros_crs_id` int NOT NULL,
+  PRIMARY KEY (`ros_id`),
+  KEY `roleID_idx` (`ros_rol_id`),
+  KEY `section_num_course_id_idx` (`ros_sec_number`),
+  KEY `course_id_idx` (`ros_crs_id`),
+  KEY `userID` (`ros_usr_id`),
+  CONSTRAINT `course_num_roster` FOREIGN KEY (`ros_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `roleID` FOREIGN KEY (`ros_rol_id`) REFERENCES `role` (`rol_id`),
+  CONSTRAINT `section_num_roster` FOREIGN KEY (`ros_sec_number`) REFERENCES `section` (`sec_number`),
+  CONSTRAINT `userID` FOREIGN KEY (`ros_usr_id`) REFERENCES `user` (`usr_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -288,11 +288,12 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section` (
-  `courseID` int NOT NULL,
-  `sectionNum` int NOT NULL,
-  PRIMARY KEY (`sectionNum`,`courseID`),
-  KEY `courseID_idx` (`courseID`),
-  CONSTRAINT `section_course_courseID` FOREIGN KEY (`courseID`) REFERENCES `course` (`courseID`)
+  `sec_crs_id` int NOT NULL,
+  `sec_number` int NOT NULL,
+  `sec_name` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`sec_number`,`sec_crs_id`),
+  KEY `courseID_idx` (`sec_crs_id`),
+  CONSTRAINT `section_course_courseID` FOREIGN KEY (`sec_crs_id`) REFERENCES `course` (`crs_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -302,7 +303,7 @@ CREATE TABLE `section` (
 
 LOCK TABLES `section` WRITE;
 /*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,1),(2,1),(3,2),(4,3),(5,100);
+INSERT INTO `section` VALUES (1,1,'001'),(2,1,'001'),(3,2,'002'),(4,3,'003'),(5,100,'100');
 /*!40000 ALTER TABLE `section` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,27 +315,27 @@ DROP TABLE IF EXISTS `section_resource`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section_resource` (
-  `section_resource_ID` varchar(45) NOT NULL,
-  `sectionNum` int NOT NULL,
-  `courseID` int NOT NULL,
-  `fileID` int DEFAULT NULL,
-  `calendarID` int DEFAULT NULL,
-  `apiID` int DEFAULT NULL,
-  `websiteID` int DEFAULT NULL,
-  PRIMARY KEY (`section_resource_ID`),
-  KEY `fileID_idx` (`fileID`),
-  KEY `calendarID_idx` (`calendarID`),
-  KEY `websiteID_idx` (`websiteID`),
-  KEY `apiID_idx` (`apiID`),
-  KEY `section_num_resource_idx` (`sectionNum`),
-  KEY `course_id_resource_idx` (`courseID`),
-  CONSTRAINT `apiID` FOREIGN KEY (`apiID`) REFERENCES `api` (`apiID`),
-  CONSTRAINT `calendarID` FOREIGN KEY (`calendarID`) REFERENCES `calendar` (`calendarID`),
-  CONSTRAINT `course_id_resource` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
-  CONSTRAINT `fileID` FOREIGN KEY (`fileID`) REFERENCES `file` (`fileID`),
-  CONSTRAINT `section_num_resource` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`),
-  CONSTRAINT `websiteID` FOREIGN KEY (`websiteID`) REFERENCES `website` (`websiteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `scr_id` int NOT NULL AUTO_INCREMENT,
+  `scr_sec_number` int NOT NULL,
+  `scr_crs_id` int NOT NULL,
+  `scr_fil_id` int DEFAULT NULL,
+  `scr_cdr_id` int DEFAULT NULL,
+  `scr_api_id` int DEFAULT NULL,
+  `scr_web_id` int DEFAULT NULL,
+  PRIMARY KEY (`scr_id`),
+  KEY `fileID_idx` (`scr_fil_id`),
+  KEY `calendarID_idx` (`scr_cdr_id`),
+  KEY `websiteID_idx` (`scr_web_id`),
+  KEY `apiID_idx` (`scr_api_id`),
+  KEY `section_num_resource_idx` (`scr_sec_number`),
+  KEY `course_id_resource_idx` (`scr_crs_id`),
+  CONSTRAINT `apiID` FOREIGN KEY (`scr_api_id`) REFERENCES `api` (`api_id`),
+  CONSTRAINT `calendarID` FOREIGN KEY (`scr_cdr_id`) REFERENCES `calendar` (`cdr_id`),
+  CONSTRAINT `course_id_resource` FOREIGN KEY (`scr_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `fileID` FOREIGN KEY (`scr_fil_id`) REFERENCES `file` (`fil_id`),
+  CONSTRAINT `section_num_resource` FOREIGN KEY (`scr_sec_number`) REFERENCES `section` (`sec_number`),
+  CONSTRAINT `websiteID` FOREIGN KEY (`scr_web_id`) REFERENCES `website` (`web_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -343,7 +344,7 @@ CREATE TABLE `section_resource` (
 
 LOCK TABLES `section_resource` WRITE;
 /*!40000 ALTER TABLE `section_resource` DISABLE KEYS */;
-INSERT INTO `section_resource` VALUES ('1',1,1,1,NULL,NULL,NULL),('2',2,1,NULL,1,NULL,NULL),('3',3,2,NULL,NULL,1,NULL),('4',100,2,NULL,NULL,NULL,1),('5',100,3,2,NULL,NULL,NULL);
+INSERT INTO `section_resource` VALUES (1,1,1,1,NULL,NULL,NULL),(2,2,1,NULL,1,NULL,NULL),(3,3,2,NULL,NULL,1,NULL),(4,100,2,NULL,NULL,NULL,1),(5,100,3,2,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `section_resource` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,18 +356,18 @@ DROP TABLE IF EXISTS `section_syllabot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `section_syllabot` (
-  `sect_syl_ID` varchar(45) NOT NULL,
-  `deployID` int NOT NULL,
-  `sectionNum` int NOT NULL,
-  `courseID` int NOT NULL,
-  PRIMARY KEY (`sect_syl_ID`),
-  KEY `section_num_join_idx` (`sectionNum`),
-  KEY `course_id_join_idx` (`courseID`),
-  KEY `deployID` (`deployID`),
-  CONSTRAINT `course_id_join` FOREIGN KEY (`courseID`) REFERENCES `section` (`courseID`),
-  CONSTRAINT `deployID` FOREIGN KEY (`deployID`) REFERENCES `deploy` (`deployID`),
-  CONSTRAINT `section_num_join` FOREIGN KEY (`sectionNum`) REFERENCES `section` (`sectionNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `scl_id` int NOT NULL AUTO_INCREMENT,
+  `scl_dep_id` int NOT NULL,
+  `scl_sec_number` int NOT NULL,
+  `scl_crs_id` int NOT NULL,
+  PRIMARY KEY (`scl_id`),
+  KEY `section_num_join_idx` (`scl_sec_number`),
+  KEY `course_id_join_idx` (`scl_crs_id`),
+  KEY `deployID` (`scl_dep_id`),
+  CONSTRAINT `course_id_join` FOREIGN KEY (`scl_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `deployID` FOREIGN KEY (`scl_dep_id`) REFERENCES `deploy` (`dep_id`),
+  CONSTRAINT `section_num_join` FOREIGN KEY (`scl_sec_number`) REFERENCES `section` (`sec_number`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,7 +376,7 @@ CREATE TABLE `section_syllabot` (
 
 LOCK TABLES `section_syllabot` WRITE;
 /*!40000 ALTER TABLE `section_syllabot` DISABLE KEYS */;
-INSERT INTO `section_syllabot` VALUES ('1',1,1,1),('2',2,2,2),('3',3,3,3),('4',4,100,4),('5',5,100,5);
+INSERT INTO `section_syllabot` VALUES (1,1,1,1),(2,2,2,2),(3,3,3,3),(4,4,100,4),(5,5,100,5);
 /*!40000 ALTER TABLE `section_syllabot` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,12 +388,12 @@ DROP TABLE IF EXISTS `semester`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `semester` (
-  `semesterID` int NOT NULL AUTO_INCREMENT,
-  `season` varchar(45) NOT NULL,
-  `year` int NOT NULL,
-  PRIMARY KEY (`semesterID`),
-  KEY `season_idx` (`season`),
-  CONSTRAINT `season` FOREIGN KEY (`season`) REFERENCES `period` (`season`)
+  `sem_id` int NOT NULL AUTO_INCREMENT,
+  `sem_season` varchar(45) NOT NULL,
+  `sem_year` int NOT NULL,
+  PRIMARY KEY (`sem_id`),
+  KEY `season_idx` (`sem_season`),
+  CONSTRAINT `season` FOREIGN KEY (`sem_season`) REFERENCES `period` (`per_season`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -414,14 +415,14 @@ DROP TABLE IF EXISTS `syllabot`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `syllabot` (
-  `syllabotID` int NOT NULL AUTO_INCREMENT,
-  `courseID` int NOT NULL,
-  `botName` varchar(100) NOT NULL,
-  `promptFlavor` varchar(300) DEFAULT NULL,
-  `profilePicture` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`syllabotID`),
-  KEY `courseID_idx` (`courseID`),
-  CONSTRAINT `syllabot_course_courseID` FOREIGN KEY (`courseID`) REFERENCES `course` (`courseID`)
+  `syl_id` int NOT NULL AUTO_INCREMENT,
+  `syl_crs_id` int NOT NULL,
+  `syl_name` varchar(100) NOT NULL,
+  `syl_prompt_flavor` varchar(300) DEFAULT NULL,
+  `syl_profile_picture` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`syl_id`),
+  KEY `courseID_idx` (`syl_crs_id`),
+  CONSTRAINT `syllabot_course_courseID` FOREIGN KEY (`syl_crs_id`) REFERENCES `course` (`crs_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -443,9 +444,9 @@ DROP TABLE IF EXISTS `type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `type` (
-  `typeID` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
-  PRIMARY KEY (`typeID`)
+  `typ_id` int NOT NULL AUTO_INCREMENT,
+  `typ_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`typ_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -467,11 +468,13 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `userID` int NOT NULL AUTO_INCREMENT,
-  `is_admin` tinyint NOT NULL,
-  `name` varchar(75) NOT NULL,
-  `unityid` varchar(45) NOT NULL,
-  PRIMARY KEY (`userID`)
+  `usr_id` int NOT NULL AUTO_INCREMENT,
+  `usr_is_admin` tinyint NOT NULL,
+  `usr_first_name` varchar(75) NOT NULL,
+  `usr_last_name` varchar(45) NOT NULL,
+  `usr_unity_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`usr_id`),
+  UNIQUE KEY `unity_id_UNIQUE` (`usr_unity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -481,7 +484,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Brandon Lee Partin','blpartin'),(2,0,'Collin Riggs','cmriggs'),(3,0,'Kai-En Wang','kwang23'),(4,0,'Jackson Hall','jphall'),(5,0,'Daniel Buchanan','dsbuchanan');
+INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,0,'Collin','Riggs','criggs'),(3,0,'Kai-En','Wang','kwang'),(4,0,'Jackson','Hall','jhall'),(5,0,'Daniel','Buchanan','dbuchanan');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,10 +496,10 @@ DROP TABLE IF EXISTS `website`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `website` (
-  `websiteID` int NOT NULL,
-  `link` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`websiteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+  `web_id` int NOT NULL AUTO_INCREMENT,
+  `web_link` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`web_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -518,4 +521,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-15 13:59:09
+-- Dump completed on 2023-10-20  9:53:20

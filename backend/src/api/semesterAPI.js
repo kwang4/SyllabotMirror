@@ -24,7 +24,7 @@ router.get("/:semesterid",(req,res,next)=>{
     console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
-    SemesterDAO.getSemester(req.params.semesterid, req.params.semesterid).then(semester => {
+    SemesterDAO.getSemester().then(semester => {
         if (semester) {
             // get list of instructors for semester
             res.json(semester)
@@ -39,6 +39,7 @@ router.get("/:semesterid",(req,res,next)=>{
  * Get a list of semesters
  */
 router.get("/",(req,res,next)=>{
+    // console.log(req);
     SemesterDAO.getSemesters().then(semesters => {
         if (semesters) {
             // get list of semesters for each semester

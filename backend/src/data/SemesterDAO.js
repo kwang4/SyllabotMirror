@@ -5,6 +5,7 @@ const Semester = require('./models/Semester')
 // This returns all semesters
 function getSemesters() {
   return db.query('SELECT * FROM semester').then(({ results }) => {
+    // console.log(results);
     return results.map(semester => new Semester(semester));
   })
 }
