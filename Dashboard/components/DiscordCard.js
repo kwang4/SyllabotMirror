@@ -25,7 +25,7 @@ export default function DiscordCard() {
           <CardContent sx={{ display: 'flex', alignItems: 'center' }}> 
             <CardMedia sx={{ height: 75, width: 75 }} image="/discordicon.png"/>
             <Typography gutterBottom variant="h5" component="div" color="white" sx={{ ml: 2, flexGrow: 1 }}> 
-              Add Bot to Discord
+              Manage Discord Connection
             </Typography>
           </CardContent>
         </CardActionArea>

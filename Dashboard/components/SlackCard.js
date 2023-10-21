@@ -25,7 +25,7 @@ export default function DiscordCard() {
           <CardContent sx={{ display: 'flex', alignItems: 'center' }}>
             <CardMedia sx={{ height: 70, width: 70}} image="/slackicon.png"/>
             <Typography gutterBottom variant="h5" component="div" color="black" sx={{ ml: 2, flexGrow: 1 }}>
-              Add Bot to Slack
+              Manage Slack Connection
             </Typography>
           </CardContent>
         </CardActionArea>
