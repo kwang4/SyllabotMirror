@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const SectionDAO = require('../data/SectionDAO.js');
+const CourseDAO = require('../data/CourseDAO.js')
 
 router.use(express.json());
 
@@ -16,7 +17,7 @@ router.use(express.json());
  */ 
 router.get("/:sectionNum",(req,res,next)=>{
     
-    SectionDAO.getSection(req.params.courseid, req.params.sectionNum).then(section => {
+    SectionDAO.getSectionsByCourse(req.params.courseid, req.params.sectionNum).then(section => {
         if (section && section.length != 0) {
             SectionDAO.getInstructors(req.params.courseid, req.params.sectionNum).then(instructors => {
                 if(instructors) {

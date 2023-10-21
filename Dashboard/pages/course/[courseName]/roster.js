@@ -8,6 +8,16 @@ import List from '@mui/material/List';
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText';;
 import Avatar from '@mui/material/Avatar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import { useEffect, useState } from 'react';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -29,6 +39,23 @@ export default function Roster() {
       {name: 'Collin Riggs', unityId: 'cmriggs'},
       {name: 'Kai-En Wang', unityId: 'kwang23'},
   ];
+
+  const [uploadStudentDialog,setUploadStudentDialog] = useState(false);
+  const [uploadCSVDialog,setUploadCSVDialog] = useState(false);
+  const toggleStudentDialog = ()=>
+{
+  if(uploadStudentDialog)
+    setUploadStudentDialog(false);
+  else
+    setUploadStudentDialog(true);
+}
+const toggleUploadCSVDialog = ()=>
+{
+  if(uploadCSVDialog)
+    setUploadCSVDialog(false);
+  else
+    setUploadCSVDialog(true);
+}
 
 
   return (
@@ -70,14 +97,76 @@ export default function Roster() {
     <h2></h2>
     <Grid container spacing={5} sx={{flexGrow: 1}}>
         <Grid xs={10} md={6}>
-        <Button variant="contained" sx={{whiteSpace:'nowrap'}}>Add Student</Button>
+        <Button onClick={toggleStudentDialog} variant="contained" sx={{whiteSpace:'nowrap'}}>Add Student</Button>
         </Grid>
         <Grid xs={10} md={6}>
-        <Button variant="contained">Upload CSV</Button>
+        <Button onClick={toggleUploadCSVDialog} variant="contained">Upload CSV</Button>
         </Grid>
     </Grid>
     
-    
+<Dialog fullWidth open={uploadStudentDialog} onClose={toggleStudentDialog}>
+  <DialogTitle id="add-course-dialog">Add Student</DialogTitle>
+  <DialogContent dividers>
+  <Grid container direction="column" spacing={2}>
+          <Grid>
+            <TextField
+              autoFocus
+              fullWidth
+              margin="dense"
+              id="courseName"
+              label="Course Name"
+              variant="standard"
+            />
+          </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="sectionNum"
+              label="Section"
+              variant="standard"
+              type="number"
+            />
+          </Grid>
+        </Grid>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleStudentDialog} color="secondary">Cancel</Button>
+      <Button onClick={toggleStudentDialog} color="primary">Add</Button>
+    </DialogActions>
+</Dialog>
+
+<Dialog fullWidth open={uploadCSVDialog} onClose={toggleUploadCSVDialog}>
+  <DialogTitle id="add-course-dialog">Upload CSV</DialogTitle>
+  <DialogContent dividers>
+  <Grid container direction="column" spacing={2}>
+          <Grid>
+            <TextField
+              autoFocus
+              fullWidth
+              margin="dense"
+              id="courseName"
+              label="Course Name"
+              variant="standard"
+            />
+          </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="sectionNum"
+              label="Section"
+              variant="standard"
+              type="number"
+            />
+          </Grid>
+        </Grid>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleUploadCSVDialog} color="secondary">Cancel</Button>
+      <Button onClick={toggleUploadCSVDialog} color="primary">Add</Button>
+    </DialogActions>
+</Dialog>
 
       </main>
 

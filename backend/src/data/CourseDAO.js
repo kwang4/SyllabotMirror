@@ -7,20 +7,26 @@ function getCourses() {
   })
 }
 
-function getCourse(semesterID, courseID){
-  return db.query('SELECT * FROM course WHERE semesterID = ? and courseID = ?', [semesterID, courseID]).then(({ results }) => {
+function getCourse(crs_sem_id, crs_id){
+  return db.query('SELECT * FROM course WHERE crs_sem_id = ? and crs_id = ?', [crs_sem_id, crs_id]).then(({ results }) => {
     return results.map(course => new Course(course));
   })
 }
 
-function checkIfCourseExists(semesterID, courseName){
-  return db.query('SELECT * FROM course WHERE semesterID = ? and courseName= ?', [semesterID, courseName]).then(({ results }) => {
+function getCourseByID(crs_id){
+  return db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]).then(({ results }) => {
     return results.map(course => new Course(course));
   })
 }
-function createCourse(semesterID, courseName){
+
+function checkIfCourseExists(crs_sem_id, crs_name){
+  return db.query('SELECT * FROM course WHERE crs_sem_id = ? and crs_name= ?', [crs_sem_id, crs_name]).then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+function createCourse(crs_sem_id, crs_name){
   
-  return db.query('INSERT INTO course (semesterID, courseName) VALUES (?, ?);', [semesterID, courseName], function (err, result) {
+  return db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name], function (err, result) {
     if (err) throw err;
     console.log("Number of records inserted: " + result.affectedRows);
     return result.affectedRows;
@@ -28,15 +34,25 @@ function createCourse(semesterID, courseName){
 }
 
 //Not TESTED
-function setCourse(semesterID, courseName){
-  return db.query('INSERT INTO course WHERE semesterID = ? and courseName = ?', [courseID, courseName]).then(({ results }) => {
+function setCourse(crs_sem_id, crs_name){
+  return db.query('INSERT INTO course WHERE crs_sem_id = ? and crs_name = ?', [crs_id, crs_name]).then(({ results }) => {
     return results.map(course => new Course(course));
   })
 }
 
+// function getInstructors(crs_id, sectionNum){
+//   // crs_id = 1
+//     return db.query('SELECT u.userID, u.name FROM user u NATURAL JOIN roster r WHERE r.crs_id = ? AND r.sectionNum = ? AND r.roleID = 2;', [crs_id, sectionNum]).then(({ results }) => {
+//         return results.map(user => new User(user));
+//       })
+
+// }
+
 module.exports = {
   getCourses: getCourses,
   getCourse: getCourse,
+  getCourseByID: getCourseByID,
   createCourse: createCourse,
   checkIfCourseExists: checkIfCourseExists
+  // getInstructors: getInstructors
 }

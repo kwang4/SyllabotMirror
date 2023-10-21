@@ -5,6 +5,7 @@ const sectionRouter = require('./api/sectionAPI.js');
 const courseRouter = require('./api/courseAPI.js');
 const resourceRouter = require('./api/resourceAPI.js');
 const semesterRouter = require('./api/semesterAPI.js');
+const userRouter = require('./api/userAPI.js');
 const rosterRouter = require('./api/rosterAPI.js');
 const shibRouter = require('./api/shibAPI.js')
 
@@ -12,7 +13,7 @@ const shibRouter = require('./api/shibAPI.js')
 apiRouter.use('/semesters', semesterRouter);
 // NOT TESTED
 apiRouter.use('/semesters/:semesterid/courses/:courseid/sections/:sectionid/roster', rosterRouter);
-
+apiRouter.use('/users', userRouter);
 apiRouter.use('/semesters/:semesterid/courses/:courseid/sections', sectionRouter);
 apiRouter.use('/semesters/:semesterid/courses', courseRouter);
 apiRouter.use('/semesters/:semesterid/courses/:courseid/sections/:sectionNum/resources', resourceRouter);
