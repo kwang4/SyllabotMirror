@@ -26,6 +26,29 @@ function setRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
   })
 }
 
+function addOneToRoster(ros_crs_id, ros_sec_number, ros_rol_id, usr_first_name, usr_last_name, usr_unity_id){
+  
+  db.query('INSERT INTO user (usr_is_admin, usr_first_name, usr_last_name, usr_unity_id) VALUES (0, ?, ?, ?)', [usr_first_name, usr_last_name, usr_unity_id]).catch(function(){
+    console.log('Duplicate user')
+  });
+ 
+  db.query('SELECT usr_id FROM user WHERE usr_unity_id = ?', [usr_unity_id]).then(({user}) => {
+    console.log(user)
+    db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, user]).then(function (result) {
+      console.log(result)
+      if(result && result.affectedRows > 0){
+        return result.map(roster => new Roster(roster));
+      } else {
+        return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id,ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, user, ros_rol_id]).then(({ results }) => {
+          return results.map(roster => new Roster(roster));
+        })
+      }
+    })
+    
+  })
+  
+}
+
 // SAME AS setRoster, but may want different naming convention for editing/adding a roster
 function addRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
   return db.query('INSERT INTO roster WHERE rosterID = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
@@ -53,5 +76,6 @@ module.exports = {
   getRoster: getRoster,
   setRoster: setRoster,
   deleteRoster: deleteRoster,
-  addRoster: addRoster
+  addRoster: addRoster,
+  addOneToRoster: addOneToRoster
 }
