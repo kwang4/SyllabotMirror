@@ -157,51 +157,6 @@ export default function CourseInfo() {
 <h2></h2>
 <Box sx={{ minWidth: 14/18, minHeight: 80, }} onClick={toggleSlackDialog}><SlackCard></SlackCard></Box>
 
-<Dialog fullWidth open={slackDialogStatus} onClose={toggleSlackDialog}>
-  <DialogTitle id="link-to-slack-dialog">Manage Slack Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/blob/slack/Slack/README.md" color="primary">Slack Setup Tutorial</Link></DialogTitle>
-  <DialogContent dividers>
-  <Grid container direction="column" spacing={2}>
-          <Grid>
-            <TextField
-              autoFocus
-              fullWidth
-              margin="dense"
-              id="slackToken"
-              label="Slack Token"
-              variant="standard"
-              onChange={handleSlackToken}
-            />
-          </Grid>
-          <Grid>
-            <TextField
-              margin="dense"
-              fullWidth
-              id="signingSecret"
-              label="Signing Secret"
-              variant="standard"
-              onChange={handleSigningSecret}
-            />
-          </Grid>
-          <Grid>
-            <TextField
-              margin="dense"
-              fullWidth
-              id="socketToken"
-              label="Socket Token"
-              variant="standard"
-              onChange={handleSocketToken}
-            />
-          </Grid>
-        </Grid>
-  </DialogContent>
-    <DialogActions>
-      <Button onClick={unlinkToSlack} color="primary" sx={{ alignItems: 'flex-start' }}>Remove Connection</Button>
-      <Button onClick={toggleSlackDialog} color="secondary">Cancel</Button>
-      <Button onClick={linkToSlack} color="primary">Confirm</Button>
-    </DialogActions>
-  
-</Dialog>
-
 <Dialog fullWidth open={discordDialogStatus} onClose={toggleDiscordDialog}>
   <DialogTitle id="link-to-slack-dialog">Manage Discord Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/blob/slack/Slack/README.md" color="primary">Discord Setup Tutorial</Link></DialogTitle>
   <DialogContent dividers>
@@ -241,8 +196,56 @@ export default function CourseInfo() {
   </DialogContent>
     <DialogActions>
       <Button onClick={unlinkToDiscord} color="primary" sx={{ alignItems: 'flex-start' }}>Remove Connection</Button>
+      <Box flexGrow={1}></Box>
       <Button onClick={toggleDiscordDialog} color="secondary">Cancel</Button>
       <Button onClick={linkToDiscord} color="primary">Confirm</Button>
+    </DialogActions>
+  
+</Dialog>
+
+
+<Dialog fullWidth open={slackDialogStatus} onClose={toggleSlackDialog}>
+  <DialogTitle id="link-to-slack-dialog">Manage Slack Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/blob/slack/Slack/README.md" color="primary">Slack Setup Tutorial</Link></DialogTitle>
+  <DialogContent dividers>
+  <Grid container direction="column" spacing={2}>
+          <Grid>
+            <TextField
+              autoFocus
+              fullWidth
+              margin="dense"
+              id="slackToken"
+              label="Slack Token"
+              variant="standard"
+              onChange={handleSlackToken}
+            />
+          </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="signingSecret"
+              label="Signing Secret"
+              variant="standard"
+              onChange={handleSigningSecret}
+            />
+          </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="socketToken"
+              label="Socket Token"
+              variant="standard"
+              onChange={handleSocketToken}
+            />
+          </Grid>
+        </Grid>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={unlinkToSlack} color="primary" sx={{ alignItems: 'flex-start' }}>Remove Connection</Button>
+      <Box flexGrow={1}></Box>
+      <Button onClick={toggleSlackDialog} color="secondary">Cancel</Button>
+      <Button onClick={linkToSlack} color="primary">Confirm</Button>
     </DialogActions>
   
 </Dialog>
