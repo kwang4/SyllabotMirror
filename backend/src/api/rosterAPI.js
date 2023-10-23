@@ -63,8 +63,13 @@ router.post("/",function(req,res){
     const ros_sec_number = req.params.sectionNum;
     const roster=req.body;
     if (roster && roster.role_id && roster.first_name && roster.last_name && roster.unity_id){
-        RosterDAO.addOneToRoster(ros_crs_id, ros_sec_number, roster.role_id, roster.first_name, roster.last_name, roster.unity_id).then(roster =>{
-            res.json(roster);
+        RosterDAO.addUserToRoster(ros_crs_id, ros_sec_number, roster.role_id, roster.first_name, roster.last_name, roster.unity_id).then(roster =>{
+            if(roster){
+                res.json(roster);
+            } else{
+                res.json(404).json({error: 'Could not add user'});
+            }
+            
         })
         
     } else {
