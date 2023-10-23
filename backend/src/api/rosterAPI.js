@@ -59,13 +59,19 @@ router.get("/",(req,res,next)=>{
  * 
  */
 router.post("/",function(req,res){
+    const ros_crs_id = req.params.courseid;
+    const ros_sec_number = req.params.sectionNum;
     const roster=req.body;
-    if (roster && roster.rosterID && roster.userID && roster.sectionID && roster.roleID){
-        res.json({'rosterid':'1', 'userID':roster.userID, 'sectionID':roster.sectionID, 'roleID':roster.roleID});
+    if (roster && roster.role_id && roster.first_name && roster.last_name && roster.unity_id){
+        RosterDAO.addOneToRoster(ros_crs_id, ros_sec_number, roster.role_id, roster.first_name, roster.last_name, roster.unity_id).then(roster =>{
+            res.json(roster);
+        })
+        
     } else {
-        res.status(404).json({error: "roster must have values for /'rosterID/', /'userID/',/'sectionID' and /'roleID/'"});
+        res.status(404).json({error: "roster must have values for /'role_id/', /'first_name/',/'last_name' and /'unity_id/'"});
     }
 })
+
 
 // NOT TESTED
 /**
