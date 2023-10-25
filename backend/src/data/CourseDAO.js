@@ -1,8 +1,9 @@
-const db = require('./DBConnection')
-const Course = require('./models/Course')
+const db = require('./DBConnection');
+const Course = require('./models/Course');
+const Roles = require('./models/RoleEnum');
 
 function getCourses() {
-  console.log(roles_user.TEACHER);
+  console.log(Roles.TEACHER);
   return db.query('SELECT * FROM course').then(({ results }) => {
     return results.map(course => new Course(course));
   })
