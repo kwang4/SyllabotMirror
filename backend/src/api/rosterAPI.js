@@ -87,19 +87,29 @@ router.post("/",function(req,res){
   
 })
 
-
-// NOT TESTED
 /**
  * Deletes roster with the given roster ID
  * 
  *  params: rosterid
  *  returns: roster object with given rosterid that was just deleted
  */
-router.delete("/:sectionid",(req,res,next)=>{
-    // Check if id exists
-    // else return 404 error
-    //res.json({'CouresName':'CSC 492', 'rosterid':req.params.rosterid, 'period':'fall', 'roster':'2023'})
+router.delete("/",(req,res,next)=>{
+    const ros_crs_id = req.params.courseid;
+    const ros_sec_number = req.params.sectionNum;
+    RosterDAO.deleteEntireRoster(ros_crs_id, ros_sec_number).then(result=>{res.json({RowsDeleted:result})});
 })
 
+/**
+ * Deletes roster with the given roster ID
+ * 
+ *  params: rosterid
+ *  returns: roster object with given rosterid that was just deleted
+ */
+router.delete("/users/:userid",(req,res,next)=>{
+    const ros_usr_id = req.params.userid;
+    const ros_crs_id = req.params.courseid;
+    const ros_sec_number = req.params.sectionNum;
+    RosterDAO.deleteUserFromRoster(ros_crs_id, ros_sec_number, ros_usr_id).then(result=>{res.json({RowsDeleted:result})});
+})
 
 module.exports = router;
