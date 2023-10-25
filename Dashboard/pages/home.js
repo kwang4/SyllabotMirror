@@ -33,9 +33,9 @@ export default function Home() {
 
 
 
-  async function fetchSections()
+  async function fetchCourseInfo()
   {
-    console.log("Fetching section...");
+    console.log("Fetching courses...");
     //Gets all courses a user is responsible for (admin see all courses not done yet)
     const sectionResp = await APIModule.get(`/users/${authenticatedUser.id}/courses`);
     if(sectionResp?.status != 200)
@@ -43,8 +43,9 @@ export default function Home() {
       console.log("Section API call error");
       return;
     }
-    let sectionList = sectionResp.data;
-    console.log(sectionList);
+    let courseList = sectionResp.data;
+    setCourseData(courseList);
+
 
   }
 
@@ -87,7 +88,7 @@ export default function Home() {
   },[]);
 
   useEffect(()=>{
-    fetchSections();
+    fetchCourseInfo();
     
   },[authenticatedUser]);
 
@@ -138,10 +139,10 @@ const handleSectionNum = (event) =>{
 
 <Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-{classDat.map((card, index) => (
+{courseData.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
     <Link href={`/course/${card.courseName}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.courseName} classInstructors={'I. Dominguez'} />
+        <ClassCard classTitle={card.courseName} classInstructors={card.instructors.join(',')} />
     </Link>
   </Grid>
 ))}
