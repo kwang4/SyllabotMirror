@@ -1,9 +1,11 @@
 import styles from './NcsuHeader.module.css';
 const axios = require('axios');
+const BASE_API_URL = "https://localhost/api";
 const APIModule = {
-        get: async (url) =>{
-            const response = await axios.get('https://localhost/api/shib').catch(error=>{console.log(error)});
-            return response.data;
+        get: async (endpoint) =>{
+            console .log(BASE_API_URL+endpoint);
+            const response = await axios.get(BASE_API_URL+endpoint).catch(error=>{console.log(error)});
+            return response;
         }
 }
 

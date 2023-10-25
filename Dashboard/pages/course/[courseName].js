@@ -2,6 +2,7 @@ import Head from 'next/head';
 import styles from '@styles/Home.module.css';
 import Link from 'next/link';
 import NcsuHeader from 'components/NcsuHeader.js';
+import APIModule from '@components/APIModule.js';
 import OptionCard from 'components/OptionCard';
 import DiscordCard from 'components/DiscordCard';
 import SlackCard from 'components/SlackCard';
@@ -41,7 +42,7 @@ export default function CourseInfo() {
       'signingSecret': signingSecret,
       'socketToken': socketToken
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = slackData;
     console.log(response);
@@ -57,7 +58,7 @@ export default function CourseInfo() {
       'signingSecret': "",
       'socketToken': ""
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response =  await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = slackData;
 
@@ -74,7 +75,7 @@ export default function CourseInfo() {
       'signingSecret': signingSecret,
       'socketToken': socketToken
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = discordData;
     console.log(response);
@@ -90,7 +91,7 @@ export default function CourseInfo() {
       'signingSecret': "",
       'socketToken': ""
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = discordData;
 

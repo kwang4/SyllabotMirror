@@ -18,14 +18,13 @@ function getSectionsByCourse(sec_crs_id) {
 
 function getSectionsByUserID(ros_usr_id) {
 
-    return db.query('SELECT * FROM section S JOIN roster R ON S.sec_crs_id = R.ros_crs_id WHERE ros_usr_id = ? AND ros_rol_id = 2;', [ros_usr_id]).then(({ results }) => {
+    return db.query('SELECT * FROM section S JOIN roster R ON S.sec_crs_id = R.ros_crs_id AND S.sec_number = R.ros_sec_number WHERE ros_usr_id = ? AND ros_rol_id = 2;', [ros_usr_id]).then(({ results }) => {
       return results.map(section => new Section(section));
     })
   }
 
 function getInstructors(ros_crs_id, ros_sec_number){
-  // courseID = 1 and sectionNum = 2 
-    return db.query('SELECT u.usr_id, u.usr_first_name, u.usr_last_name FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = 2;', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return db.query('SELECT * FROM roster R JOIN user U ON U.usr_id = R.ros_usr_id WHERE ros_crs_id=? AND ros_sec_number=? AND ros_rol_id=2;', [ros_crs_id, ros_sec_number]).then(({ results }) => {
         return results.map(user => new User(user));
       })
 
