@@ -14,28 +14,55 @@ const UserDAO = require('../data/UserDAO.js');
 router.get("/:userid/courses", async (req, res, next) => {
     const userID = req.params.userid;
     try {
-        const sections = await SectionDAO.getSectionsByUserID(userID);
-        const validSections = await Promise.all(
-            sections.map(async (section) => {
-                const course = await CourseDAO.getCourseByID(section.courseID);
-                if(course) {
-                    section['courseName'] = course.courseName;
-                    section['semesterID'] = course.semesterID;
-                }
-                const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
-                if(instructors != null) {
-                    let instructorList = [];
-                    for(const instructor of instructors)
-                    {
-                        const instructorName = instructor.first_name + " " + instructor.last_name;
-                        instructorList.push(instructorName);
+        const user = await UserDAO.getUser(userID);
+        if (user.is_admin) {
+            const sections = await SectionDAO.getSections();
+            const validSections = await Promise.all(
+                sections.map(async (section) => {
+                    const course = await CourseDAO.getCourseByID(section.courseID);
+                    if(course) {
+                        section['courseName'] = course.courseName;
+                        section['semesterID'] = course.semesterID;
                     }
-                    section['instructors'] = instructorList;
-                }
-                return section;
-            })
-        );
-        res.json(validSections);
+                    const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
+                    if(instructors != null) {
+                        let instructorList = [];
+                        for(const instructor of instructors)
+                        {
+                            const instructorName = instructor.first_name + " " + instructor.last_name;
+                            instructorList.push(instructorName);
+                        }
+                        section['instructors'] = instructorList;
+                    }
+                    return section;
+                })
+            );
+            res.json(validSections);
+        } else {
+            const sections = await SectionDAO.getSectionsByUserID(userID);
+            const validSections = await Promise.all(
+                sections.map(async (section) => {
+                    const course = await CourseDAO.getCourseByID(section.courseID);
+                    if(course) {
+                        section['courseName'] = course.courseName;
+                        section['semesterID'] = course.semesterID;
+                    }
+                    const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
+                    if(instructors != null) {
+                        let instructorList = [];
+                        for(const instructor of instructors)
+                        {
+                            const instructorName = instructor.first_name + " " + instructor.last_name;
+                            instructorList.push(instructorName);
+                        }
+                        section['instructors'] = instructorList;
+                    }
+                    return section;
+                })
+            );
+            res.json(validSections);
+        }
+        
     } catch (error) {
         res.status(404).send({error: 'Section not found'})
     }

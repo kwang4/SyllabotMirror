@@ -2,6 +2,12 @@ const db = require('./DBConnection')
 const Section = require('./models/Section')
 const User = require('./models/User')
 
+function getSections() {
+  return db.query('SELECT * FROM section;').then(({ results }) => {
+    return results.map(section => new Section(section));
+  })
+}
+
 function getSectionByCourse(sec_crs_id, sec_number) {
 
     return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
@@ -40,6 +46,7 @@ function createSection(sec_crs_id, sec_number){
 }
 
 module.exports = {
+    getSections: getSections,
     getSectionsByCourse: getSectionsByCourse,
     getSectionByCourse: getSectionByCourse,
     getSectionsByUserID: getSectionsByUserID,

@@ -484,7 +484,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,1,'Collin','Riggs','criggs'),(3,1,'Kai-En','Wang','kwang23'),(4,1,'Jackson','Hall','jhall'),(5,1,'Daniel','Buchanan','dbuchanan'),(6,0,'Ignacio','Dominguez','ixdoming'),(7,0,'Margaret','Heil','mheil');
+INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,1,'Collin','Riggs','cmriggs'),(3,1,'Kai-En','Wang','kwang23'),(4,1,'Jackson','Hall','jhall'),(5,1,'Daniel','Buchanan','dbuchanan'),(6,0,'Ignacio','Dominguez','ixdoming'),(7,0,'Margaret','Heil','mheil');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
