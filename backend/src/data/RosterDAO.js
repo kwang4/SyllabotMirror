@@ -62,7 +62,6 @@ function deleteEntireRoster(ros_crs_id, ros_sec_number){
   return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
     console.log("Number of records deleted: " + results.affectedRows);
     return results.affectedRows;
-    // Maybe just return a success message?
   })
 }
 
