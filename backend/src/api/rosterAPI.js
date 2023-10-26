@@ -66,7 +66,7 @@ router.post("/",function(req,res){
     if(req.body && req.body.user){
         let user = JSON.parse(req.body.user);
         
-        if (user && user.first_name && user.last_name && user.unity_id){
+        if (user && user.formal_name && user.unity_id){
             RosterDAO.addUserToRoster(ros_crs_id, ros_sec_number, user, req.body.role_id).then(roster =>{
                 if(roster){
                     res.json(roster);
@@ -77,7 +77,7 @@ router.post("/",function(req,res){
             });
             
         } else {
-            res.status(404).json({error: "roster must have values for first_name, last_name and unity_id"});
+            res.status(404).json({error: "roster must have values for formal_name and unity_id"});
         }
 
     } else {

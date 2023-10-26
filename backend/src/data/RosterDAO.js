@@ -36,7 +36,9 @@ function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id){
   // TODO is there a better way to search for duplicates Call USER DAO to create a new user
   return UserDAO.createUser(user).then(results => {
     new_user = results[0];
-    return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).then(() =>{
+    return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).catch(()=>{
+      console.log("User already exists in roster");
+    }).then(() =>{
       return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(result=>{
         return result.results.map(roster => new Roster(roster));
       });
