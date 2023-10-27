@@ -9,6 +9,11 @@ const router = express.Router({mergeParams: true});
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
+// const multer  = require('multer');
+// const upload = multer({ dest: 'uploads/' });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
 /**
  * Returns a list of the materials associated with the specified 
  * course and section, or an error if the course with the given course_id does not exist.
