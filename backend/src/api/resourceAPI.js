@@ -5,12 +5,23 @@
 const express = require('express');
 const ResourceDAO = require('../data/ResourceDAO');
 const router = express.Router({mergeParams: true});
-
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
+router.use(bodyParser.json()); //utilizes the body-parser package
+router.use(bodyParser.urlencoded({extended: true}));
 
 const multer  = require('multer');
-const upload = multer({ dest: '../resources/' }).single('uploaded_file');
+const upload = multer({ dest: 'resources/' });
+
+var formidable = require('formidable'),
+    form = new formidable.IncomingForm();
+
+    // function submit(dir) {
+    //     return function (req, res, next) {
+    //         form.parse(req, function(err, fields, files) {  
+    //             // The files object here is what you expected from req.files
+    //         });
+    //     };
+    // };
 
 /**
  * Returns a list of the materials associated with the specified 
@@ -33,13 +44,14 @@ router.get("/",(req,res,next)=>{
     // );
 })
 
-router.post("/", upload.single('uploaded_file'), (req,res, next) => {
+router.post("/", (req,res, next) => {
+    
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;
-    console.log(req.body);
+    
     if (req.body.file){
         // check if file with same name already exists in given course and section
-        file = req.file['file'];
+        file = req.file['uploaded_file'];
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
               // A Multer error occurred when uploading.
