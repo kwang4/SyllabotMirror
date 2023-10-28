@@ -9,10 +9,8 @@ const router = express.Router({mergeParams: true});
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
-// const multer  = require('multer');
-// const upload = multer({ dest: 'uploads/' });
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
+const multer  = require('multer');
+const upload = multer({ dest: '../resources /' });
 
 /**
  * Returns a list of the materials associated with the specified 
@@ -38,7 +36,6 @@ router.get("/",(req,res,next)=>{
 router.post("/", (req,res, next) => {
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;
-    // create a file link here
     ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, fil_link).then(resource=> {
         if (resource) {
             // get list of instructors for course

@@ -159,6 +159,7 @@ DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
   `fil_id` int NOT NULL AUTO_INCREMENT,
   `fil_link` varchar(300) DEFAULT NULL,
+  `fil_name` varchar(90) DEFAULT NULL,
   PRIMARY KEY (`fil_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -169,7 +170,7 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location'),(2,'Link to File 2 Location');
+INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'file_name_1'),(2,'Link to File 2 Location', 'file_name_2');
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 

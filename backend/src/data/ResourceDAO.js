@@ -38,8 +38,17 @@ function getFile(fil_link) {
     })
   }
 
+// This is just here to make sure we are not making duplicates
+function getFileName(fileName, courseid, sectionNumber){
+  return db.query('SELECT * FROM file JOIN section_resource ON fil_id = scr_fil_id WHERE fil_name like ? AND scr_crs_id = ? AND scr_sec_number = ?', [fileName, courseid, sectionNumber]).then((results)=>{
+    return results.map(file => new File(file));
+  })
+
+}
+
 module.exports = {
     getCourseFiles: getCourseFiles,
     uploadFile: uploadFile,
-    getResources: getResources
+    getResources: getResources,
+    getFileName: getFileName
 }
