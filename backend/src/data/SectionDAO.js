@@ -1,6 +1,7 @@
-const db = require('./DBConnection')
-const Section = require('./models/Section')
-const User = require('./models/User')
+const db = require('./DBConnection');
+const Section = require('./models/Section');
+const User = require('./models/User');
+const Roles = require('./models/RoleEnum');
 
 function getSectionByCourse(sec_crs_id, sec_number) {
 
@@ -25,7 +26,7 @@ function getSectionsByUserID(ros_usr_id) {
 
 function getInstructors(ros_crs_id, ros_sec_number){
   // courseID = 1 and sectionNum = 2 
-    return db.query('SELECT u.usr_id, u.usr_first_name, u.usr_last_name FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = 2;', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return db.query('SELECT u.usr_id, u.usr_first_name, u.usr_last_name FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = ?;', [ros_crs_id, ros_sec_number, Roles.TEACHER]).then(({ results }) => {
         return results.map(user => new User(user));
       })
 

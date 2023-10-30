@@ -1,6 +1,9 @@
 const db = require('./DBConnection');
 const Roster = require('./models/Roster');
-const User= require('./models/User');
+const User = require('./models/User');
+const UserDAO = require('./UserDAO');
+
+
 
 // NOT TESTED
 // This gets all users from every roster
@@ -12,8 +15,8 @@ function getRosters() {
 
 // NOT TESTED
 // This gets ALL users in a section's roster
-function getRoster(ros_sec_number){
-  return db.query('SELECT * FROM roster WHERE ros_sec_number = ?', [ros_sec_number]).then(({ results }) => {
+function getRoster(ros_crs_id, ros_sec_number){
+  return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
     return results.map(roster => new Roster(roster));
   })
 }
@@ -22,59 +25,53 @@ function getRoster(ros_sec_number){
 // This should currently only work for adding 1 user to the roster at a time
 // Router doesn't give ros_usr_id, so idk how that'll work currently
 function setRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
-  return db.query('INSERT INTO roster WHERE rosterID = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
+  return db.query('INSERT INTO roster WHERE ros_id = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
     return results.map(roster => new Roster(roster));
   })
 }
 
-function addOneToRoster(ros_crs_id, ros_sec_number, ros_rol_id, usr_first_name, usr_last_name, usr_unity_id){
+// ros_crs_id, ros_sec_number, ros_rol_id, usr_first_name, usr_last_name, usr_unity_id
+function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id){
   // Insert new user
-  db.query('INSERT INTO user (usr_is_admin, usr_first_name, usr_last_name, usr_unity_id) VALUES (0, ?, ?, ?)', [usr_first_name, usr_last_name, usr_unity_id]).catch(function(){
-    console.log('Duplicate user');
-  }).then(()=>{
-  db.query('SELECT * FROM user WHERE usr_unity_id = ?;', [usr_unity_id]).then(function(resultsU) {
-    console.log(resultsU.results[0]);
-    var user = resultsU.results[0]['usr_id'];
-      console.log(user);
-
-      user_id = user;
-      // To update the role if the user already exists
-      db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, user_id]).then(function (result) {
-        console.log(result);
-        if(result && result.affectedRows > 0){
-          return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then((results) =>{
-            return results.map(roster => new Roster(roster));
-          });
-        } else {
-          // Add user to roster
-          db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, user, ros_rol_id]).then((results1) => {
-            return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({results2}) =>{
-              console.log(results2);
-              return results2.map(roster => new Roster(roster));
-            });
-          
-          });
-        }
+  // TODO is there a better way to search for duplicates Call USER DAO to create a new user
+  return UserDAO.createUser(user).then(results => {
+    new_user = results[0];
+    return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).catch(()=>{
+      console.log("User already exists in roster");
+    }).then(() =>{
+      return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(result=>{
+        return result.results.map(roster => new Roster(roster));
       });
     });
-    
-    
   });
-  
 }
-
-// SAME AS setRoster, but may want different naming convention for editing/adding a roster
-function addRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
-  return db.query('INSERT INTO roster WHERE rosterID = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
+  
+function updateUserRole(ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id){
+  return db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
     return results.map(roster => new Roster(roster));
   })
 }
-// NOT TESTED
+
+// // SAME AS setRoster, but may want different naming convention for editing/adding a roster
+// function addRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
+//   return db.query('INSERT INTO roster WHERE rosterID = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
+//     return results.map(roster => new Roster(roster));
+//   })
+// }
+
+// This deletes the ENTIRE Roster for a section of a course
+function deleteEntireRoster(ros_crs_id, ros_sec_number){
+  return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    console.log("Number of records deleted: " + results.affectedRows);
+    return results.affectedRows;
+  })
+}
+
 // This deletes a SINGLE user from a Roster (may want to rename)
-function deleteRoster(ros_usr_id, ros_sec_number){
-  return db.query('INSERT INTO roster WHERE ros_usr_id = ? and ros_sec_number = ?', [ros_usr_id, ros_sec_number]).then(({ results }) => {
-    return results.map(roster => new Roster(roster));
-    // Maybe just return a success message?
+function deleteUserFromRoster(ros_crs_id, ros_sec_number, ros_usr_id){
+  return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
+    console.log("Number of records deleted: " + results.affectedRows);
+    return results.affectedRows;
   })
 }
 
@@ -89,7 +86,8 @@ module.exports = {
   getRosters: getRosters,
   getRoster: getRoster,
   setRoster: setRoster,
-  deleteRoster: deleteRoster,
-  addRoster: addRoster,
-  addOneToRoster: addOneToRoster
+  deleteEntireRoster: deleteEntireRoster,
+  deleteUserFromRoster: deleteUserFromRoster,
+  updateUserRole: updateUserRole,
+  addUserToRoster: addUserToRoster
 }
