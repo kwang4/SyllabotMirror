@@ -35,6 +35,14 @@ export default function CourseInfo() {
       {name: 'Settings', path:'settings'},
   ];
 
+  async function validateCourse()
+  {
+    const splitIdx = courseName.lastIndexOf('-');
+    const section = courseName.split(splitIdx+1);
+    const name = courseName.split(0,splitIx);
+    console.log(name + " " + section);
+  }
+
   async function linkToSlack()
   {
     const slackData  = {
@@ -125,6 +133,10 @@ export default function CourseInfo() {
     setSocketToken(event.target.value);
   }
 
+  useEffect(()=>{
+    validateCourse();
+  },[]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -134,7 +146,7 @@ export default function CourseInfo() {
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
       <h2 className={styles.title}>
-          Course Info {courseName} 
+           {courseName} 
         </h2>
         <h2>
           <Link href="/">Go Back</Link>
