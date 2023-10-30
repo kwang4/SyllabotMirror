@@ -11,7 +11,8 @@ router.use(express.urlencoded({ extended: true }));
 
 const CourseDAO = require('.././data/CourseDAO.js');
 const SectionDAO = require('.././data/SectionDAO.js');
-
+const UserDAO = require('.././data/UserDAO.js');
+const RosterDAO = require('.././data/RosterDAO.js');
 
 /**
  * Currently, these endpoints are just mock endpoints 
@@ -67,44 +68,52 @@ router.post("/",function(req,res){
     var courseName =  req.body.courseName;
     var sectionNum = req.body.sectionNum;
     var semesterid = req.params.semesterid;
-    if (courseName && sectionNum){
-        CourseDAO.checkIfCourseExists(semesterid, courseName).then(result =>{
-            if(result.length == 0){
-                CourseDAO.createCourse(semesterid, courseName).then(rowsAdded => {
-                    if ( rowsAdded.results.affectedRows > 0){
-                        CourseDAO.checkIfCourseExists(semesterid, courseName).then(course =>{
-                            // Add a section
-                            SectionDAO.createSection(course[0].courseID, sectionNum).then(sectionAdded => {
-                                res.json(sectionAdded.results.affectedRows)
+    const unityid = req.headers['x-shib_uid'];
+    UserDAO.getUserByUnityID(unityid).then(user => {
+        if (courseName && sectionNum){
+            CourseDAO.checkIfCourseExists(semesterid, courseName).then(result =>{
+                if(result.length == 0){
+                    CourseDAO.createCourse(semesterid, courseName).then(rowsAdded => {
+                        if ( rowsAdded.results.affectedRows > 0){
+                            CourseDAO.checkIfCourseExists(semesterid, courseName).then(course =>{
+                                // Add a section
+                                SectionDAO.createSection(course[0].courseID, sectionNum).then(sectionAdded => {
+                                    RosterDAO.addUserToRoster(course[0].courseID, sectionNum, user, 2).then(result => {
+                                        res.json(sectionAdded.results.affectedRows)
+                                    })
+                                })
+                                
                             })
-                            
-                        })
-                    } else {
-                        res.status(404).json({error: 'Error adding a course'})
-                    }
-                })
-                
-        
-            } else {
-                // check if section exists
-                SectionDAO.getSection(result[0].courseid, sectionNum).then(section=>{
-                    if(section.length > 0){
-                        res.json(section)
-                    } else{
-                        SectionDAO.createSection(result[0].courseID, sectionNum).then(sectionAdded => {
-                            res.json(sectionAdded.results.affectedRows)
-                        })
-                        // create the section with the user with the course
-                    }
-                })
-                
-                res.json(result)
-            }
+                        } else {
+                            res.status(404).json({error: 'Error adding a course'})
+                        }
+                    })
+                    
             
-        })
-    } else {
-        res.status(404).json({error: 'Course must have courseName and sectionNum'})
-    }
+                } else {
+                    // check if section exists
+                    SectionDAO.getSection(result[0].courseid, sectionNum).then(section=>{
+                        if(section.length > 0){
+                            res.json(section)
+                        } else{
+                            SectionDAO.createSection(result[0].courseID, sectionNum).then(sectionAdded => {
+                                RosterDAO.addUserToRoster(course[0].courseID, sectionNum, user, 2).then(result => {
+                                    res.json(sectionAdded.results.affectedRows)
+                                })
+                            })
+                            // create the section with the user with the course
+                        }
+                    })
+                    
+                    res.json(result)
+                }
+                
+            })
+        } else {
+            res.status(404).json({error: 'Course must have courseName and sectionNum'})
+        }
+    });
+    
     
     // const course=req.body;
     // if (course && course.CourseName && course.period && course.semester){

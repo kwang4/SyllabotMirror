@@ -25,11 +25,12 @@ router.get("/:userid/courses", async (req, res, next) => {
                         section['semesterID'] = course.semesterID;
                     }
                     const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
+                    console.log(instructors);
                     if(instructors != null) {
                         let instructorList = [];
                         for(const instructor of instructors)
                         {
-                            const instructorName = instructor.first_name + " " + instructor.last_name;
+                            const instructorName = instructor.usr_formal_name;
                             instructorList.push(instructorName);
                         }
                         section['instructors'] = instructorList;
@@ -37,6 +38,7 @@ router.get("/:userid/courses", async (req, res, next) => {
                     return section;
                 })
             );
+            console.log(validSections);
             res.json(validSections);
         } else {
             const sections = await SectionDAO.getSectionsByUserID(userID);
