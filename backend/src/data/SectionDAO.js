@@ -3,6 +3,12 @@ const Section = require('./models/Section');
 const User = require('./models/User');
 const Roles = require('./models/RoleEnum');
 
+function getSections() {
+  return db.query('SELECT * FROM section;').then(({ results }) => {
+    return results.map(section => new Section(section));
+  })
+}
+
 function getSectionByCourse(sec_crs_id, sec_number) {
 
     return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
@@ -19,7 +25,7 @@ function getSectionsByCourse(sec_crs_id) {
 
 function getSectionsByUserID(ros_usr_id) {
 
-    return db.query('SELECT * FROM section S JOIN roster R ON S.sec_crs_id = R.ros_crs_id WHERE ros_usr_id = ? AND ros_rol_id = 2;', [ros_usr_id]).then(({ results }) => {
+    return db.query('SELECT * FROM section S JOIN roster R ON S.sec_crs_id = R.ros_crs_id AND S.sec_number = R.ros_sec_number WHERE ros_usr_id = ? AND ros_rol_id = 2;', [ros_usr_id]).then(({ results }) => {
       return results.map(section => new Section(section));
     })
   }
@@ -42,6 +48,7 @@ function createSection(sec_crs_id, sec_number){
 }
 
 module.exports = {
+    getSections: getSections,
     getSectionsByCourse: getSectionsByCourse,
     getSectionByCourse: getSectionByCourse,
     getSectionsByUserID: getSectionsByUserID,

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import styles from '@styles/Home.module.css';
 import Link from 'next/link';
 import NcsuHeader from 'components/NcsuHeader.js';
+import APIModule from '@components/APIModule.js';
 import OptionCard from 'components/OptionCard';
 import DiscordCard from 'components/DiscordCard';
 import SlackCard from 'components/SlackCard';
@@ -34,6 +35,14 @@ export default function CourseInfo() {
       {name: 'Settings', path:'settings'},
   ];
 
+  async function validateCourse()
+  {
+    const splitIdx = courseName.lastIndexOf('-');
+    const section = courseName.split(splitIdx+1);
+    const name = courseName.split(0,splitIx);
+    console.log(name + " " + section);
+  }
+
   async function linkToSlack()
   {
     const slackData  = {
@@ -41,7 +50,7 @@ export default function CourseInfo() {
       'signingSecret': signingSecret,
       'socketToken': socketToken
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = slackData;
     console.log(response);
@@ -57,7 +66,7 @@ export default function CourseInfo() {
       'signingSecret': "",
       'socketToken': ""
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response =  await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = slackData;
 
@@ -74,7 +83,7 @@ export default function CourseInfo() {
       'signingSecret': signingSecret,
       'socketToken': socketToken
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = discordData;
     console.log(response);
@@ -90,7 +99,7 @@ export default function CourseInfo() {
       'signingSecret': "",
       'socketToken': ""
     }
-    // const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData).catch(error=>{console.log(error)});
+    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
 
     const response = discordData;
 
@@ -124,6 +133,10 @@ export default function CourseInfo() {
     setSocketToken(event.target.value);
   }
 
+  useEffect(()=>{
+    validateCourse();
+  },[]);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -133,7 +146,7 @@ export default function CourseInfo() {
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
       <h2 className={styles.title}>
-          Course Info {courseName} 
+           {courseName} 
         </h2>
         <h2>
           <Link href="/">Go Back</Link>

@@ -11,13 +11,13 @@ function getCourses() {
 
 function getCourse(crs_sem_id, crs_id){
   return db.query('SELECT * FROM course WHERE crs_sem_id = ? and crs_id = ?', [crs_sem_id, crs_id]).then(({ results }) => {
-    return results.map(course => new Course(course));
+    return new Course(results[0]);
   })
 }
 
 function getCourseByID(crs_id){
   return db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]).then(({ results }) => {
-    return results.map(course => new Course(course));
+    return new Course(results[0]);
   })
 }
 

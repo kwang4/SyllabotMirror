@@ -4,14 +4,14 @@ const User = require('./models/User')
 function getUser(usr_id) {
 
     return db.query('SELECT * FROM user WHERE usr_id = ?;', [usr_id]).then(({ results }) => {
-      return results.map(user => new User(user));
+      return new User(results[0]);
     })
   }
 
 function getUserByUnityID(usr_unity_id) {
 
     return db.query('SELECT * FROM user WHERE usr_unity_id = ?;', [usr_unity_id]).then(({ results }) => {
-      return results.map(user => new User(user));
+      return new User(results[0]);
     })
 }  
 

@@ -3,6 +3,7 @@ import styles from '@styles/Home.module.css';
 const axios = require('axios');
 import Link from 'next/link'
 import NcsuHeader from '@components/NcsuHeader.js';
+import APIModule from '@components/APIModule.js';
 import ClassCard from '@components/ClassCard';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 
@@ -21,53 +23,78 @@ export default function Home() {
   const [classDat,setClassDat] = useState([]);
   const [semesterData,setSemesterData] = useState([]);
   const [instructorData,setInstructorData] = useState([]);
+  //Course Creation
   const [dialogStatus,setDialogStatus] = useState(false);
   const [semesterSelector,setSemesterSelector] = useState('');
   const [courseName, setCourseName] = useState('');
   const [sectionNum, setSectionNum] = useState('');
+  const [createCourseError, setCreateCourseError] = useState(false);
+  //Get courses v2
+  const [authenticatedUser, setAuthenticatedUser] = useState({});
+  const [courseData, setCourseData] = useState([]);
 
-  //MOCK DATA
-//   const semesterData = [ 
-//     {semesterID: 1, season: 'Maymester',year:2023},
-//     {semesterID: 2, season: 'Summer 1',year:2023},
-//     {semesterID: 3, season: 'Summer 2',year:2023},
-//     {semesterID: 4, season: 'Fall',year:2024},
-//     {semesterID: 5, season: 'Spring',year:2024},
-//     {semesterID: 6, season: 'Fall',year:2025},
-// ];
+
+
+  /**
+   * Hits the /users/:userID/courses endpoint, retrieves all courses an authenticated user is allowed to see, such as
+   * the courses they are teachers in, or in the case of admins all courses for the current semester
+   * 
+   */
+  async function fetchCourseInfo()
+  {
+    //Gets all courses a user is responsible for (admin see all courses not done yet)
+    const sectionResp = await APIModule.get(`/users/${authenticatedUser.id}/courses`);
+    if(sectionResp?.status != 200)
+    {
+      console.log("Section API call error");
+      return;
+    }
+    let courseList = sectionResp.data;
+    setCourseData(courseList);
+
+  }
+
+  async function fetchAuthenticatedUser()
+  {
+    const shibResponse = await APIModule.get('/shib');
+    if(shibResponse?.data != null)
+    {
+      const unityid = shibResponse.data.unityid;
+      const usrResponse = await APIModule.get(`/users/unityid/${unityid}`);
+      if(usrResponse?.data != null)
+      {
+        setAuthenticatedUser(usrResponse.data);
+      }
+    }
+  }
+
+  async function fetchSemesterData()
+  {
+    const response = await APIModule.get('/semesters');
+    if(response?.data != null)
+    {
+      setSemesterData(response.data);
+    }
+  }
 
   useEffect(()=>{
-
-    async function fetchClassData()
-    {
-      const response = await axios.get('https://localhost/api/semesters/1/courses').catch(error=>{console.log(error)});
-      if(response?.data != null)
-      {
-        console.log(response.data);
-        setClassDat(response.data);
-      }
-    }
-    async function fetchSemesterData()
-    {
-      const response = await axios.get('https://localhost/api/semesters').catch(error=>{console.log(error)});
-      if(response?.data != null)
-      {
-        setSemesterData(response.data);
-      }
-    }
-    async function fetchInstructorData()
-    {
-      const response = await axios.get('https://localhost/api/semesters/1/courses/1/sections/users/2').catch(error=>{console.log(error)});
-      if(response?.data != null)
-      {
-        console.log(response.data);
-        setClassDat(response.data);
-      }
-    }
     fetchSemesterData();
-    fetchClassData();
-    fetchInstructorData();
+    fetchAuthenticatedUser();
+   // fetchSections();
   },[]);
+
+  useEffect(()=>{
+    fetchCourseInfo();
+    
+  },[authenticatedUser]);
+
+  /**
+   * Function to validate course fields before hitting the POST request
+   */
+  function validateCourse()
+  {
+
+  }
 
   async function createCourse()
   {
@@ -76,9 +103,18 @@ export default function Home() {
       'sectionNum': sectionNum,
       'semesterId': semesterSelector
     }
-    const response = await axios.post(`https://localhost/api/semesters/${semesterSelector}/courses`,courseData).catch(error=>{console.log(error)});
-
+    const response = await APIModule.post(`/semesters/${semesterSelector}/courses`,courseData);
     console.log(response);
+    if(response?.status != 200)
+    {
+      setCreateCourseError(true);
+      console.log(response);
+      return;
+    }
+    else
+    {
+      setCreateCourseError(false);
+    }
     window.location.reload();
   }
 
@@ -88,6 +124,7 @@ function toggleCourseDialog()
     setDialogStatus(false);
   else
     setDialogStatus(true);
+
 }
 const handleSemesterChange = (event) =>{
   setSemesterSelector(event.target.value);
@@ -115,10 +152,10 @@ const handleSectionNum = (event) =>{
 
 <Grid sx={{width:'80%',}} container rowSpacing={5} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-{classDat.map((card, index) => (
+{courseData.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
-    <Link href={`/course/${card.courseName}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.courseName} classInstructors={'I. Dominguez'} />
+    <Link href={`/course/${card.courseName + "-" + String(card.sectionNum).padStart(3,'0')}`} style={{textDecoration:'none'}} passHref>
+        <ClassCard classTitle={card.courseName} classInstructors={card.instructors.join(',')} />
     </Link>
   </Grid>
 ))}
@@ -164,6 +201,13 @@ const handleSectionNum = (event) =>{
                 ))}
               </Select>
             </FormControl>
+          </Grid>
+          <Grid>
+           {createCourseError && 
+            <Typography variant="subtitle1" sx={{color:'red'}}>
+             Invalid Fields
+            </Typography>
+          }
           </Grid>
         </Grid>
   </DialogContent>
