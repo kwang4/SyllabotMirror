@@ -8,29 +8,30 @@ const router = express.Router({mergeParams: true});
 // const bodyParser = require('body-parser');
 // router.use(bodyParser.json()); //utilizes the body-parser package
 // router.use(bodyParser.urlencoded({extended: true}));
+const path = require('path');
 
 const multer  = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, './uploads');
+      cb(null, path.join(__dirname, '/uploads'));    
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
       cb(null, file.fieldname + '-' + uniqueSuffix)
     }
   });
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage
+    //,fileFilter: fileFilter 
+})
 
-// var formidable = require('formidable'),
-//     form = new formidable.IncomingForm();
-
-    // function submit(dir) {
-    //     return function (req, res, next) {
-    //         form.parse(req, function(err, fields, files) {  
-    //             // The files object here is what you expected from req.files
-    //         });
-    //     };
-    // };
+// const fileFilter = (req, file, cb) => {
+//     // reject a file
+//     if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+//       cb(null, true);
+//     } else {
+//       cb(null, false);
+//     }
+//   };
 
 /**
  * Returns a list of the materials associated with the specified 
@@ -53,7 +54,7 @@ router.get("/",(req,res,next)=>{
     // );
 })
 
-router.post("/", upload.single('upload_file'), (req,res, next) => {
+router.post("/", upload.single('file'), (req,res, next) => {
     
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;

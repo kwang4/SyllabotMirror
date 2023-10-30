@@ -23,7 +23,7 @@ services:
     build: ./backend
     restart: unless-stopped
     volumes:
-      - ./backend:/app/backend/src
+      - ./backend/src:/app/src
     environment:
       - PORT=80
     env_file: 
