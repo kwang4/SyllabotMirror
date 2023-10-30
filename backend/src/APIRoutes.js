@@ -12,7 +12,7 @@ const shibRouter = require('./api/shibAPI.js')
 // NOT TESTED
 apiRouter.use('/semesters', semesterRouter);
 // NOT TESTED
-apiRouter.use('/semesters/:semesterid/courses/:courseid/sections/:sectionid/roster', rosterRouter);
+apiRouter.use('/semesters/:semesterid/courses/:courseid/sections/:sectionNum/roster', rosterRouter);
 apiRouter.use('/users', userRouter);
 apiRouter.use('/semesters/:semesterid/courses/:courseid/sections', sectionRouter);
 apiRouter.use('/semesters/:semesterid/courses', courseRouter);
