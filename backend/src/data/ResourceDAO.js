@@ -15,15 +15,14 @@ function getCourseFiles(scr_sec_number, scr_crs_id) {
     })
   }
 
-function uploadFile(scr_sec_number, scr_crs_id, file){
-  return db.query('INSERT INTO file (fil_link, fil_name) VALUES (?, ?)', [file.fil_link, file.fil_name]).then(()=>{
-    return getFile(file.fil_link, file.fil_name).then(new_file =>{
-      return db.query('INSERT INTO section_resource (scr_crs_id, scr_sec_number, scr_fil_id) VALUES (?,?,?)', [scr_sec_number, scr_crs_id, new_file.fil_id]).then(()=>{
-        return new_file;
+function uploadFile(scr_sec_number, scr_crs_id, original_name, file_path){
+  return db.query('INSERT INTO file (fil_link, fil_name) VALUES (?, ?)', [file_path, original_name]).then(()=>{
+    return getFile(file_path, original_name).then(results =>{
+      let file = results.map(file => new File(file));
+      return db.query('INSERT INTO section_resource (scr_crs_id, scr_sec_number, scr_fil_id) VALUES (?,?,?)', [scr_sec_number, scr_crs_id, file.fil_id]).then(()=>{
+        return file;
       });
-     
     });
-    
   });
 }
 

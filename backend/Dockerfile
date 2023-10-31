@@ -3,7 +3,7 @@
 FROM node:lts
 
 # Set working directory
-WORKDIR /usr/src/api
+WORKDIR /app
 
 # install node modules
 COPY ./package*.json .
