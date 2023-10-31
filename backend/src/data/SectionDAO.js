@@ -33,7 +33,7 @@ function getSectionsByUserID(ros_usr_id) {
 function getInstructors(ros_crs_id, ros_sec_number){
   // courseID = 1 and sectionNum = 2 
   console.log(ros_crs_id, ros_sec_number);
-    return db.query('SELECT u.usr_id, u.usr_formal_name FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = ? AND u.usr_id = ros_usr_id;;', [ros_crs_id, ros_sec_number, Roles.TEACHER]).then(({ results }) => {
+    return db.query('SELECT * FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = ? AND u.usr_id = ros_usr_id;', [ros_crs_id, ros_sec_number, Roles.TEACHER]).then(({ results }) => {
         return results.map(user => new User(user));
       })
 

@@ -51,6 +51,7 @@ export default function Home() {
     }
     let courseList = sectionResp.data;
     setCourseData(courseList);
+    console.log(courseList);
 
   }
 
