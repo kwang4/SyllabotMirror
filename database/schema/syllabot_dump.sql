@@ -162,16 +162,16 @@ CREATE TABLE file (
   fil_name varchar(90) DEFAULT NULL,
   PRIMARY KEY (fil_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
-/!40101 SET character_set_client = @saved_cs_client/;
+/*!40101 SET character_set_client = @saved_cs_client*/;
 
 --
 -- Dumping data for table `file`
 --
 
 LOCK TABLES file WRITE;
-/!40000 ALTER TABLE file DISABLE KEYS/;
+/*!40000 ALTER TABLE file DISABLE KEYS*/;
 INSERT INTO file VALUES (1,'Link to File 1 Location', 'file_name_1'),(2,'Link to File 2 Location', 'file_name_2');
-/!40000 ALTER TABLE file ENABLE KEYS/;
+/*!40000 ALTER TABLE file ENABLE KEYS*/;
 UNLOCK TABLES;
 
 --
