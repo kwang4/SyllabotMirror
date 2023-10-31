@@ -25,4 +25,4 @@ ENV PORT 8000
 COPY . .  
 
 EXPOSE 8000
-CMD [ "npm", "test"]
+CMD [ "npm", "start"]
