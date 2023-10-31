@@ -156,21 +156,22 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `file` (
-  `fil_id` int NOT NULL AUTO_INCREMENT,
-  `fil_link` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`fil_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE file (
+  fil_id int NOT NULL AUTO_INCREMENT,
+  fil_link varchar(300) DEFAULT NULL,
+  fil_name varchar(90) DEFAULT NULL,
+  PRIMARY KEY (fil_id)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+/!40101 SET character_set_client = @saved_cs_client/;
 
 --
 -- Dumping data for table `file`
 --
 
-LOCK TABLES `file` WRITE;
-/*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location'),(2,'Link to File 2 Location');
-/*!40000 ALTER TABLE `file` ENABLE KEYS */;
+LOCK TABLES file WRITE;
+/!40000 ALTER TABLE file DISABLE KEYS/;
+INSERT INTO file VALUES (1,'Link to File 1 Location', 'file_name_1'),(2,'Link to File 2 Location', 'file_name_2');
+/!40000 ALTER TABLE file ENABLE KEYS/;
 UNLOCK TABLES;
 
 --
@@ -484,7 +485,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,0,'Collin','Riggs','criggs'),(3,0,'Kai-En','Wang','kwang'),(4,0,'Jackson','Hall','jhall'),(5,0,'Daniel','Buchanan','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Brandon','Partin','blpartin'),(2,0,'Collin','Riggs','cmriggs'),(3,0,'Kai-En','Wang','kwang23'),(4,0,'Jackson','Hall','jdhall9'),(5,0,'Daniel','Buchanan','dsbuchan');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 

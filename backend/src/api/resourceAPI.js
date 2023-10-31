@@ -5,6 +5,8 @@
 const express = require('express');
 const ResourceDAO = require('../data/ResourceDAO');
 const router = express.Router({mergeParams: true});
+const fs = require('fs');
+const pdf = require('pdf-parse');
 // const bodyParser = require('body-parser');
 // router.use(bodyParser.json()); //utilizes the body-parser package
 // router.use(bodyParser.urlencoded({extended: true}));
