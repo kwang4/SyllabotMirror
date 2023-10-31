@@ -11,6 +11,7 @@ const pdf = require('pdf-parse');
 // router.use(bodyParser.json()); //utilizes the body-parser package
 // router.use(bodyParser.urlencoded({extended: true}));
 const path = require('path');
+//import { open, close, appendFile } from 'node:fs';
 
 const multer  = require('multer');
 const storage = multer.diskStorage({
@@ -68,6 +69,19 @@ router.post("/", upload.single('file'), (req,res, next) => {
         // check if file with same name already exists in given course and section
         ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, file.originalname, file.path).then(resource=> {
             if (resource) {
+                if (file.mimetype == 'application/pdf') {
+                  let dataBuffer = fs.readFileSync(file.path);
+                  pdf(dataBuffer).then(function(data) {
+                    console.log(data.text);
+                    fs.appendFile(file.originalname + "_parsed.txt", data.text, function(err) {
+                      if (err) throw err;
+                      console.log('PDF File Saved!');
+                    });
+                  });
+                }
+                else if (file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                  console.log("DOCX detected");
+                }
                 // get list of instructors for course
                 res.json(resource);
             } else {
