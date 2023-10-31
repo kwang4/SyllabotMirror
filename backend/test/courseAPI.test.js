@@ -7,9 +7,11 @@ var course1 = {
   "courseName": "Senior Design"
 }
 
-test('adds 1 + 2 to equal 3', () => {
-  console.log(CourseDAO.getCourse(1, 1));
-  expect(1+2).toBe(3);
+test('Get Course using semesterID and courseID', () => {
+  CourseDAO.getCourse(1, 1).then(result=>{
+    console.log(result);
+    expect(result).toEqual(course1);
+  });
 });
 
 test('adds 3 - 2 to equal 1', () => {
