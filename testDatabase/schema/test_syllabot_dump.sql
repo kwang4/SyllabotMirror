@@ -115,7 +115,7 @@ CREATE TABLE `course` (
 
 LOCK TABLES `course` WRITE;
 /*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Junior Design'),(4,4,'Network Security'),(5,5,'Software Development');
+INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Senior Design'),(4,4,'Network Security'),(5,5,'Software Development');
 /*!40000 ALTER TABLE `course` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,6 +159,8 @@ DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
   `fil_id` int NOT NULL AUTO_INCREMENT,
   `fil_link` varchar(300) DEFAULT NULL,
+  `fil_name` varchar(90) DEFAULT NULL,
+  `fil_parsed_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`fil_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -169,7 +171,7 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location'),(2,'Link to File 2 Location');
+INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'file_name_1','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2','Parsed_link2_here');
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -277,7 +279,7 @@ CREATE TABLE `roster` (
 
 LOCK TABLES `roster` WRITE;
 /*!40000 ALTER TABLE `roster` DISABLE KEYS */;
-INSERT INTO `roster` VALUES (8,1,1,1,1),(9,2,2,2,1),(10,3,3,3,2),(11,4,100,4,3),(12,5,100,5,4);
+INSERT INTO `roster` VALUES (1,1,1,2,1),(2,2,2,2,1),(3,3,3,3,2),(4,4,100,4,3),(5,5,100,5,4),(6,5,1,2,2),(7,4,3,2,4),(8,3,2,2,3),(9,2,100,2,5);
 /*!40000 ALTER TABLE `roster` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -485,7 +487,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin'),(2,0,'Riggs,Collin','P_Riggs,Collin','cmriggs'),(3,0,'Wang,Kai-En','P_Wang,Kai-en','kwang23'),(4,0,'Hall,Jackson','P_Hall,Jackson','jdhall9'),(5,0,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin'),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs'),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23'),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9'),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -522,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-31 11:26:37
+-- Dump completed on 2023-10-25 10:25:20

@@ -1,5 +1,4 @@
 services:
-
   apacheshib:
     image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
     ports:
@@ -23,16 +22,16 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile.test
-    restart: no
+    restart: "no"
     volumes:
       - ./backend/src:/app/src
     environment:
       - PORT=80
-    env_file: 
-      - .env 
-  
+    env_file:
+      - .env
+
   database:
-    image: 'mariadb:latest'
+    image: "mariadb:latest"
     volumes:
       - ./testDatabase/schema:/docker-entrypoint-initdb.d
       - ./testDatabase/data:/var/lib/mysql
@@ -40,5 +39,3 @@ services:
       - .env # in root, configure db, backend, etc
     ports:
       - 3307:3306
-     
-  
