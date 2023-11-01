@@ -156,7 +156,7 @@ const handleSectionNum = (event) =>{
 {courseData.map((card, index) => (
   <Grid key={index} xs={6} sm={4}>
     <Link href={`/course/${card.courseName + "-" + String(card.sectionNum).padStart(3,'0')}`} style={{textDecoration:'none'}} passHref>
-        <ClassCard classTitle={card.courseName} classInstructors={card.instructors.join(',')} />
+        <ClassCard classTitle={card.courseName + " " + String(card.sectionNum).padStart(3,'0')} classInstructors={card.instructors.join(',')} />
     </Link>
   </Grid>
 ))}

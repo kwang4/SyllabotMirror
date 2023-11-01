@@ -37,9 +37,10 @@ export default function CourseInfo() {
 
   async function validateCourse()
   {
+    return;
     const splitIdx = courseName.lastIndexOf('-');
     const section = courseName.split(splitIdx+1);
-    const name = courseName.split(0,splitIx);
+    const name = courseName.split(0,splitIdx);
     console.log(name + " " + section);
   }
 
@@ -146,7 +147,7 @@ export default function CourseInfo() {
       </Head>
       <NcsuHeader>Syllabot</NcsuHeader>
       <h2 className={styles.title}>
-           {courseName} 
+           {courseName?.replace('-',' ')} 
         </h2>
         <h2>
           <Link href="/">Go Back</Link>
