@@ -12,8 +12,8 @@ var course1 = {
 describe('Get Course', () => {
   it('Should get course 1 from semester 1', async () => {
     const res = await request(app)
-      .get('/api/semesters/1/courses/1')
-      .expect(res.statusCode).toEqual(200)
+      .get('/api/semesters/1/courses/1');
+      expect(res.statusCode).toEqual(200);
   })
 })
 

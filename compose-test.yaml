@@ -20,7 +20,9 @@ services:
       - PORT=80
 
   api:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.test
     restart: unless-stopped
     volumes:
       - ./backend/src:/app/src

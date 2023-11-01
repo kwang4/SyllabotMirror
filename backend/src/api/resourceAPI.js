@@ -66,28 +66,28 @@ router.post("/", upload.single('file'), (req,res, next) => {
     console.log(req.file);
 
     if (file){
-        // check if file with same name already exists in given course and section
-        ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, file.originalname, file.path).then(resource=> {
-            if (resource) {
-                if (file.mimetype == 'application/pdf') {
-                  let dataBuffer = fs.readFileSync(file.path);
-                  pdf(dataBuffer).then(function(data) {
-                    console.log(data.text);
-                    fs.appendFile(file.originalname + "_parsed.txt", data.text, function(err) {
-                      if (err) throw err;
-                      console.log('PDF File Saved!');
-                    });
-                  });
-                }
-                else if (file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-                  console.log("DOCX detected");
-                }
-                // get list of instructors for course
-                res.json(resource);
-            } else {
-                res.json(404).json({error: 'Resource could not be added'});
-            }
+      if (file.mimetype == 'application/pdf') {
+        let dataBuffer = fs.readFileSync(file.path);
+        pdf(dataBuffer).then(function(data) {
+        //console.log(data.text);
+          fs.appendFile(file.path + "_parsed.txt", data.text, function(err) {
+            if (err) throw err;
+            console.log('PDF File Saved!');
+          });
         });
+      }
+      else if (file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        console.log("DOCX detected");
+      }
+      // check if file with same name already exists in given course and section
+      ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, file.originalname, file.path, file.path + "_parsed.txt").then(resource=> {
+          if (resource) {
+              // get list of instructors for course
+              res.json(resource);
+          } else {
+              res.json(404).json({error: 'Resource could not be added'});
+          }
+      });
 
     } else {
         res.status(404).json({error: "Request must contain a file"});

@@ -160,7 +160,7 @@ CREATE TABLE `file` (
   `fil_id` int NOT NULL AUTO_INCREMENT,
   `fil_link` varchar(300) DEFAULT NULL,
   `fil_name` varchar(90) DEFAULT NULL,
-  `fil_parsed_link` varchar(90) DEFAULT NULL,
+  `fil_parsed_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`fil_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
