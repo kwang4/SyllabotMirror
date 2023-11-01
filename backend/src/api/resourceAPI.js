@@ -7,6 +7,8 @@ const ResourceDAO = require('../data/ResourceDAO');
 const router = express.Router({mergeParams: true});
 const fs = require('fs');
 const pdf = require('pdf-parse');
+const WordExtractor = require("word-extractor"); 
+const extractor = new WordExtractor();
 // const bodyParser = require('body-parser');
 // router.use(bodyParser.json()); //utilizes the body-parser package
 // router.use(bodyParser.urlencoded({extended: true}));
@@ -77,7 +79,22 @@ router.post("/", upload.single('file'), (req,res, next) => {
         });
       }
       else if (file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-        console.log("DOCX detected");
+        let dataBuffer = fs.readFileSync(file.path);
+        const extracted = extractor.extract(dataBuffer);
+        extracted.then(function(doc) { 
+          fs.appendFile(file.path + "_parsed.txt", doc.getBody(), function(err) {
+            if (err) throw err;
+            console.log("DOCX File Saved!");
+          });
+        });
+      }
+      else if (file.mimetype == 'text/plain') {
+          fs.copyFile(file.path, file.path + "_parsed.txt", function(err) {
+            if (err) throw err;
+            console.log('TXT File Saved!');
+          });
+      } else {
+        res.status(404).json({error: "File must be a .TXT, .DOCX or .PDF"});
       }
       // check if file with same name already exists in given course and section
       ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, file.originalname, file.path, file.path + "_parsed.txt").then(resource=> {
