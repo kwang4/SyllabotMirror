@@ -25,10 +25,11 @@ const RosterDAO = require('.././data/RosterDAO.js');
  *  returns: Course object with given courseid
  */
 router.get("/:courseid",(req,res,next)=>{
-    console.log("URL: " + req.originalUrl)
-    console.log("Request parameters: " + JSON.stringify(req.params))
+    //console.log("URL: " + req.originalUrl)
+   // console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
+   // console.log("I'm inside the get endpoint for Courses");
     CourseDAO.getCourse(req.params.semesterid, req.params.courseid).then(course => {
         if (course) {
             // get list of instructors for course

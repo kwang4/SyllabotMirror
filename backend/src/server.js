@@ -18,3 +18,5 @@ if(PORT == null)
   PORT = 80;
 // As our server to listen for incoming connections
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+
+module.exports = {app:app}

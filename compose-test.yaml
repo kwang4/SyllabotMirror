@@ -23,7 +23,7 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile.test
-    restart: unless-stopped
+    restart: no
     volumes:
       - ./backend/src:/app/src
     environment:
@@ -34,8 +34,8 @@ services:
   database:
     image: 'mariadb:latest'
     volumes:
-      - ./database/schema:/docker-entrypoint-initdb.d
-      - ./database/data:/var/lib/mysql
+      - ./testDatabase/schema:/docker-entrypoint-initdb.d
+      - ./testDatabase/data:/var/lib/mysql
     env_file:
       - .env # in root, configure db, backend, etc
     ports:

@@ -1,6 +1,6 @@
 //import courseAPI;
 const request = require('supertest')
-const app = require('../src/server')
+const server = require('../src/server')
 //const CourseDAO = require('../src/data/CourseDAO');
 
 var course1 = {
@@ -11,10 +11,11 @@ var course1 = {
 
 describe('Get Course', () => {
   it('Should get course 1 from semester 1', async () => {
-    const res = await request(app)
-      .get('/api/semesters/1/courses/1');
+    const res = await request(server.app).get('/semesters/1/courses/1/');
       expect(res.statusCode).toEqual(200);
-  })
+      expect(res.body).toEqual(course1);
+      //console.log(res.body)
+  },100000)
 })
 
 
