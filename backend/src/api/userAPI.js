@@ -110,5 +110,11 @@ router.get("/unityid/:unityid", async (req, res, next) => {
     });
 });
 
+router.get("/", async (req, res, next) => {
+    UserDAO.getUsers().then(users=>{
+        res.json(users);
+    });
+});
+
 
 module.exports = router;

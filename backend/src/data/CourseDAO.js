@@ -3,7 +3,7 @@ const Course = require('./models/Course');
 const Roles = require('./models/RoleEnum');
 
 function getCourses() {
-  console.log(Roles.TEACHER);
+  //console.log(Roles.TEACHER);
   return db.query('SELECT * FROM course').then(({ results }) => {
     return results.map(course => new Course(course));
   })
@@ -35,11 +35,19 @@ function createCourse(crs_sem_id, crs_name){
   });
 }
 
-//Not TESTED
-function setCourse(crs_sem_id, crs_name){
-  return db.query('INSERT INTO course WHERE crs_sem_id = ? and crs_name = ?', [crs_id, crs_name]).then(({ results }) => {
-    return results.map(course => new Course(course));
-  })
+// //Not TESTED
+// function setCourse(crs_sem_id, crs_name){
+//   return db.query('INSERT INTO course WHERE crs_sem_id = ? and crs_name = ?', [crs_id, crs_name]).then(({ results }) => {
+//     return results.map(course => new Course(course));
+//   })
+// }
+
+function deleteCourse(crs_sem_id, crs_name){
+  
+  return db.query('DELETE FROM course WHERE crs_sem_id = ? AND crs_name = ?', [crs_sem_id, crs_name], function (err, result) {
+    if (err) throw err;
+    return result.affectedRows;
+  });
 }
 
 // function getInstructors(crs_id, sectionNum){
@@ -55,6 +63,7 @@ module.exports = {
   getCourse: getCourse,
   getCourseByID: getCourseByID,
   createCourse: createCourse,
-  checkIfCourseExists: checkIfCourseExists
+  checkIfCourseExists: checkIfCourseExists,
+  deleteCourse: deleteCourse
   // getInstructors: getInstructors
 }

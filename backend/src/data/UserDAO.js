@@ -1,6 +1,14 @@
 const db = require('./DBConnection')
 const User = require('./models/User')
 
+function getUsers() {
+
+  return db.query('SELECT * FROM user').then(({ results }) => {
+    return results.map(user => new User(user));
+  })
+}
+
+
 function getUser(usr_id) {
 
     return db.query('SELECT * FROM user WHERE usr_id = ?;', [usr_id]).then(({ results }) => {
@@ -26,8 +34,19 @@ function createUser(user){
   });
 }
 
+
+// Takes user object as input
+function deleteUser(user){
+  return db.query('DELETE FROM user WHERE usr_unity_id = ?', [user.unity_id], function (err, result) {
+    if (err) throw err;
+    return result.affectedRows;
+  });
+}
+
 module.exports = {
+    getUsers : getUsers,
     getUser : getUser,
     getUserByUnityID : getUserByUnityID,
-    createUser: createUser
+    createUser: createUser,
+    deleteUser : deleteUser
   }
