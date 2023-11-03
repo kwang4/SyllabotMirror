@@ -22,7 +22,7 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile.test
-    restart: "no"
+    restart: "unless-stopped"
     volumes:
       - ./backend/src:/app/src
     environment:
