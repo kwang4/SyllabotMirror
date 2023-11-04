@@ -56,6 +56,17 @@ router.get("/",(req,res,next)=>{
     })
 })
 
+//Get course by string name
+router.get('/courseName/:courseName', (req,res,next) => {
+    CourseDAO.getCourseByName(req.params.courseName, req.params.semesterid).then(course => {
+        if (course) {
+            res.json(course);
+        } else {
+            res.json(404).json({error: 'Course not found'})
+        }
+    })
+})
+
 /**
  * Create course with the attributes given in the request body
  *  body: keys          values

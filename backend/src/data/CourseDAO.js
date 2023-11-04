@@ -58,12 +58,19 @@ function deleteCourse(crs_sem_id, crs_name){
 
 // }
 
+function getCourseByName(crs_name, crs_sem_id) {
+  return db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]).then(({results}) => {
+    return new Course(results[0]);
+  })
+}
+
 module.exports = {
   getCourses: getCourses,
   getCourse: getCourse,
   getCourseByID: getCourseByID,
   createCourse: createCourse,
   checkIfCourseExists: checkIfCourseExists,
-  deleteCourse: deleteCourse
+  deleteCourse: deleteCourse,
+  getCourseByName:getCourseByName,
   // getInstructors: getInstructors
 }

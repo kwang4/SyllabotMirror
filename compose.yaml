@@ -13,11 +13,14 @@ services:
 
   app: #frontend
     build: ./Dashboard
-    restart: unless-stopped
+    restart: always
     volumes:
-      - ./Dashboard:/app/frontend/src
+      - ./Dashboard:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
     environment:
       - PORT=80
+      - WATCHPACK_POLLING=true
 
   api:
     build: ./backend

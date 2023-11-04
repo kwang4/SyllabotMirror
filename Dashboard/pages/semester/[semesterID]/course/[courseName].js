@@ -19,7 +19,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 export default function CourseInfo() {
   const router = useRouter();
-  const { courseName } = router.query;
+  const { semesterID, courseName } = router.query;
   const [slackDialogStatus,setSlackDialogStatus] = useState(false);
   const [slackLinked,setSlackLinkedStatus] = useState(false);
   const [discordDialogStatus,setDiscordDialogStatus] = useState(false);
@@ -159,7 +159,7 @@ export default function CourseInfo() {
 
     {optionData.map((option,index)=>(
       <Grid key={index} xs={6} sm={3}>
-        <Link href={`/course/${courseName}/${option.path}`} style={{textDecoration:'none'}} passHref>
+        <Link href={`/semester/${semesterID}/course/${courseName}/${option.path}`} style={{textDecoration:'none'}} passHref>
         <OptionCard optionTitle={option.name}></OptionCard>
         </Link>
           
