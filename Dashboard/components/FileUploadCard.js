@@ -61,7 +61,9 @@ export default function FileUploadCard() {
         return;
       }
       const courseObj = courseResponse.data;
-      const resourceResponse = await APIModule.post(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources`,file);
+      const formData = new FormData();
+      formData.append('file',file);
+      const resourceResponse = await APIModule.post(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources`,formData);
       
       if(resourceResponse?.status != 200)
       {
