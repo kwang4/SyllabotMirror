@@ -126,10 +126,10 @@ useEffect(()=>{
             <ListItem key={index+1}>
             <Grid container spacing={0} sx={{width:'100%'}}>
               <Grid item xs={5.5}>
-                 <ListItemText primary={resource.fil_name}/>
+                 <ListItemText primary={resource.fil_name.substring(0, resource.fil_name.length -4)}/>
               </Grid>
               <Grid item xs={5.5}>
-               <ListItemText primary = {'txt'}/>
+               <ListItemText primary = {resource.fil_name.substring(resource.fil_name.length-4, resource.fil_name.length)}/>
               </Grid>
               <Grid item xs={1}>
               <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>

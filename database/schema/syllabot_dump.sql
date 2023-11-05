@@ -171,7 +171,7 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'file_name_1','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2','Parsed_link2_here');
+INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'Syllabus.doc','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2','Parsed_link2_here'),(3,'Link to File 3 Location', 'Rubric.pdf');
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +347,7 @@ CREATE TABLE `section_resource` (
 
 LOCK TABLES `section_resource` WRITE;
 /*!40000 ALTER TABLE `section_resource` DISABLE KEYS */;
-INSERT INTO `section_resource` VALUES (7,1,1,1,NULL,NULL,NULL),(8,2,1,NULL,1,NULL,NULL),(9,3,2,NULL,NULL,1,NULL),(10,100,2,NULL,NULL,NULL,1),(11,100,3,2,NULL,NULL,NULL);
+INSERT INTO `section_resource` VALUES (7,1,1,1,NULL,NULL,NULL),(8,2,1,NULL,1,NULL,NULL),(9,3,2,NULL,NULL,1,NULL),(10,100,2,NULL,NULL,NULL,1),(11,100,3,2,NULL,NULL,NULL),(12,1,1,3,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `section_resource` ENABLE KEYS */;
 UNLOCK TABLES;
 
