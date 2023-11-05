@@ -50,7 +50,39 @@ module.exports = {
       formal_name: "User,Test",
       preferred_name: "P_User,Test",
       unity_id: "testid"
-  }
+    }
+  ],
+  deploys: [
+    {
+      "deployID": 1,
+      "primary_token": "Slack Primary Token for Deploy 1",
+      "syllabotID": 1,
+      "typeID": 1
+    },
+    {
+      "deployID": 2,
+      "primary_token": "Discord Primary Token for Deploy 2",
+      "syllabotID": 2,
+      "typeID": 2
+    },
+    {
+      "deployID": 3,
+      "primary_token": "Slack Primary Token for Deploy 3",
+      "syllabotID": 3,
+      "typeID": 1
+    },
+    {
+      "deployID": 4,
+      "primary_token": "Discord Primary Token for Deploy 4",
+      "syllabotID": 4,
+      "typeID": 2
+    },
+    {
+      "deployID": 5,
+      "primary_token": "Slack Primary Token for Deploy 5",
+      "syllabotID": 5,
+      "typeID": 1
+    }
   ]
 };
 

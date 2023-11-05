@@ -1,5 +1,6 @@
 const db = require('./DBConnection');
 const File = require('./models/File');
+const Resource = require('./models/Resource');
 
 // const multer  = require('multer');
 // const upload = multer({ dest: './uploads/' });
@@ -47,6 +48,7 @@ function getUniqueFile(fileName, courseid, sectionNumber){
 module.exports = {
     getCourseFiles: getCourseFiles,
     uploadFile: uploadFile,
+    getFile: getFile,
     getResources: getResources,
     getUniqueFile: getUniqueFile
 }
