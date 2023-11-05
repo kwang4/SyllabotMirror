@@ -45,6 +45,7 @@ export default function FileUploadCard() {
       // Using console.log(file) is fine for debugging but ensure it's not causing the issue
       console.log(file);
     }
+    document.getElementById("FORDEMO").innerHTML = file.name
   };
 
   async function uploadFile()
@@ -95,6 +96,7 @@ export default function FileUploadCard() {
             onChange={handleFileChange}
           />
         </Button>
+        <p id="FORDEMO"></p>
       </Grid>
     </Grid>
   </DialogContent>
