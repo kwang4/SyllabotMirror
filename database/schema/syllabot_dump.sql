@@ -171,7 +171,7 @@ CREATE TABLE `file` (
 
 LOCK TABLES `file` WRITE;
 /*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'Syllabus.doc','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2','Parsed_link2_here'),(3,'Link to File 3 Location', 'Rubric.pdf', 'Parsed_link_here');
+INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'Syllabus.doc','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2.pdf','Parsed_link2_here'),(3,'Link to File 3 Location', 'Rubric.pdf', 'Parsed_link_here');
 /*!40000 ALTER TABLE `file` ENABLE KEYS */;
 UNLOCK TABLES;
 

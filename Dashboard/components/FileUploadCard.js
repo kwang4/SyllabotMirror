@@ -73,6 +73,7 @@ export default function FileUploadCard() {
       }
       console.log(resourceResponse);
     }
+    window.location.reload();
   }
 
   return (
