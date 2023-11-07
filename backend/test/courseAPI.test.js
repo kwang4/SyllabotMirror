@@ -1,7 +1,8 @@
-// const request = require('supertest');
-// const server = require('../src/server');
-// const vars = require('../test/testVariables');
+const request = require('supertest');
+const server = require('../src/server');
+const vars = require('../test/testVariables');
 
+//const path = `https:localhost:80`;
 // describe('TEST GET /:courseid', () => {
 //   it('Generic Test', done => {
 //     var sem_id;
@@ -13,15 +14,16 @@
 //   }, 10000);
 // });
 
-// describe('TEST GET /', () => {
-//   it('Generic Test', done => {
-//     var sem_id;
-//     request(server.app).get(`/api/semesters/${sem_id}/courses`).then(res => {
-//       expect(true).toEqual(true);
-//       done();
-//     });
-//   }, 10000);
-// });
+describe('TEST GET /', () => {
+  it('Generic Test', done => {
+    var sem_id = 1;
+    request(server.app).get(`/api/semesters/${sem_id}/courses`).then(res => {
+        console.log(res)
+      expect(res.status).toEqual(200);
+      done();
+    });
+  }, 1000);
+});
 
 // describe('TEST POST /', () => {
 //   it('Generic Test', done => {

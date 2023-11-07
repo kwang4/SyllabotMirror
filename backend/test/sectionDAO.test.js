@@ -1,9 +1,14 @@
 const vars = require('../test/testVariables');
-const RosterDAO = require('../src/data/SectionDAO');
+const SectionDAO = require('../src/data/SectionDAO');
+
+
+beforeEach(() => {
+  SectionDAO.deleteSection(1, 112);
+});
 
 describe('TEST getSections', () => {
   it('Generic Test', done => {
-    RosterDAO.getSections().then(temp => {
+    SectionDAO.getSections().then(temp => {
       expect(true).toEqual(true);
       done();
     });
@@ -14,7 +19,7 @@ describe('TEST getSectionByCourse', () => {
   it('Generic Test', done => {
     var crs_id;
     var sec_num;
-    RosterDAO.getSectionByCourse(crs_id, sec_num).then(temp => {
+    SectionDAO.getSectionByCourse(crs_id, sec_num).then(temp => {
       expect(true).toEqual(true);
       done();
     });
@@ -24,7 +29,7 @@ describe('TEST getSectionByCourse', () => {
 describe('TEST getSectionsByCourse', () => {
   it('Generic Test', done => {
     var crs_id;
-    RosterDAO.getSectionsByCourse(crs_id).then(temp => {
+    SectionDAO.getSectionsByCourse(crs_id).then(temp => {
       expect(true).toEqual(true);
       done();
     });
@@ -33,8 +38,8 @@ describe('TEST getSectionsByCourse', () => {
 
 describe('TEST getSectionsByUserID', () => {
   it('Generic Test', done => {
-    var usr_id;
-    RosterDAO.getSectionsByUserID(usr_id).then(temp => {
+    var usr_id = vars.users[0].id;
+    SectionDAO.getSectionsByUserID(usr_id).then(temp => {
       expect(true).toEqual(true);
       done();
     });
@@ -43,9 +48,9 @@ describe('TEST getSectionsByUserID', () => {
 
 describe('TEST getInstructors', () => {
   it('Generic Test', done => {
-    var crs_id;
-    var sec_num;
-    RosterDAO.getInstructors(crs_id, sec_num).then(temp => {
+    var crs_id = 1;
+    var sec_num = 1;
+    SectionDAO.getInstructors(crs_id, sec_num).then(temp => {
       expect(true).toEqual(true);
       done();
     });
@@ -56,10 +61,32 @@ describe('TEST createSection', () => {
   it('Generic Test', done => {
     var crs_id = 1;
     var sec_num = 112;
-    RosterDAO.createSection(crs_id, sec_num).then(temp => {
-      expect(temp.crs_id).toEqual(crs_id);
-      expect(temp.sec_num).toEqual(sec_num);
+    // SectionDAO.getSectionByCourse(crs_id, sec_num).then(exists=> {
+      // Want to delete a section here
+    // })
+    SectionDAO.createSection(crs_id, sec_num).then(temp => {
+      expect(temp.results.affectedRows).toEqual(1);
       done();
     });
+  }, 1000);
+});
+
+describe('TEST deleteSection', () => {
+  it('Generic Test', done => {
+    var crs_id = 1;
+    var sec_num = 200;
+    // SectionDAO.getSectionByCourse(crs_id, sec_num).then(exists=> {
+      // Want to delete a section here
+    // })
+    SectionDAO.createSection(crs_id, sec_num).then(temp => {
+      console.log(temp.results.affectedRows);
+      expect(temp.results.affectedRows).toEqual(1);
+      done();
+    });
+    SectionDAO.deleteSection(crs_id, sec_num).then(temp => {
+      expect(temp.results.affectedRows).toEqual(1);
+      done();
+    });
+
   }, 1000);
 });

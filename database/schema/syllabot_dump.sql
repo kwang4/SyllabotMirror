@@ -266,9 +266,9 @@ CREATE TABLE `roster` (
   KEY `section_num_course_id_idx` (`ros_sec_number`),
   KEY `course_id_idx` (`ros_crs_id`),
   KEY `userID` (`ros_usr_id`),
-  CONSTRAINT `course_num_roster` FOREIGN KEY (`ros_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `course_num_roster` FOREIGN KEY (`ros_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE,
   CONSTRAINT `roleID` FOREIGN KEY (`ros_rol_id`) REFERENCES `role` (`rol_id`),
-  CONSTRAINT `section_num_roster` FOREIGN KEY (`ros_sec_number`) REFERENCES `section` (`sec_number`),
+  CONSTRAINT `section_num_roster` FOREIGN KEY (`ros_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
   CONSTRAINT `userID` FOREIGN KEY (`ros_usr_id`) REFERENCES `user` (`usr_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -296,7 +296,7 @@ CREATE TABLE `section` (
   `sec_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`sec_number`,`sec_crs_id`),
   KEY `courseID_idx` (`sec_crs_id`),
-  CONSTRAINT `section_course_courseID` FOREIGN KEY (`sec_crs_id`) REFERENCES `course` (`crs_id`)
+  CONSTRAINT `section_course_courseID` FOREIGN KEY (`sec_crs_id`) REFERENCES `course` (`crs_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -334,9 +334,9 @@ CREATE TABLE `section_resource` (
   KEY `course_id_resource_idx` (`scr_crs_id`),
   CONSTRAINT `apiID` FOREIGN KEY (`scr_api_id`) REFERENCES `api` (`api_id`),
   CONSTRAINT `calendarID` FOREIGN KEY (`scr_cdr_id`) REFERENCES `calendar` (`cdr_id`),
-  CONSTRAINT `course_id_resource` FOREIGN KEY (`scr_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `course_id_resource` FOREIGN KEY (`scr_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE,
   CONSTRAINT `fileID` FOREIGN KEY (`scr_fil_id`) REFERENCES `file` (`fil_id`),
-  CONSTRAINT `section_num_resource` FOREIGN KEY (`scr_sec_number`) REFERENCES `section` (`sec_number`),
+  CONSTRAINT `section_num_resource` FOREIGN KEY (`scr_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
   CONSTRAINT `websiteID` FOREIGN KEY (`scr_web_id`) REFERENCES `website` (`web_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -367,9 +367,9 @@ CREATE TABLE `section_syllabot` (
   KEY `section_num_join_idx` (`scl_sec_number`),
   KEY `course_id_join_idx` (`scl_crs_id`),
   KEY `deployID` (`scl_dep_id`),
-  CONSTRAINT `course_id_join` FOREIGN KEY (`scl_crs_id`) REFERENCES `section` (`sec_crs_id`),
+  CONSTRAINT `course_id_join` FOREIGN KEY (`scl_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE,
   CONSTRAINT `deployID` FOREIGN KEY (`scl_dep_id`) REFERENCES `deploy` (`dep_id`),
-  CONSTRAINT `section_num_join` FOREIGN KEY (`scl_sec_number`) REFERENCES `section` (`sec_number`)
+  CONSTRAINT `section_num_join` FOREIGN KEY (`scl_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -425,7 +425,7 @@ CREATE TABLE `syllabot` (
   `syl_profile_picture` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`syl_id`),
   KEY `courseID_idx` (`syl_crs_id`),
-  CONSTRAINT `syllabot_course_courseID` FOREIGN KEY (`syl_crs_id`) REFERENCES `course` (`crs_id`)
+  CONSTRAINT `syllabot_course_courseID` FOREIGN KEY (`syl_crs_id`) REFERENCES `course` (`crs_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

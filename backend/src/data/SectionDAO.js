@@ -48,11 +48,20 @@ function createSection(sec_crs_id, sec_number){
   });
 }
 
+function deleteSection(sec_crs_id, sec_number){
+  return db.query('DELETE FROM section WHERE sec_crs_id = ? AND sec_number = ?', [sec_crs_id, sec_number], function (err, result) {
+    if (err) throw err;
+    console.log("Number of records deleted: " + result.affectedRows);
+    return result.affectedRows;
+  })
+}
+
 module.exports = {
     getSections: getSections,
     getSectionsByCourse: getSectionsByCourse,
     getSectionByCourse: getSectionByCourse,
     getSectionsByUserID: getSectionsByUserID,
     getInstructors: getInstructors,
-    createSection: createSection
+    createSection: createSection,
+    deleteSection: deleteSection
   }
