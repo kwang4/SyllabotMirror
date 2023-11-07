@@ -48,7 +48,8 @@ function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id){
   
 function updateUserRole(ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id){
   return db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
-    return results.map(roster => new Roster(roster));
+    //return results.map(roster => new Roster(roster));
+    return results.affectedRows;
   })
 }
 

@@ -1,5 +1,5 @@
 const vars = require('../test/testVariables');
-const SectionDAO = require('../src/data/SectionDAO');
+const RosterDAO = require('../src/data/SectionDAO');
 
 describe('TEST getSections', () => {
   it('Generic Test', done => {
@@ -54,10 +54,11 @@ describe('TEST getInstructors', () => {
 
 describe('TEST createSection', () => {
   it('Generic Test', done => {
-    var crs_id;
-    var sec_num;
+    var crs_id = 1;
+    var sec_num = 112;
     RosterDAO.createSection(crs_id, sec_num).then(temp => {
-      expect(true).toEqual(true);
+      expect(temp.crs_id).toEqual(crs_id);
+      expect(temp.sec_num).toEqual(sec_num);
       done();
     });
   }, 1000);
