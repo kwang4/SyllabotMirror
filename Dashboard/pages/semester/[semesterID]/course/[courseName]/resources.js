@@ -31,20 +31,11 @@ import { useRouter } from 'next/router';
 export default function Resources() {
     const router = useRouter();
     const { semesterID, courseName } = router.query;
-  const resourceList = [ 
-      {name: 'Syllabus', type: 'PDF'},
-      {name: 'Hw1', type: 'txt'},
-      {name: 'HW2', type: 'txt'},
-      {name: 'Syllabus', type: 'PDF'},
-      {name: 'Hw1', type: 'txt'},
-      {name: 'HW2', type: 'txt'},
-      {name: 'Syllabus', type: 'PDF'},
-      {name: 'Hw1', type: 'txt'},
-      {name: 'HW2', type: 'txt'},
-  ];
+
 
   const [uploadFileDialog,setUploadStudentDialog] = useState(false);
   const [courseResources, setCourseResources] = useState([]);
+  const [courseObject, setCourseObject] = useState(null);
   const toggleFileDialog = ()=>
 {
   if(uploadFileDialog)
@@ -61,11 +52,12 @@ async function getCourseResources()
     const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
     const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
     const courseResponse = await APIModule.get(`/semesters/${semesterID}/courses/courseName/${splitCourseName}`);
-    if(courseResponse.status != 200)
+    if(courseResponse?.status != 200)
     {
       console.log("Error getting course object by name");
       return;
     }
+    setCourseObject(courseResponse.data);
     const courseObj = courseResponse.data;
     const resourceResponse = await APIModule.get(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources`);
     
@@ -113,10 +105,10 @@ useEffect(()=>{
     >
             <ListItem key={0}>
             <Grid container spacing={0} sx={{width:'100%'}}>
-              <Grid item xs={5.5}>
+              <Grid xs={7}>
                  <ListItemText sx={{variant:"h1"}} primary={'Resource Name'}/>
               </Grid>
-              <Grid item xs={5.5}>
+              <Grid xs={4}>
                <ListItemText primary = {'Type'}/>
               </Grid>
             </Grid>
@@ -125,13 +117,20 @@ useEffect(()=>{
       {courseResources.map((resource,index)=>(
             <ListItem key={index+1}>
             <Grid container spacing={0} sx={{width:'100%'}}>
-              <Grid item xs={5.5}>
-                 <ListItemText primary={resource.fil_name.substring(0, resource.fil_name.length -4)}/>
+              <Grid xs={7}>
+                <Link href='#' onClick={
+                  (e)=>{
+                    e.preventDefault();
+                    console.log("Click");
+                  }
+                }>
+                  <ListItemText primary={resource.fil_name.substring(0, resource.fil_name.length -4)}/>
+                </Link>
               </Grid>
-              <Grid item xs={5.5}>
+              <Grid xs={4}>
                <ListItemText primary = {resource.fil_name.substring(resource.fil_name.length-4, resource.fil_name.length)}/>
               </Grid>
-              <Grid item xs={1}>
+              <Grid xs={1}>
               <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
               </Grid>
               

@@ -16,6 +16,14 @@ function getCourseFiles(scr_sec_number, scr_crs_id) {
     })
   }
 
+  function getResourcePath(scr_sec_number, scr_crs_id,scr_fil_id) {
+    console.log(scr_sec_number);
+      //return db.query('SELECT fil_id, fil_link FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ?', [scr_sec_number, scr_crs_id]).then(({results}) => {
+      return db.query('SELECT fil_link FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ? AND fil_id=?;', [scr_sec_number, scr_crs_id,scr_fil_id]).then(({results}) => {
+          return results;
+      })
+    }
+
 function uploadFile(scr_sec_number, scr_crs_id, original_name, file_path, file_parsedpath){
   return db.query('INSERT INTO file (fil_link, fil_name, fil_parsed_link) VALUES (?, ?, ?)', [file_path, original_name, file_parsedpath]).then(()=>{
     return getFile(file_path, original_name).then(results =>{
@@ -47,6 +55,7 @@ function getUniqueFile(fileName, courseid, sectionNumber){
 
 module.exports = {
     getCourseFiles: getCourseFiles,
+    getResourcePath: getResourcePath,
     uploadFile: uploadFile,
     getFile: getFile,
     getResources: getResources,

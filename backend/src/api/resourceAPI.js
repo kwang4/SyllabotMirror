@@ -46,17 +46,22 @@ router.get("/",(req,res,next)=>{
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;
     ResourceDAO.getCourseFiles(scr_sec_number, scr_crs_id).then(resources=>res.json(resources));
-    // res.json([
-    //     {'name': 'Syllabus',
-    //     'type': 'pdf',
-    //     'file_contents' :'Syllabus.pdf'
-    //     },
-    //     {'name': 'IPR-template',
-    //     'type': 'docx',
-    //     'file_contents': 'IPR-template.docx'
-    //     }
-    // ]
-    // );
+})
+
+
+
+/**
+ * Returns the file with the associated resource ID
+ */
+router.get("/:resourceid/download",(req,res,next)=>{
+  const scr_sec_number = req.params.sectionNum;
+  const scr_crs_id = req.params.courseid;
+  const resourceID = req.params.resourceid;
+  ResourceDAO.getResourcePath(scr_sec_number,scr_crs_id,resourceID).then(filePath=>{
+    const absPath = path.join(__dirname,filePath);
+    console.log(absPath);
+    res.sendFile(String(absPath));
+  });
 })
 
 router.post("/", upload.single('file'), (req,res, next) => {
