@@ -27,9 +27,10 @@ function getUserByUnityID(usr_unity_id) {
 function createUser(user){
   return db.query('INSERT INTO user (usr_is_admin, usr_formal_name, usr_preferred_name, usr_unity_id) VALUES (0, ?, ?, ?)', [user.formal_name, user.preferred_name, user.unity_id]).catch(function(){
     console.log('Duplicate user'); 
+    console.log(user);
   }).then(()=>{
     return db.query('SELECT * FROM user WHERE usr_unity_id = ?;', [user.unity_id]).then(({results}) => {
-      return results.map(user => new User(user));
+      return new User(results[0]);
     }); 
   });
 }
