@@ -98,6 +98,7 @@ router.post("/", upload.single('file'), (req,res, next) => {
           });
       } else {
         res.status(404).json({error: "File must be a .TXT, .DOCX or .PDF"});
+        return;
       }
       // check if file with same name already exists in given course and section
       ResourceDAO.uploadFile(scr_sec_number, scr_crs_id, file.originalname, file.path, file.path + "_parsed.txt").then(resource=> {
