@@ -1,8 +1,7 @@
 const request = require('supertest');
 const server = require('../src/server');
 const vars = require('../test/testVariables');
-
-//const path = `https:localhost:80`;
+//const request = require('./commonTests');
 // describe('TEST GET /:courseid', () => {
 //   it('Generic Test', done => {
 //     var sem_id;
@@ -15,13 +14,13 @@ const vars = require('../test/testVariables');
 // });
 
 describe('TEST GET /', () => {
-  it('Generic Test', done => {
+  it('Generic Test', async() => {
     var sem_id = 1;
-    request(server.app).get(`/api/semesters/${sem_id}/courses`).then(res => {
-        console.log(res)
-      expect(res.status).toEqual(200);
-      done();
-    });
+    const res = await request(server.app).get(`/api/semesters/${sem_id}/courses`);
+      console.log(res.body);
+    expect(res.status).toEqual(200);
+    done();
+    
   }, 1000);
 });
 
