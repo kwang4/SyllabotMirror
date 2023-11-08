@@ -27,5 +27,5 @@ COPY . .
 
 EXPOSE 8000
 
-#CMD [ "./scripts/wait-for-it.sh" , "database:3306" , "--strict" , "--timeout=1000" , "--", "npm", "test"]
-CMD [ "npm", "test"]
+CMD [ "./scripts/wait-for-it.sh" , "database:3306" , "--strict" , "--timeout=1000" , "--", "npm", "test"]
+#CMD [ "npm", "test"]

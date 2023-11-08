@@ -15,7 +15,7 @@ function getSyllabot(syl_id) {
 }
 
 function createSyllabot(syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture) {
-  return db.query('INSERT INTO syllabot (syl_id, syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture) VALUES (NULL, ?, ?, ?, ?);', [syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture], function (err, result) {
+  return db.query('INSERT INTO syllabot (syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture) VALUES (?, ?, ?, ?);', [syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture], function (err, result) {
     if (err) throw err;
     return result.affectedRows;
   });

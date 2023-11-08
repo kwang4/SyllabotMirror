@@ -31,7 +31,7 @@ describe('TEST getResources', () => {
     var sec_num = 1;
     var crs_id = 1;
     ResourceDAO.getResources(sec_num, crs_id).then(temp => {
-      expect(true).toEqual(true);
+      expect(temp.scr_fil_id).toEqual(1);
       done();
     });
   }, 1000);
@@ -42,12 +42,13 @@ describe('TEST getFile', () => {
     var file_link = "Link to File 1 Location";
     var file_name = "file_name_1";
     ResourceDAO.getFile(file_link, file_name).then(temp => {
-      expect(true).toEqual(true);
+      expect(temp.fil_name).toEqual(file_name);
       done();
     });
   }, 1000);
 });
 
+/// There seems to be something wrong with getUniqueFile()
 describe('TEST getUniqueFile', () => {
   it('Generic Test', done => {
     var file_name = "file_name_1";
