@@ -44,8 +44,16 @@ export default function Resources() {
     setUploadStudentDialog(true);
 }
 
+/**
+ * Method to hit an API endpoint for the whole course Object (mostly needed for courseID)
+ * If the courseObject state variable is already populated, it just returns that.
+ * @returns courseObject with course ID, name, and other fields
+ */
 async function getCourseObj()
 {
+  if(courseObject)
+    return courseObject;
+
   if(semesterID != null)
   {
     const splitIdx = courseName.lastIndexOf('-');
@@ -62,6 +70,10 @@ async function getCourseObj()
   }
 }
 
+/**
+ * Method that will retrieve a list of resources/files associated with this specific course & section. 
+ * @returns resourceData, a list of resources associated with the course and section
+ */
 async function getCourseResources()
 {
   if(!courseName)
@@ -89,6 +101,12 @@ async function getCourseResources()
     console.log(resourceResponse.data);
 }
 
+/**
+ * Will hit API endpoint to download resource file
+ * @param e Event handler to prevent default link behavior
+ * @param resource Resource object needed to api call to get specific resource ID
+ * @returns 
+ */
 async function fileLinkHandler(e,resource)
 {
   e.preventDefault();

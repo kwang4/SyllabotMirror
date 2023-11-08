@@ -29,9 +29,13 @@ export default function FileUploadCard() {
   const { semesterID,courseName } = router.query;
   const [file, setFile] = useState(null);
   const [uploadFileDialog,setUploadStudentDialog] = useState(false);
+  const [fileNameHTML,setFileNameHTML] = useState('');
+  const [errorMsg,setErrorMsg] = useState('');
   const toggleFileDialog = ()=>
   {
     setFile(null);
+    setFileNameHTML('');
+    setErrorMsg('');
     if(uploadFileDialog)
       setUploadStudentDialog(false);
    else
@@ -45,7 +49,7 @@ export default function FileUploadCard() {
       // Using console.log(file) is fine for debugging but ensure it's not causing the issue
       console.log(file);
     }
-    document.getElementById("FORDEMO").innerHTML = file.name
+    setFileNameHTML(file.name);
   };
 
   async function uploadFile()
@@ -58,6 +62,7 @@ export default function FileUploadCard() {
       const courseResponse = await APIModule.get(`/semesters/${semesterID}/courses/courseName/${splitCourseName}`);
       if(courseResponse.status != 200)
       {
+        setErrorMsg('Unable to Upload File');
         console.log("Error getting course object by name");
         return;
       }
@@ -68,6 +73,7 @@ export default function FileUploadCard() {
       
       if(resourceResponse?.status != 200)
       {
+        setErrorMsg('Unable to Upload File');
         console.log("Error getting course resources");
         return;
       }
@@ -97,7 +103,8 @@ export default function FileUploadCard() {
             onChange={handleFileChange}
           />
         </Button>
-        <p id="FORDEMO"></p>
+        <p id="fileNameHTML">{fileNameHTML}</p>
+        <p style={{color:'red'}} id="errorMSG">{errorMsg}</p>
       </Grid>
     </Grid>
   </DialogContent>
