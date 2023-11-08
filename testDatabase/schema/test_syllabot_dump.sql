@@ -26,7 +26,7 @@ CREATE TABLE `api` (
   `api_id` int NOT NULL AUTO_INCREMENT,
   `api_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`api_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,7 +50,7 @@ CREATE TABLE `calendar` (
   `cdr_id` int NOT NULL AUTO_INCREMENT,
   `cdr_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`cdr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -79,7 +79,7 @@ CREATE TABLE `conversation` (
   KEY `conversation_roster_userID_idx` (`con_usr_id`),
   CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`con_usr_id`) REFERENCES `user` (`usr_id`) ON DELETE CASCADE,
   CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `course` (
   PRIMARY KEY (`crs_id`),
   KEY `semesterID_idx` (`crs_sem_id`),
   CONSTRAINT `semesterID` FOREIGN KEY (`crs_sem_id`) REFERENCES `semester` (`sem_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,13 +130,15 @@ CREATE TABLE `deploy` (
   `dep_id` int NOT NULL AUTO_INCREMENT,
   `dep_syl_id` int NOT NULL,
   `dep_typ_id` int NOT NULL,
-  `dep_primary_token` varchar(100) DEFAULT NULL,
+  `dep_primary_token` varchar(100) NOT NULL,
+  `dep_ss_token` VARCHAR(100) NULL,
+  `dep_socket_token` VARCHAR(150) NULL,
   PRIMARY KEY (`dep_id`),
   KEY `typeID_idx` (`dep_typ_id`),
   KEY `syllabotID_idx` (`dep_syl_id`),
   CONSTRAINT `syllabotID` FOREIGN KEY (`dep_syl_id`) REFERENCES `syllabot` (`syl_id`) ON DELETE CASCADE,
   CONSTRAINT `typeID` FOREIGN KEY (`dep_typ_id`) REFERENCES `type` (`typ_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +147,7 @@ CREATE TABLE `deploy` (
 
 LOCK TABLES `deploy` WRITE;
 /*!40000 ALTER TABLE `deploy` DISABLE KEYS */;
-INSERT INTO `deploy` VALUES (1,1,1,'Slack Primary Token for Deploy 1'),(2,2,2,'Discord Primary Token for Deploy 2'),(3,3,1,'Slack Primary Token for Deploy 3'),(4,4,2,'Discord Primary Token for Deploy 4'),(5,5,1,'Slack Primary Token for Deploy 5');
+INSERT INTO `deploy` VALUES (1,1,1,'Slack Primary Token for Deploy 1', 'SS1', 'ST1'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'Slack Primary Token for Deploy 3', 'SS3', 'ST3'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
 /*!40000 ALTER TABLE `deploy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,7 +164,7 @@ CREATE TABLE `file` (
   `fil_name` varchar(90) DEFAULT NULL,
   `fil_parsed_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`fil_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +212,7 @@ CREATE TABLE `question` (
   `qst_question` varchar(5000) NOT NULL,
   `qst_response` varchar(5000) NOT NULL,
   PRIMARY KEY (`qst_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +272,7 @@ CREATE TABLE `roster` (
   CONSTRAINT `roleID` FOREIGN KEY (`ros_rol_id`) REFERENCES `role` (`rol_id`) ON DELETE CASCADE,
   CONSTRAINT `section_num_roster` FOREIGN KEY (`ros_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
   CONSTRAINT `userID` FOREIGN KEY (`ros_usr_id`) REFERENCES `user` (`usr_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -338,7 +340,7 @@ CREATE TABLE `section_resource` (
   CONSTRAINT `fileID` FOREIGN KEY (`scr_fil_id`) REFERENCES `file` (`fil_id`) ON DELETE CASCADE,
   CONSTRAINT `section_num_resource` FOREIGN KEY (`scr_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
   CONSTRAINT `websiteID` FOREIGN KEY (`scr_web_id`) REFERENCES `website` (`web_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -370,7 +372,7 @@ CREATE TABLE `section_syllabot` (
   CONSTRAINT `course_id_join` FOREIGN KEY (`scl_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE,
   CONSTRAINT `deployID` FOREIGN KEY (`scl_dep_id`) REFERENCES `deploy` (`dep_id`) ON DELETE CASCADE,
   CONSTRAINT `section_num_join` FOREIGN KEY (`scl_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,7 +399,7 @@ CREATE TABLE `semester` (
   PRIMARY KEY (`sem_id`),
   KEY `season_idx` (`sem_season`),
   CONSTRAINT `season` FOREIGN KEY (`sem_season`) REFERENCES `period` (`per_season`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,7 +428,7 @@ CREATE TABLE `syllabot` (
   PRIMARY KEY (`syl_id`),
   KEY `courseID_idx` (`syl_crs_id`),
   CONSTRAINT `syllabot_course_courseID` FOREIGN KEY (`syl_crs_id`) REFERENCES `course` (`crs_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -450,7 +452,7 @@ CREATE TABLE `type` (
   `typ_id` int NOT NULL AUTO_INCREMENT,
   `typ_name` varchar(45) NOT NULL,
   PRIMARY KEY (`typ_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -478,7 +480,7 @@ CREATE TABLE `user` (
   `usr_unity_id` varchar(45) NOT NULL,
   PRIMARY KEY (`usr_id`),
   UNIQUE KEY `unity_id_UNIQUE` (`usr_unity_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +504,7 @@ CREATE TABLE `website` (
   `web_id` int NOT NULL AUTO_INCREMENT,
   `web_link` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`web_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
