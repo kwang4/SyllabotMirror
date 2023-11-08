@@ -58,9 +58,7 @@ router.get("/:resourceid/download",(req,res,next)=>{
   const scr_crs_id = req.params.courseid;
   const resourceID = req.params.resourceid;
   ResourceDAO.getResourcePath(scr_sec_number,scr_crs_id,resourceID).then(filePath=>{
-    const absPath = path.join(__dirname,filePath);
-    console.log(absPath);
-    res.sendFile(String(absPath));
+    res.sendFile(filePath.fil_link);
   });
 })
 

@@ -44,7 +44,7 @@ export default function Resources() {
     setUploadStudentDialog(true);
 }
 
-async function getCourseResources()
+async function getCourseObj()
 {
   if(semesterID != null)
   {
@@ -58,7 +58,26 @@ async function getCourseResources()
       return;
     }
     setCourseObject(courseResponse.data);
-    const courseObj = courseResponse.data;
+    return courseResponse.data; 
+  }
+}
+
+async function getCourseResources()
+{
+  if(!courseName)
+    return;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+ let courseObj = null;
+ if(!courseObject)
+ {
+  courseObj = await getCourseObj();
+ }
+ else
+ {
+  courseObj = courseObject;
+ }
     const resourceResponse = await APIModule.get(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources`);
     
     if(resourceResponse?.status != 200)
@@ -68,7 +87,41 @@ async function getCourseResources()
     }
     setCourseResources(resourceResponse.data);
     console.log(resourceResponse.data);
+}
+
+async function fileLinkHandler(e,resource)
+{
+  e.preventDefault();
+
+  let courseObj = null;
+  if(!courseObject)
+  {
+   courseObj = await getCourseObj();
   }
+  else
+  {
+   courseObj = courseObject;
+  }
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+
+  const downloadResponse = await APIModule.get(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources/${resource.id}/download`,'blob');
+  if(downloadResponse?.status != 200)
+  {
+    console.log("Error getting course resources");
+    return;
+  }
+  const file = window.URL.createObjectURL(new Blob([downloadResponse.data]));
+  const linkElement = document.createElement('a');
+  linkElement.href = file;
+  const fileName = resource.fil_name;
+  linkElement.setAttribute('download',fileName);
+  document.body.appendChild(linkElement);
+  linkElement.click();
+  document.body.removeChild(linkElement);
+  window.URL.revokeObjectURL(file);
+
 }
 
 useEffect(()=>{
@@ -115,20 +168,15 @@ useEffect(()=>{
             </ListItem>
             <Divider sx={{borderBottomWidth: 3,borderColor:'black'}}/>
       {courseResources.map((resource,index)=>(
-            <ListItem key={index+1}>
+            <ListItem key={resource.id}>
             <Grid container spacing={0} sx={{width:'100%'}}>
               <Grid xs={7}>
-                <Link href='#' onClick={
-                  (e)=>{
-                    e.preventDefault();
-                    console.log("Click");
-                  }
-                }>
-                  <ListItemText primary={resource.fil_name.substring(0, resource.fil_name.length -4)}/>
+                <Link href='#' onClick={(e)=>{fileLinkHandler(e,resource)}}>
+                  <ListItemText primary={resource.fil_name.substring(0, resource.fil_name.lastIndexOf('.'))}/>
                 </Link>
               </Grid>
               <Grid xs={4}>
-               <ListItemText primary = {resource.fil_name.substring(resource.fil_name.length-4, resource.fil_name.length)}/>
+               <ListItemText primary = {resource.fil_name.substring(resource.fil_name.lastIndexOf('.'))}/>
 
               </Grid>
               <Grid xs={1}>
