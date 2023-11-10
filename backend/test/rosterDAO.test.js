@@ -17,7 +17,7 @@ describe('TEST getRoster', () => {
     var crs_id = 1;
     var sec_num = 1;
     RosterDAO.getRoster(crs_id, sec_num).then(temp => {
-      expect(true).toEqual(true);
+      expect(true).toEqual(truee);
       done();
     });
   }, 1000);

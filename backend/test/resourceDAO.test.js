@@ -12,6 +12,22 @@ describe('TEST getCourseFiles', () => {
   }, 1000);
 });
 
+/**
+ * Unable to test this one yet, expected file path may be a bit off.
+ */
+describe('TEST getResourcePath', () => {
+  it('Generic Test', done => {
+    var sec_num = 1;
+    var crs_id = 1;
+    var fil_id = 1;
+    ResourceDAO.getResourcePath(sec_num, crs_id, fil_id).then(temp => {
+      var file_path = "resources/" + temp.fil_name;
+      expect(temp.file_path).toEqual(file_path);
+      done();
+    });
+  }, 1000);
+});
+
 describe('TEST uploadFile', () => {
   it('Generic Test', done => {
     var sec_num = 1;
@@ -55,7 +71,7 @@ describe('TEST getUniqueFile', () => {
     var crs_id = 1;
     var sec_num = 1;
     ResourceDAO.getUniqueFile(file_name, crs_id, sec_num).then(temp => {
-      expect(true).toEqual(true);
+      expect(temp.fil_name).toEqual(file_name);
       done();
     });
   }, 1000);

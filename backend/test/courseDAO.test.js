@@ -19,10 +19,18 @@ describe('TEST getCourse', () => {
   }, 1000);
 });
 
-
 describe('TEST getCourseByID', () => {
   it('Test CourseDAO get a course by ID', done => {
     CourseDAO.getCourseByID(vars.courses[0].courseID).then(course => {
+      expect(course).toEqual(vars.courses[0]);
+      done();
+    });
+  }, 1000);
+})
+
+describe('TEST getCourseByName', () => {
+  it('Test CourseDAO get a course by Name', done => {
+    CourseDAO.getCourseByName(vars.courses[0].courseName, vars.courses[0].semesterID).then(course => {
       expect(course).toEqual(vars.courses[0]);
       done();
     });
