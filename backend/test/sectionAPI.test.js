@@ -28,8 +28,11 @@ describe('TEST GET /:sectionNum', () => {
 //     var sem_id;
 //     var crs_id;
 //     var sec_num;
-//     // Time constraint figure out delete skeleton
-//     expect(true).toEqual(true);
+//     request(app).delete(path + `/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}`).then(res => {
+//       expect(res).toBeDefined()
+//     expect(res.status).toEqual(200);
+//     done();
+//   });
 //   }, 10000);
 // });
 
@@ -37,8 +40,11 @@ describe('TEST GET /:sectionNum', () => {
 //   it('Generic Test', done => {
 //     var sem_id;
 //     var crs_id;
-//     // Time constraint figure out post skeleton
-//     expect(true).toEqual(true);
+//     request(app).post(path + `/semesters/${sem_id}/courses/${crs_id}/sections/`).then(res => {
+//       expect(res).toBeDefined()
+//     expect(res.status).toEqual(200);
+//     done();
+//   });
 //   }, 10000);
 // });
 

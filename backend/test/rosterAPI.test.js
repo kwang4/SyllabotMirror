@@ -17,25 +17,27 @@
 //   }, 10000);
 // });
 
-// describe('TEST GET /', () => {
-//   it('Generic Test', done => {
-//     var sem_id;
-//     var crs_id;
-//     var sec_num;
-//     request(server.app).get(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/roster`).then(res => {
-//       expect(true).toEqual(true);
-//       done();
-//     });
-//   }, 10000);
-// });
+describe('TEST GET /', () => {
+  it('Generic Test', done => {
+    var sem_id;
+    var crs_id;
+    var sec_num;
+    request(server.app).get(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/roster`).then(res => {
+      expect(true).toEqual(true);
+      done();
+    });
+  }, 10000);
+});
 
 // describe('TEST POST /', () => {
 //   it('Generic Test', done => {
 //     var sem_id;
 //     var crs_id;
 //     var sec_num;
-//     // Time constraint figure out post skeleton
-//     expect(true).toEqual(true);
+//     request(server.app).post(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/roster`).then(res => {
+//         expect(true).toEqual(true);
+//         done();
+//       });
 //   }, 10000);
 // });
 
@@ -44,8 +46,10 @@
 //     var sem_id;
 //     var crs_id;
 //     var sec_num;
-//     // Time constraint figure out delete skeleton
-//     expect(true).toEqual(true);
+//     request(server.app).delete(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/roster`).then(res => {
+//         expect(true).toEqual(true);
+//         done();
+//       });
 //   }, 10000);
 // });
 
@@ -55,7 +59,9 @@
 //     var crs_id;
 //     var sec_num;
 //     var usr_id;
-//     // Time constraint figure out delete skeleton
-//     expect(true).toEqual(true);
+//     request(server.app).delete(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/roster/users/${usr_id}`).then(res => {
+//         expect(true).toEqual(true);
+//         done();
+//       });
 //   }, 10000);
 // });

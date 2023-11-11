@@ -43,6 +43,60 @@ module.exports = {
         unity_id: "dbuchanan"
     }
   ],
+  sections: [
+    {
+      crs_id: 1,
+      number: 1,
+      name: "001"
+    },
+    {
+      crs_id: 2,
+      number: 1,
+      name: "001"
+    },
+    {
+      crs_id: 3,
+      number: 2,
+      name: "002"
+    },
+    {
+      crs_id: 4,
+      number: 3,
+      name: "003"
+    },
+    {
+      crs_id: 5,
+      number: 100,
+      name: "100"
+    }
+  ],
+  semesters: [
+    {
+      id: 1,
+      season: "Maymester",
+      year: 2023
+    },
+    {
+      id: 2,
+      season: "Summer 1",
+      year: 2024
+    },
+    {
+      id: 3,
+      season: "Summer 2",
+      year: 2025
+    },
+    {
+      id: 4,
+      season: "Fall",
+      year: 2026
+    },
+    {
+      id: 5,
+      season: "Spring",
+      year: 2027
+    },
+  ],
   testUser: [
     {
       id: 6,

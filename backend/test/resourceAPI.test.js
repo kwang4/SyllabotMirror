@@ -21,7 +21,9 @@
 //     var sem_id;
 //     var crs_id;
 //     var sec_num;
-//     // Time constraint find out POST skeleton later
-//     expect(true).toEqual(true);
+//     request(server.app).post(`/api/semesters/${sem_id}/courses/${crs_id}/sections/${sec_num}/resources`).then(res => {
+//       expect(true).toEqual(true);
+//       done();
+//     });
 //   }, 10000);
 // });

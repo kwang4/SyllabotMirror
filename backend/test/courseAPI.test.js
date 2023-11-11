@@ -24,19 +24,21 @@ describe('TEST GET /', () => {
   }, 1000);
 });
 
-// describe('TEST POST /', () => {
-//   it('Generic Test', done => {
-//     var sem_id;
-//     // Time constraint, figure out post skeleton structure later
-//     expect(true).toEqual(true);
-//   }, 10000);
-// });
+describe('TEST POST /', () => {
+  it('Generic Test', async() => {
+    var sem_id = 2;
+    const res = await request(server.app).post(`/api/semesters/${sem_id}/courses`);
+      console.log(res.body);
+    expect(res.status).toEqual(200);
+  }, 10000);
+});
 
-// describe('TEST DELETE /:courseid', () => {
-//   it('Generic Test', done => {
-//     var sem_id;
-//     var crs_id;
-//     // Time constraint, figure out delete skeleton structure later
-//     expect(true).toEqual(true);
-//   }, 10000);
-// });
+describe('TEST DELETE /:courseid', () => {
+  it('Generic Test', async() => {
+    var sem_id = 1;
+    var crs_id = 1;
+    const res = await request(server.app).delete(`/api/semesters/${sem_id}/${crs_id}`);
+      console.log(res.body);
+    expect(res.status).toEqual(200);
+  }, 10000);
+});
