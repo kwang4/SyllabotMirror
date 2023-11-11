@@ -2,6 +2,7 @@ const vars = require('../test/testVariables');
 const UserDAO = require('../src/data/UserDAO');
 const testVariables = require('../test/testVariables');
 
+//PASSING
 describe('TEST getUsers', () => {
   it('Generic Test', done => {
     UserDAO.getUsers().then(temp => {
@@ -11,6 +12,7 @@ describe('TEST getUsers', () => {
   }, 1000);
 });
 
+//PASSING
 describe('TEST getUser', () => {
   it('Generic Test', done => {
     var usr_id = testVariables.users[0].id;
@@ -21,6 +23,7 @@ describe('TEST getUser', () => {
   }, 1000);
 });
 
+//PASSING
 describe('TEST getUserByUnityID', () => {
   it('Generic Test', done => {
     var unity_id = testVariables.users[0].unity_id;
@@ -31,7 +34,7 @@ describe('TEST getUserByUnityID', () => {
   }, 1000);
 });
 
-// This seems to be running through the duplicate path rather than a regular one, not sure why yet
+//PASSING
 describe('TEST createUser', () => {
   it('Generic Test', done => {
     var user = testVariables.testUser[0];
@@ -42,12 +45,11 @@ describe('TEST createUser', () => {
   }, 1000);
 });
 
-// This will fail if createUser fails
+//PASSING
 describe('TEST deleteUser', () => {
   it('Generic Test', done => {
     var user = testVariables.testUser[0];
     UserDAO.deleteUser(user).then(temp => {
-      // STILL NEEDS TO BE TESTED PROPERLY
       expect(temp.results.affectedRows).toEqual(1);
       done();
     });

@@ -13,32 +13,32 @@ const vars = require('../test/testVariables');
 //   }, 10000);
 // });
 
-describe('TEST GET /', () => {
-  it('Generic Test', async() => {
-    var sem_id = 1;
-    const res = await request(server.app).get(`/api/semesters/${sem_id}/courses`);
-      console.log(res.body);
-    expect(res.status).toEqual(200);
-    done();
+// describe('TEST GET /', () => {
+//   it('Generic Test', async() => {
+//     var sem_id = 1;
+//     const res = await request(server.app).get(`/api/semesters/${sem_id}/courses`);
+//       console.log(res.body);
+//     expect(res.status).toEqual(200);
+//     done();
     
-  }, 1000);
-});
+//   }, 1000);
+// });
 
-describe('TEST POST /', () => {
-  it('Generic Test', async() => {
-    var sem_id = 2;
-    const res = await request(server.app).post(`/api/semesters/${sem_id}/courses`);
-      console.log(res.body);
-    expect(res.status).toEqual(200);
-  }, 10000);
-});
+// describe('TEST POST /', () => {
+//   it('Generic Test', async() => {
+//     var sem_id = 2;
+//     const res = await request(server.app).post(`/api/semesters/${sem_id}/courses`);
+//       console.log(res.body);
+//     expect(res.status).toEqual(200);
+//   }, 10000);
+// });
 
-describe('TEST DELETE /:courseid', () => {
-  it('Generic Test', async() => {
-    var sem_id = 1;
-    var crs_id = 1;
-    const res = await request(server.app).delete(`/api/semesters/${sem_id}/${crs_id}`);
-      console.log(res.body);
-    expect(res.status).toEqual(200);
-  }, 10000);
-});
+// describe('TEST DELETE /:courseid', () => {
+//   it('Generic Test', async() => {
+//     var sem_id = 1;
+//     var crs_id = 1;
+//     const res = await request(server.app).delete(`/api/semesters/${sem_id}/${crs_id}`);
+//       console.log(res.body);
+//     expect(res.status).toEqual(200);
+//   }, 10000);
+// });

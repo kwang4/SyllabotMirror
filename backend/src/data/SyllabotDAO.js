@@ -10,7 +10,7 @@ function getSyllabots() {
 
 function getSyllabot(syl_id) {
   return db.query('SELECT * FROM syllabot WHERE syl_id = ?;', [syl_id]).then(({ results }) => {
-    return results.map(syllabot => new Syllabot(syllabot));
+    return new Syllabot(results[0]);
   });
 }
 
@@ -32,8 +32,8 @@ function createSyllabot(syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_pic
 function updateSyllabot(syl_id, syl_name, syl_prompt_flavor, syl_profile_picture) {
   return db.query('UPDATE syllabot SET syl_name = ?, syl_prompt_flavor = ?, syl_profile_picture = ? WHERE syl_id = ?', [syl_name, syl_prompt_flavor, syl_profile_picture, syl_id], function (err, result) {
     if (err) throw err;
-    return result;
-  })
+    return result.affectedRows;
+  });
 }
 
 module.exports = {

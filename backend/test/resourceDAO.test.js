@@ -1,6 +1,7 @@
 const vars = require('../test/testVariables');
 const ResourceDAO = require('../src/data/ResourceDAO');
 
+//NEEDS WORK
 describe('TEST getCourseFiles', () => {
   it('Generic Test', done => {
     var sec_num = 1;
@@ -14,6 +15,7 @@ describe('TEST getCourseFiles', () => {
 
 /**
  * Unable to test this one yet, expected file path may be a bit off.
+ * FAILING
  */
 describe('TEST getResourcePath', () => {
   it('Generic Test', done => {
@@ -28,6 +30,7 @@ describe('TEST getResourcePath', () => {
   }, 1000);
 });
 
+//NEEDS WORK
 describe('TEST uploadFile', () => {
   it('Generic Test', done => {
     var sec_num = 1;
@@ -42,6 +45,7 @@ describe('TEST uploadFile', () => {
   }, 1000);
 });
 
+//FAILING
 describe('TEST getResources', () => {
   it('Generic Test', done => {
     var sec_num = 1;
@@ -53,6 +57,7 @@ describe('TEST getResources', () => {
   }, 1000);
 });
 
+//FAILING
 describe('TEST getFile', () => {
   it('Generic Test', done => {
     var file_link = "Link to File 1 Location";
@@ -64,7 +69,8 @@ describe('TEST getFile', () => {
   }, 1000);
 });
 
-/// There seems to be something wrong with getUniqueFile()
+//FAILING
+/// There seems to be something wrong with getUniqueFile() function
 describe('TEST getUniqueFile', () => {
   it('Generic Test', done => {
     var file_name = "file_name_1";

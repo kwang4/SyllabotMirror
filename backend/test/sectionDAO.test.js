@@ -6,6 +6,7 @@ beforeEach(() => {
   SectionDAO.deleteSection(1, 112);
 });
 
+//NEEDS WORK
 describe('TEST getSections', () => {
   it('Generic Test', done => {
     SectionDAO.getSections().then(temp => {
@@ -15,6 +16,7 @@ describe('TEST getSections', () => {
   }, 1000);
 });
 
+//NEEDS WORK
 describe('TEST getSectionByCourse', () => {
   it('Generic Test', done => {
     var crs_id;
@@ -26,6 +28,7 @@ describe('TEST getSectionByCourse', () => {
   }, 1000);
 });
 
+///NEEDS WORK
 describe('TEST getSectionsByCourse', () => {
   it('Generic Test', done => {
     var crs_id;
@@ -36,6 +39,7 @@ describe('TEST getSectionsByCourse', () => {
   }, 1000);
 });
 
+//NEEDS WORK
 describe('TEST getSectionsByUserID', () => {
   it('Generic Test', done => {
     var usr_id = vars.users[0].id;
@@ -46,6 +50,7 @@ describe('TEST getSectionsByUserID', () => {
   }, 1000);
 });
 
+//NEEDS WORK
 describe('TEST getInstructors', () => {
   it('Generic Test', done => {
     var crs_id = 1;
@@ -57,6 +62,7 @@ describe('TEST getInstructors', () => {
   }, 1000);
 });
 
+//PASSING
 describe('TEST createSection', () => {
   it('Generic Test', done => {
     var crs_id = 1;
@@ -71,6 +77,7 @@ describe('TEST createSection', () => {
   }, 1000);
 });
 
+//PASSING
 describe('TEST deleteSection', () => {
   it('Generic Test', done => {
     var crs_id = 1;
