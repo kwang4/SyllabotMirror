@@ -106,6 +106,15 @@ module.exports = {
       unity_id: "testid"
     }
   ],
+  testUser2: [
+    {
+      id: 7,
+      is_admin: 0,
+      formal_name: "User,Test2",
+      preferred_name: "P_User,Test2",
+      unity_id: "test2id"
+    }
+  ],
   deploys: [
     {
       "deployID": 1,
