@@ -50,10 +50,12 @@ export default function FileUploadCard() {
       console.log(file);
     }
     setFileNameHTML(file.name);
+    setErrorMsg('');
   };
 
   async function uploadFile()
   {
+    //TODO file type validation
     if(semesterID != null && courseName != null)
     {
       const splitIdx = courseName.lastIndexOf('-');

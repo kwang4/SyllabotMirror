@@ -7,6 +7,7 @@ const Resource = require('./models/Resource');
 
 const User = require('./models/User');
 const UserDAO = require('./UserDAO');
+const fs = require('fs');
 
 function getCourseFiles(scr_sec_number, scr_crs_id) {
   console.log(scr_sec_number);
@@ -34,6 +35,39 @@ function uploadFile(scr_sec_number, scr_crs_id, original_name, file_path, file_p
   });
 }
 
+function deleteFile(fil_id){
+  return db.query('SELECT fil_link,fil_parsed_link FROM file WHERE fil_id=?', [fil_id]).then((queryResponse)=>{
+    const fil_link = queryResponse?.results[0]?.fil_link;
+    const fil_parsed_link = queryResponse?.results[0]?.fil_parsed_link;
+    console.log(fil_link + "\n" + fil_parsed_link);
+
+      return db.query('DELETE FROM section_resource WHERE scr_fil_id = ?', [fil_id]).then(()=> {
+        return db.query('DELETE FROM file WHERE fil_id = ?', [fil_id],function(err2,res2) {
+          if(err2) throw err2;
+            //Delete file from upload folder and parsed file
+            if(fil_link)
+            {
+              fs.unlink(fil_link,(errDel1)=>{
+                if(errDel1) throw errDel1;
+              });
+            }
+          if(fil_parsed_link)
+          {
+            fs.unlink(fil_parsed_link,(errDel2)=>{
+              if(errDel2) throw errDel2;
+             });
+          }
+          console.log(res2);
+          
+          return res2.affectedRows;
+      });
+    }).catch(err=>{
+      console.log(err);
+    });
+
+  });
+}
+
 function getResources(scr_sec_number, scr_crs_id){
   return db.query('SELECT * FROM section_resource WHERE scr_sec_number = ? AND scr_crs_id = ?', [scr_sec_number, scr_crs_id]).then(({ results }) => {
     return results.map(resource => new Resource(resource));
@@ -57,6 +91,7 @@ module.exports = {
     getCourseFiles: getCourseFiles,
     getResourcePath: getResourcePath,
     uploadFile: uploadFile,
+    deleteFile: deleteFile,
     getFile: getFile,
     getResources: getResources,
     getUniqueFile: getUniqueFile

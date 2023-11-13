@@ -101,6 +101,11 @@ async function getCourseResources()
     console.log(resourceResponse.data);
 }
 
+function deleteResource(e,resource)
+{
+  console.log("Delete");
+}
+
 /**
  * Will hit API endpoint to download resource file
  * @param e Event handler to prevent default link behavior
@@ -198,7 +203,7 @@ useEffect(()=>{
 
               </Grid>
               <Grid xs={1}>
-              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
+              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png" onClick={(e)=>{deleteResource(e,resource)}}/>
               </Grid>
             </Grid>
             </ListItem>
