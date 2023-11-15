@@ -15,6 +15,23 @@ router.get("/deploys", (req, res, next) => {
   })
 });
 
+router.post("/deploys", (req, res, next) => {
+  const crs_id = req.params.courseid;
+  const sec_num = req.params.sectionNum
+
+  const syl_id = req.body.syl_id;
+  const typ_id = req.body.typ_id;
+  const primary_token = req.body.primary_token;
+  const secondary_token = req.body.secondary_token;
+  const socket_token = req.body.socket_token;
+  // console.log(`syl_id: ${syl_id}\ntyp_id: ${typ_id}\nprimary: ${primary_token}\nsecondary: ${secondary_token}\nsocket: ${socket_token}\n`);
+
+  DeployDAO.createDeploy(syl_id, typ_id, primary_token, secondary_token, socket_token, crs_id, sec_num).then(res => {
+    console.log(results);
+    res.json(results);
+  });
+});
+
 router.get("/syllabots/all", (req, res, next) => {
   SyllabotDAO.getSyllabots().then(syllabots => {
       res.json(syllabots);
