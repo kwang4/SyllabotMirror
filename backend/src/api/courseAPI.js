@@ -13,6 +13,8 @@ const CourseDAO = require('.././data/CourseDAO.js');
 const SectionDAO = require('.././data/SectionDAO.js');
 const UserDAO = require('.././data/UserDAO.js');
 const RosterDAO = require('.././data/RosterDAO.js');
+const SyllabotDAO = require('.././data/SyllabotDAO.js');
+const DeployDAO = require('.././data/DeployDAO.js');
 
 /**
  * Currently, these endpoints are just mock endpoints 
@@ -91,7 +93,13 @@ router.post("/",function(req,res){
                                 // Add a section
                                 SectionDAO.createSection(course[0].courseID, sectionNum).then(sectionAdded => {
                                     RosterDAO.addUserToRoster(course[0].courseID, sectionNum, user, 2).then(result => {
-                                        res.json(sectionAdded.results.affectedRows)
+                                        SyllabotDAO.createSyllabot(course[0].courseID, "Syllabot " + courseName, null, null).then(syllabot => {
+                                            DeployDAO.createDeploy(syllabot.syllabotID, 1, "Your Token", "Your Token", "Your Token", course[0].courseID, sectionNum).then(slackDeploy => {
+                                                DeployDAO.createDeploy(syllabot.syllabotID, 2, "Your Token", null, null, course[0].courseID, sectionNum).then(discordDeploy => {
+                                                    res.json(sectionAdded.results.affectedRows);
+                                                })
+                                            })
+                                        })
                                     })
                                 })
                                 
@@ -110,7 +118,13 @@ router.post("/",function(req,res){
                         } else{
                             SectionDAO.createSection(result[0].courseID, sectionNum).then(sectionAdded => {
                                 RosterDAO.addUserToRoster(course[0].courseID, sectionNum, user, 2).then(result => {
-                                    res.json(sectionAdded.results.affectedRows)
+                                    SyllabotDAO.createSyllabot(course[0].courseID, "Syllabot " + courseName, null, null).then(syllabot => {
+                                        DeployDAO.createDeploy(syllabot.syllabotID, 1, "Your Token", "Your Token", "Your Token", course[0].courseID, sectionNum).then(slackDeploy => {
+                                            DeployDAO.createDeploy(syllabot.syllabotID, 2, "Your Token", null, null, course[0].courseID, sectionNum).then(discordDeploy => {
+                                                res.json(sectionAdded.results.affectedRows);
+                                            })
+                                        })
+                                    })
                                 })
                             })
                             // create the section with the user with the course

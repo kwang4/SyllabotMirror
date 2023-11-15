@@ -10,7 +10,7 @@ function getDeploys() {
 }
 
 function getDeploysBySection(sec_crs_id, sec_num) {
-  return db.query('SELECT dep_id,dep_syl_id,dep_typ_id,dep_primary_token FROM deploy JOIN section_syllabot ON scl_dep_id = dep_id WHERE scl_sec_number=? AND scl_crs_id=?;', [sec_crs_id, sec_num]).then(( { results }) => {
+  return db.query('SELECT dep_id,dep_syl_id,dep_typ_id,dep_primary_token,dep_ss_token,dep_socket_token FROM deploy JOIN section_syllabot ON scl_dep_id = dep_id WHERE scl_sec_number=? AND scl_crs_id=?;', [sec_num, sec_crs_id]).then(( { results }) => {
     return results.map(deploy => new Deploy(deploy))
   });
 }
@@ -48,7 +48,7 @@ async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_toke
     scl_sec_number = sec_num
     scl_crs_id = crs_id
     */
-    new_syllabot_section = await db.query('INSERT INTO section_syllabot (scl_dep_id, scl_sec_number, scl_crs_id) VALUES (?, ?, ?)', [new_deploy.dep_id, sec_num, crs_id]);
+    new_syllabot_section = await db.query('INSERT INTO section_syllabot (scl_dep_id, scl_sec_number, scl_crs_id) VALUES (?, ?, ?)', [new_deploy.deployID, sec_num, crs_id]);
 
     // Respond with newly created deploy (response of getDeployById)
     return new_deploy;

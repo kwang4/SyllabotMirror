@@ -32,6 +32,18 @@ router.post("/deploys", (req, res, next) => {
   });
 });
 
+router.get("/deploysBySection", (req, res, next) => {
+  const crs_id = req.params.courseid;
+  const sec_num = req.params.sectionNum
+  DeployDAO.getDeploysBySection(crs_id, sec_num).then(deploys => {
+    res.json(deploys);
+  })
+})
+
+
+
+// MAY ALL BE DATED BENEATH THIS COMMENT
+
 router.get("/syllabots/all", (req, res, next) => {
   SyllabotDAO.getSyllabots().then(syllabots => {
       res.json(syllabots);
