@@ -33,35 +33,25 @@ async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_toke
       syllabot = await SyllabotDAO.createSyllabot(crs_id, "Syllabot", null, null);
     }
 
+    /* Create Deploy
+    dep_syl_id = syllabot_val.syl_id
+    dep_typ_id = typ_id
+    dep_primary_token = primary_token
+    dep_ss_token = ss_token
+    dep_socket_token = socket_token
+    */
     insert_results = await db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token) VALUES (?, ?, ?, ?, ?)', [syllabot.syllabotID, typ_id, primary_token, ss_token, socket_token]);
     new_deploy = await getDeployById(insert_results.results.insertId);
+
+    /* Add to syllabot_section
+    scl_dep_id = dep_id (from newly created deploy)
+    scl_sec_number = sec_num
+    scl_crs_id = crs_id
+    */
+    new_syllabot_section = await db.query('INSERT INTO section_syllabot (scl_dep_id, scl_sec_number, scl_crs_id) VALUES (?, ?, ?)', [new_deploy.dep_id, sec_num, crs_id]);
+
+    // Respond with newly created deploy (response of getDeployById)
     return new_deploy;
-  /*
-      // Create Deploy
-      /*
-      dep_syl_id = syllabot_val.syl_id
-      dep_typ_id = typ_id
-      dep_primary_token = primary_token
-      dep_ss_token = ss_token
-      dep_socket_token = socket_token
-  */
-      /*
-      return db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token) VALUES (?, ?, ?, ?, ?)', [syllabot_val.syl_id, typ_id, primary_token, ss_token, socket_token], function(err, result) {
-        console.log(result.insertId);
-        return getDeployById(result.insertId).then(results =>{
-          // Add to syllabot_section
-          /*
-          scl_dep_id = dep_id (from newly created deploy)
-          scl_sec_number = sec_num
-          scl_crs_id = crs_id
-          *//*
-          return db.query('INSERT INTO section_resource (scr_sec_number,scr_crs_id, scr_fil_id) VALUES (?,?,?)', [scr_sec_number, scr_crs_id, results[0].id]).then(()=>{
-            // Respond with newly created deploy (response of getDeployById)
-            return results;
-          });
-        });
-      });
-      */
   } catch(err) {
     console.log(err);
     return err;
