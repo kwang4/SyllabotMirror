@@ -20,10 +20,14 @@ function getSyllabot(syl_id) {
 
 function createSyllabot(syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture) {
   return db.query('INSERT INTO syllabot (syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture) VALUES (?, ?, ?, ?);', [syl_crs_id, syl_name, syl_prompt_flavor, syl_profile_picture]).then(({results}) => {
+    //console.log(result);
     let id = results.insertId;
     return db.query('SELECT * FROM SYLLABOT WHERE syl_id = ?;', [id]).then(({ results }) => {
       return new Syllabot(results[0])
     });
+  })
+  .catch(err => {
+    throw err;
   });
 }
 

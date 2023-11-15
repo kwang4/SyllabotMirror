@@ -26,9 +26,9 @@ router.post("/deploys", (req, res, next) => {
   const socket_token = req.body.socket_token;
   // console.log(`syl_id: ${syl_id}\ntyp_id: ${typ_id}\nprimary: ${primary_token}\nsecondary: ${secondary_token}\nsocket: ${socket_token}\n`);
 
-  DeployDAO.createDeploy(syl_id, typ_id, primary_token, secondary_token, socket_token, crs_id, sec_num).then(res => {
-    console.log(results);
-    res.json(results);
+  DeployDAO.createDeploy(syl_id, typ_id, primary_token, secondary_token, socket_token, crs_id, sec_num).then(response => {
+    console.log(response);
+    res.json(response);
   });
 });
 
