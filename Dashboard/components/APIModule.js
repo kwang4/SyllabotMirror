@@ -15,7 +15,13 @@ const APIModule = {
             };
             });
             return response;
+        },
+        delete: async (endpoint) =>{
+            console .log(BASE_API_URL+endpoint);
+            const response = await axios.delete(BASE_API_URL+endpoint).catch(error=>{console.log(error)});
+            return response;
         }
+        
 }
 
 export default APIModule;
