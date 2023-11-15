@@ -35,15 +35,23 @@ function uploadFile(scr_sec_number, scr_crs_id, original_name, file_path, file_p
   });
 }
 
+/**
+ * Deletes all references of a file associated by the fil_id specified, in both section_resource and in file table
+ * @param {* File id to delete} fil_id 
+ * @returns  # of rows affected in the file table
+ */
 function deleteFile(fil_id){
+  //First get file link and possibly parsed file link for deltion later.
   return db.query('SELECT fil_link,fil_parsed_link FROM file WHERE fil_id=?', [fil_id]).then((queryResponse)=>{
     const fil_link = queryResponse?.results[0]?.fil_link;
     const fil_parsed_link = queryResponse?.results[0]?.fil_parsed_link;
-    console.log(fil_link + "\n" + fil_parsed_link);
 
+    //Delete section_resource as it uses fil_id foreign key
       return db.query('DELETE FROM section_resource WHERE scr_fil_id = ?', [fil_id]).then(()=> {
+        //Now delete from file, at which point all references to this file in the db should be gone
         return db.query('DELETE FROM file WHERE fil_id = ?', [fil_id],function(err2,res2) {
           if(err2) throw err2;
+
             //Delete file from upload folder and parsed file
             if(fil_link)
             {
@@ -57,7 +65,6 @@ function deleteFile(fil_id){
               if(errDel2) throw errDel2;
              });
           }
-          console.log(res2);
           
           return res2.affectedRows;
       });

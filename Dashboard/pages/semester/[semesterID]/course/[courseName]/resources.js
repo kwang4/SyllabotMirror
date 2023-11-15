@@ -27,21 +27,33 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { useRouter } from 'next/router';
+import { blueGrey, red } from '@mui/material/colors';
 
 export default function Resources() {
     const router = useRouter();
     const { semesterID, courseName } = router.query;
 
-
-  const [uploadFileDialog,setUploadStudentDialog] = useState(false);
+  const [resToDelete,setResToDelete] = useState(null);
+  const [deleteErr,setDeleteErr] = useState('');
+  const [confirmDeleteDialog,setConfirmDeleteDialog] = useState(false);
   const [courseResources, setCourseResources] = useState([]);
   const [courseObject, setCourseObject] = useState(null);
-  const toggleFileDialog = ()=>
+
+  /**
+   * Toggles state variable for whether the the delete confirmation dialog is open or closed. Resets resource to delete on close, and removes error messages.
+   */
+  const toggleDeleteDialog = ()=>
 {
-  if(uploadFileDialog)
-    setUploadStudentDialog(false);
+  if(confirmDeleteDialog)
+  {
+    setConfirmDeleteDialog(false);
+    setResToDelete(null);
+    setDeleteErr('');
+  }
   else
-    setUploadStudentDialog(true);
+  {
+    setConfirmDeleteDialog(true);
+  }
 }
 
 /**
@@ -101,9 +113,52 @@ async function getCourseResources()
     console.log(resourceResponse.data);
 }
 
-function deleteResource(e,resource)
+/**
+ * Sets which file to delete into state var, and opens confirmation delete dialog
+ * @param {*Event Handler to determine which button was clicked} e 
+ * @param {* Resource object to store} resource 
+ */
+function openDeleteDialog(e,resource)
 {
-  console.log("Delete");
+  console.log(resource);
+  setResToDelete(resource);
+  setConfirmDeleteDialog(true);
+}
+
+/**
+ * Method that hits the DELETE endpoint for deleting resources.
+ * First makes a call to get Course Object, mostly for courseID needed in endpoint.
+ */
+async function deleteFile()
+{
+  if(!resToDelete || !semesterID || !courseName)
+  {
+    setDeleteErr('Error deleting file: File not found');
+    return;
+  }
+
+
+      //Splitting query params to get the course name an section separately
+        const splitIdx = courseName.lastIndexOf('-');
+        const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+        const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+        const courseResponse = await APIModule.get(`/semesters/${semesterID}/courses/courseName/${splitCourseName}`);
+        if(courseResponse.status != 200)
+        {
+          setDeleteErr('Unable to Upload File');
+          console.log("Error getting course object by name");
+          return;
+        }
+        const courseObj = courseResponse.data;
+        const deleteResponse = await APIModule.delete(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/resources/${resToDelete.id}`);
+        if(deleteResponse?.status != 200)
+        {
+          console.log('Unable to Delete File');
+          setDeleteErr('Unable to upload file, Route error');
+          return;
+        }
+        window.location.reload();
+  
 }
 
 /**
@@ -147,6 +202,9 @@ async function fileLinkHandler(e,resource)
 
 }
 
+/**
+ * Watches for when the router.query populates semesterID. When it does, it will hit getCourseResources to guarantee a populate.
+ */
 useEffect(()=>{
   getCourseResources();
 },[semesterID]);
@@ -203,7 +261,7 @@ useEffect(()=>{
 
               </Grid>
               <Grid xs={1}>
-              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png" onClick={(e)=>{deleteResource(e,resource)}}/>
+              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png" onClick={(e)=>{openDeleteDialog(e,resource)}}/>
               </Grid>
             </Grid>
             </ListItem>
@@ -212,6 +270,16 @@ useEffect(()=>{
     <h2></h2>
     
 <FileUploadCard/>
+<Dialog fullWidth open={confirmDeleteDialog} onClose={toggleDeleteDialog}>
+  <DialogTitle id="del-res-dialog">Are you sure you want to delete <span style={{color:'#3366CC'}}>{resToDelete?.fil_name}</span>?</DialogTitle>
+  <DialogContent dividers>
+  <p style={{color:'red'}} id="errorMSG">{deleteErr}</p>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleDeleteDialog} color="secondary">Cancel</Button>
+      <Button onClick={deleteFile} color="primary">Delete</Button>
+    </DialogActions>
+</Dialog>
 
 <h2></h2>
 

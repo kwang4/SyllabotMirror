@@ -48,7 +48,7 @@ router.get("/",(req,res,next)=>{
     ResourceDAO.getCourseFiles(scr_sec_number, scr_crs_id).then(resources=>res.json(resources));
 })
 
-router.get("/:resourceid/delete",(req,res,next)=>{
+router.delete("/:resourceid",(req,res,next)=>{
   const fil_id = req.params.resourceid;
   ResourceDAO.deleteFile(fil_id).then(response=>res.json(response.results));
 })
