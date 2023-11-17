@@ -12,12 +12,13 @@ function getRosters() {
     return results.map(roster => new Roster(roster));
   })
 }
+//SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=1 AND ros_sec_number=2
 
-// NOT TESTED
-// This gets ALL users in a section's roster
+
+// This gets ALL users in a section's roster (Currently refactoring bc it blows)
 function getRoster(ros_crs_id, ros_sec_number){
-  return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
-    return results.map(roster => new Roster(roster));
+  return db.query('SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=? AND ros_sec_number=?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return results.map(user => new User(user));
   })
 }
 

@@ -66,7 +66,7 @@ async function getCourseObj()
   if(courseObject)
     return courseObject;
 
-  if(semesterID != null)
+  if(semesterID != null && courseName != null)
   {
     const splitIdx = courseName.lastIndexOf('-');
     const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));

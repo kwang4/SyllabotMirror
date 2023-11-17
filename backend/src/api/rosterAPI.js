@@ -33,19 +33,16 @@ router.get("/:sectionid",(req,res,next)=>{
     })
 })
 
-// NOT TESTED
+
 /**
- * Get a list of rosters
+ * Gets the roster of the specified course and section
  */
 router.get("/",(req,res,next)=>{
-    RosterDAO.getRosters().then(rosters => {
-        if (rosters) {
-            // get list of rosters for each roster
-            res.json(rosters)
-        } else {
-            res.status(404).json({error: 'rosters not found'})
-        }
-    })
+   const courseID = req.params.courseid;
+   const sectionNum = req.params.sectionNum;
+   RosterDAO.getRoster(courseID,sectionNum).then(users=>{
+    res.json(users);
+   });
 })
 
 // NOT TESTED
