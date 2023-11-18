@@ -32,6 +32,23 @@ router.post("/deploys", (req, res, next) => {
   });
 });
 
+router.put("/deploy/:typeid", async (req, res, next) => {
+  const crs_id = req.params.courseid;
+  const sec_num = req.params.sectionNum
+  const typ_id = req.params.typeid;
+
+  const primary_token = req.body.primary_token;
+  const secondary_token = req.body.secondary_token;
+  const socket_token = req.body.socket_token;
+
+  deploy = await DeployDAO.getDeployBySectionAndType(crs_id, sec_num, typ_id);
+  if (!deploy) {
+    res.json({error: `Deploy not found with parameters courseid=${crs_id}, sectionNum=${sec_num}, typeid=${typ_id}`});
+  }
+  result = await DeployDAO.updateDeploy(primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id);
+  res.json(result);
+});
+
 router.get("/deploysBySection", (req, res, next) => {
   const crs_id = req.params.courseid;
   const sec_num = req.params.sectionNum
