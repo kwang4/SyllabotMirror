@@ -1,6 +1,7 @@
 const db = require('./DBConnection')
 const SyllabotDAO = require('./SyllabotDAO')
 const Deploy = require('./models/Deploy')
+const slackBot = require('./../../Slack/index')
 
 // This returns all Syllabot instances
 function getDeploys() {
@@ -39,9 +40,26 @@ async function updateDeploy(primary_token, secondary_token, socket_token, crs_id
   }
 }
 
+async function createSlackBot(primary_token, ss_token, socket_token){
+  console.log(primary_token);
+  console.log(ss_token);
+  console.log(socket_token);
+  try{
+    bot = new slackBot.slackBot(primary_token, ss_token, socket_token);
+    return true;
+  }
+  catch(error){
+    return false;
+  }
+}
+
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
+
+    //slackBot(primary_token, ss_token, socket_token);
+
+
     // Check if syllabot exists
     syllabot = await SyllabotDAO.getSyllabot(syl_id);
 
@@ -81,5 +99,6 @@ module.exports = {
   getDeployById: getDeployById,
   getDeployBySectionAndType: getDeployBySectionAndType,
   updateDeploy: updateDeploy,
-  createDeploy: createDeploy
+  createDeploy: createDeploy,
+  createSlackBot: createSlackBot
 }

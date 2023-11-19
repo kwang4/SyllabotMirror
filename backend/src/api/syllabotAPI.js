@@ -32,6 +32,21 @@ router.post("/deploys", (req, res, next) => {
   });
 });
 
+router.post("/botStartup", async (req, res, next) => {
+  const primary_token = req.body.primary_token;
+  const ss_token = req.body.ss_token;
+  const app_token = req.body.app_token;
+  try{
+    let results = await DeployDAO.createSlackBot(primary_token, ss_token, app_token);
+    console.log(results);
+    res.send(results);
+  }
+  catch(error){
+    console.log(error);
+    res.send(error);
+  }
+})
+
 router.put("/deploy/:typeid", async (req, res, next) => {
   const crs_id = req.params.courseid;
   const sec_num = req.params.sectionNum
