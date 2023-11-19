@@ -15,10 +15,20 @@ function getCourse(crs_sem_id, crs_id){
   })
 }
 
-function getCourseByID(crs_id){
-  return db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]).then(({ results }) => {
-    return new Course(results[0]);
-  })
+async function getCourseByID(crs_id) {
+  try {
+    let result = await db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]);
+    let courses = result.results.map(course => new Course(course));
+    if (courses.length == 0) {
+      return false;
+    }
+    return courses[0];
+  } catch (err) {
+    throw err;
+  }
+  // return db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]).then(({ results }) => {
+  //   return new Course(results[0]);
+  // })
 }
 
 function checkIfCourseExists(crs_sem_id, crs_name){
@@ -26,13 +36,19 @@ function checkIfCourseExists(crs_sem_id, crs_name){
     return results.map(course => new Course(course));
   })
 }
-function createCourse(crs_sem_id, crs_name){
-  
-  return db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name], function (err, result) {
-    if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
-    return result.affectedRows;
-  });
+async function createCourse(crs_sem_id, crs_name) {
+  try {
+    let insert_results = await db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name]);
+    return insert_results
+  } catch (err) { 
+    throw err;
+  }
+
+  // return db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name], function (err, result) {
+  //   if (err) throw err;
+  //   //console.log("Number of records inserted: " + result.affectedRows);
+  //   return result.affectedRows;
+  // });
 }
 
 // //Not TESTED
@@ -58,10 +74,22 @@ function deleteCourse(crs_sem_id, crs_name){
 
 // }
 
-function getCourseByName(crs_name, crs_sem_id) {
-  return db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]).then(({results}) => {
-    return new Course(results[0]);
-  })
+async function getCourseByName(crs_name, crs_sem_id) {
+  try {
+    let courses = await db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]);
+    let courses_obj = courses.results.map(course => new Course(course));
+    if (courses_obj.length == 0) {
+      return false;
+    }
+    // Assumes multiple courses can not have same name in one semester
+    return courses_obj[0];
+  } catch (err) {
+    throw err;
+  }
+
+  // return db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]).then(({results}) => {
+  //   return new Course(results[0]);
+  // })
 }
 
 module.exports = {

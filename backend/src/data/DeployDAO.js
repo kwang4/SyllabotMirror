@@ -17,7 +17,6 @@ function getDeploysBySection(sec_crs_id, sec_num) {
 
 function getDeployById(dep_id) {
   return db.query('SELECT * FROM deploy WHERE dep_id=?;', [dep_id]).then(({results}) => {
-    console.log(results)
     return new Deploy(results[0])
   })
 }

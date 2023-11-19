@@ -9,11 +9,22 @@ function getSections() {
   })
 }
 
-function getSectionByCourse(sec_crs_id, sec_number) {
+async function getSectionByCourse(sec_crs_id, sec_number) {
+  try {
+    let sections = await db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]);
+    let sections_obj = sections.results.map(section => new Section(section));
+    if (sections_obj.length == 0) {
+      return false;
+    }
+    // Assumes each course id can only have 1 of each sec_num
+    return sections_obj[0];
+  } catch (err) {
+    throw err;
+  }
 
-    return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
-      return results.map(section => new Section(section));
-    })
+  // return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
+  //   return results.map(section => new Section(section));
+  // })
   }
 
 function getSectionsByCourse(sec_crs_id) {
