@@ -148,6 +148,7 @@ CREATE TABLE `deploy` (
 LOCK TABLES `deploy` WRITE;
 /*!40000 ALTER TABLE `deploy` DISABLE KEYS */;
 INSERT INTO `deploy` VALUES (1,1,1,'xoxb-5808049658741-5943322501495-aknId4txsOqPQCmEbmmTR0BQ', '212a2b125e69b412a55c16326c878cb4', 'xapp-1-A05U5NWGW82-5943289940567-f64907e4039f362875f6aee3860c005a38a906fbef47224d96334f7855dbd08a'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'xoxb-6204296349143-6218840809474-CCsNmrZqYoCwl4D5F6vDEkJ1', 'ca4f9b10a6cb0fc7f1aa948f9e75fae0', 'xapp-1-A066EQQJEPL-6204308546055-873bf07f250d850f8904eae6661ffad26ad6005384afd59c4d03e052269fb111'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
+/*,(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5')*/
 /*!40000 ALTER TABLE `deploy` ENABLE KEYS */;
 UNLOCK TABLES;
 
