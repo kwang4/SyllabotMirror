@@ -1,5 +1,4 @@
 services:
-
   apacheshib:
     image: dockerhub.csc.ncsu.edu/ignacioxd/apacheshib-proxy
     ports:
@@ -13,33 +12,32 @@ services:
 
   app: #frontend
     build: ./Dashboard
-    restart: always
+    restart: unless-stopped
     volumes:
-      - ./Dashboard:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/.next
+      - ./Dashboard:/app/frontend/src
     environment:
       - PORT=80
-      - WATCHPACK_POLLING=true
 
   api:
-    build: ./backend
-    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.test
+    restart: "no"
     volumes:
       - ./backend/src:/app/src
     environment:
       - PORT=80
-    env_file: 
-      - .env 
-  
+    env_file:
+      - .env
+    depends_on:
+      - database
+
   database:
-    image: 'mariadb:latest'
+    image: "mariadb:latest"
     volumes:
-      - ./database/schema:/docker-entrypoint-initdb.d
-      - ./database/data:/var/lib/mysql
+      - ./testDatabase/schema:/docker-entrypoint-initdb.d
+      - ./testDatabase/data:/var/lib/mysql
     env_file:
       - .env # in root, configure db, backend, etc
     ports:
       - 3307:3306
-     
-  

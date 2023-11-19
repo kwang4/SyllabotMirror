@@ -8,6 +8,7 @@ import List from '@mui/material/List';
 import { ListItem } from '@mui/material'
 import ListItemText from '@mui/material/ListItemText';;
 import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -23,10 +24,11 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { useRouter } from 'next/router';
+import APIModule from '@components/APIModule';
 
 export default function Roster() {
-    const router = useRouter();
-    const { courseName } = router.query;
+  const router = useRouter();
+  const { semesterID, courseName } = router.query;
   const studentData = [ 
       {name: 'Jackson Hall', unityId: 'jdhall9'},
       {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
@@ -42,6 +44,8 @@ export default function Roster() {
 
   const [uploadStudentDialog,setUploadStudentDialog] = useState(false);
   const [uploadCSVDialog,setUploadCSVDialog] = useState(false);
+  const [courseObject, setCourseObject] = useState(null);
+  const [roster,setRoster] = useState([]);
   const toggleStudentDialog = ()=>
 {
   if(uploadStudentDialog)
@@ -57,6 +61,62 @@ const toggleUploadCSVDialog = ()=>
     setUploadCSVDialog(true);
 }
 
+/**
+ * Method to hit an API endpoint for the whole course Object (mostly needed for courseID)
+ * If the courseObject state variable is already populated, it just returns that.
+ * @returns courseObject with course ID, name, and other fields
+ */
+async function getCourseObj()
+{
+  if(courseObject)
+    return courseObject;
+
+  if(semesterID != null && courseName != null)
+  {
+    const splitIdx = courseName.lastIndexOf('-');
+    const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+    const courseResponse = await APIModule.get(`/semesters/${semesterID}/courses/courseName/${splitCourseName}`);
+    if(courseResponse?.status != 200)
+    {
+      console.log("Error getting course object by name");
+      return;
+    }
+    setCourseObject(courseResponse.data);
+    return courseResponse.data; 
+  }
+}
+
+async function getRoster()
+{
+  if(!semesterID || !courseName)
+  {
+    console.log("Course name or semester not found from query parameters");
+    return;
+  }
+  let courseObj = null;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+  if(!courseObject)
+  {
+    courseObj = await getCourseObj();
+    console.log(courseObj);
+  }
+  else
+  {
+    courseObj = courseObject;
+    console.log(courseObj);
+  }
+  const rosterResponse = await APIModule.get(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/roster`);
+  if(rosterResponse.status != 200){
+    console.log("Error getting roster");
+    return;
+  }
+  setRoster(rosterResponse.data);
+}
+
+useEffect(()=>{
+  getRoster();
+},[semesterID]);
 
   return (
     <div className={styles.container}>
@@ -70,7 +130,7 @@ const toggleUploadCSVDialog = ()=>
           Manage Roster 
         </h2>
         <h2>
-          <Link href={`/course/${courseName}`}>Go Back</Link>
+          <Link href={`/semester/${semesterID}/course/${courseName}`}>Go Back</Link>
         </h2>
       <main className={styles.mainStyle}>
     
@@ -86,10 +146,21 @@ const toggleUploadCSVDialog = ()=>
         '& ul': { padding: 0 },
       }}
     >
-      {studentData.map((student,index)=>(
+        <ListItem key={0}>
+        <Grid container spacing={0} sx={{width:'100%'}}>
+           <Grid xs={7}>
+              <ListItemText sx={{variant:"h1"}} primary={'Student Name'}/>
+           </Grid>
+          <Grid xs={4}>
+            <ListItemText primary = {'Unity ID'}/>
+          </Grid>
+        </Grid>
+        </ListItem>
+        <Divider sx={{borderBottomWidth: 3,borderColor:'black'}}/>
+      {roster.map((student,index)=>(
             <ListItem key={index}>
-              <ListItemText primary={student.name}/>
-              <ListItemText primary = {student.unityId}/>
+              <ListItemText primary={student.formal_name.split(',').reverse().join(' ')}/>
+              <ListItemText primary = {student.unity_id}/>
               <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
             </ListItem>
         ))}

@@ -9,11 +9,22 @@ function getSections() {
   })
 }
 
-function getSectionByCourse(sec_crs_id, sec_number) {
+async function getSectionByCourse(sec_crs_id, sec_number) {
+  try {
+    let sections = await db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]);
+    let sections_obj = sections.results.map(section => new Section(section));
+    if (sections_obj.length == 0) {
+      return false;
+    }
+    // Assumes each course id can only have 1 of each sec_num
+    return sections_obj[0];
+  } catch (err) {
+    throw err;
+  }
 
-    return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
-      return results.map(section => new Section(section));
-    })
+  // return db.query('SELECT * FROM section WHERE sec_crs_id = ? AND sec_number = ?;', [sec_crs_id, sec_number]).then(({ results }) => {
+  //   return results.map(section => new Section(section));
+  // })
   }
 
 function getSectionsByCourse(sec_crs_id) {
@@ -32,7 +43,8 @@ function getSectionsByUserID(ros_usr_id) {
 
 function getInstructors(ros_crs_id, ros_sec_number){
   // courseID = 1 and sectionNum = 2 
-    return db.query('SELECT u.usr_id, u.usr_first_name, u.usr_last_name FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = ?;', [ros_crs_id, ros_sec_number, Roles.TEACHER]).then(({ results }) => {
+  console.log(ros_crs_id, ros_sec_number);
+    return db.query('SELECT * FROM user u NATURAL JOIN roster r WHERE r.ros_crs_id = ? AND r.ros_sec_number = ? AND r.ros_rol_id = ? AND u.usr_id = ros_usr_id;', [ros_crs_id, ros_sec_number, Roles.TEACHER]).then(({ results }) => {
         return results.map(user => new User(user));
       })
 
@@ -47,11 +59,20 @@ function createSection(sec_crs_id, sec_number){
   });
 }
 
+function deleteSection(sec_crs_id, sec_number){
+  return db.query('DELETE FROM section WHERE sec_crs_id = ? AND sec_number = ?', [sec_crs_id, sec_number], function (err, result) {
+    if (err) throw err;
+    console.log("Number of records deleted: " + result.affectedRows);
+    return result.affectedRows;
+  })
+}
+
 module.exports = {
     getSections: getSections,
     getSectionsByCourse: getSectionsByCourse,
     getSectionByCourse: getSectionByCourse,
     getSectionsByUserID: getSectionsByUserID,
     getInstructors: getInstructors,
-    createSection: createSection
+    createSection: createSection,
+    deleteSection: deleteSection
   }

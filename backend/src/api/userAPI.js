@@ -25,11 +25,14 @@ router.get("/:userid/courses", async (req, res, next) => {
                         section['semesterID'] = course.semesterID;
                     }
                     const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
-                    if(instructors != null) {
+                    console.log("Instructors:");
+                    console.log(instructors);
+                    section['instructors'] = [];
+                    if(instructors?.length > 0) {
                         let instructorList = [];
                         for(const instructor of instructors)
                         {
-                            const instructorName = instructor.first_name + " " + instructor.last_name;
+                            const instructorName = instructor.formal_name;
                             instructorList.push(instructorName);
                         }
                         section['instructors'] = instructorList;
@@ -48,11 +51,11 @@ router.get("/:userid/courses", async (req, res, next) => {
                         section['semesterID'] = course.semesterID;
                     }
                     const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
-                    if(instructors != null) {
+                    if(instructors?.length > 0) {
                         let instructorList = [];
                         for(const instructor of instructors)
                         {
-                            const instructorName = instructor.first_name + " " + instructor.last_name;
+                            const instructorName = instructor.formal_name;
                             instructorList.push(instructorName);
                         }
                         section['instructors'] = instructorList;
@@ -104,6 +107,12 @@ router.get("/unityid/:unityid", async (req, res, next) => {
     const unityID = req.params.unityid;
     UserDAO.getUserByUnityID(unityID).then(user=>{
         res.json(user);
+    });
+});
+
+router.get("/", async (req, res, next) => {
+    UserDAO.getUsers().then(users=>{
+        res.json(users);
     });
 });
 

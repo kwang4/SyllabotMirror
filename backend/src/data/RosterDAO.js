@@ -12,12 +12,13 @@ function getRosters() {
     return results.map(roster => new Roster(roster));
   })
 }
+//SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=1 AND ros_sec_number=2
 
-// NOT TESTED
-// This gets ALL users in a section's roster
+
+// This gets ALL users in a section's roster (Currently refactoring bc it blows)
 function getRoster(ros_crs_id, ros_sec_number){
-  return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
-    return results.map(roster => new Roster(roster));
+  return db.query('SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=? AND ros_sec_number=?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return results.map(user => new User(user));
   })
 }
 
@@ -31,24 +32,47 @@ function setRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
 }
 
 // ros_crs_id, ros_sec_number, ros_rol_id, usr_first_name, usr_last_name, usr_unity_id
-function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id){
-  // Insert new user
-  // TODO is there a better way to search for duplicates Call USER DAO to create a new user
-  return UserDAO.createUser(user).then(results => {
-    new_user = results[0];
-    return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).catch(()=>{
-      console.log("User already exists in roster");
-    }).then(() =>{
-      return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(result=>{
-        return result.results.map(roster => new Roster(roster));
-      });
-    });
-  });
+async function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id) {
+  // Check if user already exists
+  let user_obj = await UserDAO.getUserByUnityID(user.unity_id);
+  if (!user_obj) {
+    user_obj = await UserDAO.createUser(user);
+  }
+
+  // Add user to roster
+  // TODO add DAO function to get user from roster (to check for dupes)
+  let insert_results = await db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, user_obj.id, role_id]);
+  if (insert_results.results.affectedRows == 0) {
+    throw new Error("Error adding user to roster");
+  }
+
+  // Return roster
+  let roster = await getRoster(ros_crs_id, ros_sec_number);
+  return roster;
+
+
+  // // Insert new user
+  // // TODO is there a better way to search for duplicates Call USER DAO to create a new user
+  // return UserDAO.createUser(user).then(results => {
+  //   //console.log(results);
+  //   new_user = results;
+  //   //console.log(new_user.id);
+  //   return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).catch(function(error){
+  //     console.log(error);
+  //   }).then(results =>{
+  //     //console.log(results);
+  //     return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(result=>{
+  //       //console.log(result);
+  //       return result.results.map(roster => new Roster(roster));
+  //     });
+  //   });
+  // });
 }
   
 function updateUserRole(ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id){
   return db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
-    return results.map(roster => new Roster(roster));
+    //return results.map(roster => new Roster(roster));
+    return results.affectedRows;
   })
 }
 
