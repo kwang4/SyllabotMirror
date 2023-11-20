@@ -2,6 +2,7 @@ const db = require('./DBConnection')
 const SyllabotDAO = require('./SyllabotDAO')
 const Deploy = require('./models/Deploy')
 const slackBot = require('./../../Slack/index')
+const { WebClient } = require('@slack/web-api');
 
 // This returns all Syllabot instances
 function getDeploys() {
@@ -40,17 +41,42 @@ async function updateDeploy(primary_token, secondary_token, socket_token, crs_id
   }
 }
 
+// Function to verify the token
+async function verifyToken(primary_token) {
+  const web = new WebClient(primary_token);
+  try {
+    // Call the auth.test method
+    const authTestResult = await web.auth.test();
+
+    // If the response indicates success, the token is valid
+    if (authTestResult.ok) {
+      console.log('Token is valid. Connected as:', authTestResult.user_id);
+      return true;
+    } else {
+      console.error('Token verification failed:', authTestResult.error);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error during token verification:', error.message);
+    return false;
+  }
+}
+
 async function createSlackBot(primary_token, ss_token, socket_token){
   console.log(primary_token);
   console.log(ss_token);
   console.log(socket_token);
-  try{
-    bot = new slackBot.slackBot(primary_token, ss_token, socket_token);
-    return true;
+  if (await verifyToken(primary_token)) {
+    try{
+      console.log(primary_token);
+      bot = new slackBot.slackBot(primary_token, ss_token, socket_token);
+      return true;
+    }
+    catch(error){
+      return false;
+    }
   }
-  catch(error){
-    return false;
-  }
+  return false;
 }
 
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
