@@ -39,6 +39,14 @@ app.listen(PORT, async () => {
     }
     else if (deploy.typeID == 2) {
       console.log("Discord bot");
+      try
+      {
+
+      }
+      catch(error)
+      {
+        console.log(error);
+      }
     }
   }
 

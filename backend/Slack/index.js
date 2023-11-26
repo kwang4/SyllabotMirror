@@ -1,6 +1,6 @@
 const { App } = require('@slack/bolt')
 require("dotenv").config();
-
+const  APIModule = require('./modules/APIModule');
 class SlackBot{
 
   //app;
@@ -28,7 +28,37 @@ class SlackBot{
       // TODO Make API call to get response
     
       //console.log(JSON.stringify(command))
-      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question!`
+      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
+    
+      // Send message back 
+      await client.chat.postMessage({
+        channel: command.channel_id,
+        text: responseMessage
+      });
+    });
+
+    this.app.command('/apitest', async({command, ack, client}) => {
+  
+      // Need to add try/catch error handling scenarios, but this is good skeleton
+      // Reworked from using built in say/respond functions to using client
+    
+      // The parameter is what prevents user message from being deleted
+      await ack({response_type: 'in_channel'});
+    console.log("Pre response");
+      let response = await APIModule.get('/shib');
+      if(response?.status != 200)
+      {
+        console.log(response?.status);
+        let responseMessage = "Error hitting API";
+        await client.chat.postMessage({
+          channel: command.channel_id,
+          text: responseMessage
+        });
+        return;
+      }
+    
+      //console.log(JSON.stringify(command))
+      let responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: ${response.data}`;
     
       // Send message back 
       await client.chat.postMessage({

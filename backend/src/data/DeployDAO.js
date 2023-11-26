@@ -79,6 +79,14 @@ async function createSlackBot(primary_token, ss_token, socket_token){
   return false;
 }
 
+async function createDiscordBot(primary_token){
+  console.log(primary_token);
+  if (await verifyToken(primary_token)) {
+    
+  }
+  return false;
+}
+
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
