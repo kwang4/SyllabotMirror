@@ -50,7 +50,7 @@ async function createUser(user){
     }
 
     // Add the user
-    let insert_results = await db.query('INSERT INTO user (usr_is_admin, usr_formal_name, usr_preferred_name, usr_unity_id) VALUES (0, ?, ?, ?)', [user.formal_name, user.preferred_name, user.unity_id]);
+    let insert_results = await db.query('INSERT INTO user (usr_is_admin, usr_formal_name, usr_preferred_name, usr_unity_id, usr_is_teacher) VALUES (0, ?, ?, ?, 0)', [user.formal_name, user.preferred_name, user.unity_id]);
     if (insert_results.results.affectedRows == 0) {
       throw new Error('Error adding user');
     }
