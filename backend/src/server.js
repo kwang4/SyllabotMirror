@@ -41,7 +41,7 @@ app.listen(PORT, async () => {
       console.log("Discord bot");
       try
       {
-
+        DeployDAO.createDiscordBot(deploy.primary_token);
       }
       catch(error)
       {
