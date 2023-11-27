@@ -79,6 +79,10 @@ async function createSlackBot(primary_token, ss_token, socket_token){
   return false;
 }
 
+async function createDiscordBot(primary_token){
+
+}
+
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
@@ -126,5 +130,6 @@ module.exports = {
   getDeployBySectionAndType: getDeployBySectionAndType,
   updateDeploy: updateDeploy,
   createDeploy: createDeploy,
-  createSlackBot: createSlackBot
+  createSlackBot: createSlackBot,
+  createDiscordBot: createDiscordBot
 }
