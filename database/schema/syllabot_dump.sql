@@ -147,7 +147,8 @@ CREATE TABLE `deploy` (
 
 LOCK TABLES `deploy` WRITE;
 /*!40000 ALTER TABLE `deploy` DISABLE KEYS */;
-INSERT INTO `deploy` VALUES (1,1,1,'Slack Primary Token for Deploy 1', 'SS1', 'ST1'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'Slack Primary Token for Deploy 3', 'SS3', 'ST3'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
+INSERT INTO `deploy` VALUES (1,1,1,'xoxb-5808049658741-5943322501495-aknId4txsOqPQCmEbmmTR0BQ', '212a2b125e69b412a55c16326c878cb4', 'xapp-1-A05U5NWGW82-5943289940567-f64907e4039f362875f6aee3860c005a38a906fbef47224d96334f7855dbd08a'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'xoxb-6204296349143-6218840809474-CCsNmrZqYoCwl4D5F6vDEkJ1', 'ca4f9b10a6cb0fc7f1aa948f9e75fae0', 'xapp-1-A066EQQJEPL-6204308546055-873bf07f250d850f8904eae6661ffad26ad6005384afd59c4d03e052269fb111'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
+/*,(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5')*/
 /*!40000 ALTER TABLE `deploy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,6 +479,7 @@ CREATE TABLE `user` (
   `usr_formal_name` varchar(75) NOT NULL,
   `usr_preferred_name` varchar(75) DEFAULT NULL,
   `usr_unity_id` varchar(45) NOT NULL,
+  `usr_is_teacher` tinyint NOT NULL,
   PRIMARY KEY (`usr_id`),
   UNIQUE KEY `unity_id_UNIQUE` (`usr_unity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
@@ -489,7 +491,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin'),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs'),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23'),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9'),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin',1),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs', 1),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23',1),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9', 1),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan', 1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
