@@ -30,9 +30,8 @@ class SlackBot{
     
       //console.log(JSON.stringify(command))
       //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
-      OpenAI.startupAI();
-      var aiResponse = OpenAI.askQuestion(command.text);
-      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\n Your response is: ${aiResponse}!\n`
+      var aiResponse = await OpenAI.askQuestion(command.text);
+      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\n Your response is: ${aiResponse}\n`
     
       // Send message back 
       await client.chat.postMessage({
