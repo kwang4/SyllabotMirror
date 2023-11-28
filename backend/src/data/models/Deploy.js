@@ -6,5 +6,6 @@ module.exports = class {
       this.primary_token = data.dep_primary_token;
       this.secondary_token = data.dep_ss_token;
       this.socket_token = data.dep_socket_token;
+      this.server_id = data.dep_server_id;
   }
 };

@@ -94,7 +94,7 @@ async function createDiscordBot(primary_token){
   }
 }
 
-async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
+async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, server_id, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
 
@@ -116,7 +116,7 @@ async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_toke
     dep_ss_token = ss_token
     dep_socket_token = socket_token
     */
-    insert_results = await db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token) VALUES (?, ?, ?, ?, ?)', [syllabot.syllabotID, typ_id, primary_token, ss_token, socket_token]);
+    insert_results = await db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token, dep_server_id) VALUES (?, ?, ?, ?, ?, ?)', [syllabot.syllabotID, typ_id, primary_token, ss_token, socket_token, server_id]);
     new_deploy = await getDeployById(insert_results.results.insertId);
 
     /* Add to syllabot_section
