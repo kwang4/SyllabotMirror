@@ -1,7 +1,8 @@
 const db = require('./DBConnection')
 const SyllabotDAO = require('./SyllabotDAO')
 const Deploy = require('./models/Deploy')
-const slackBot = require('./../../Slack/index')
+const slackBot = require('./../../Slack/index');
+const discordBot = require('./../../Discord/index');
 const { WebClient } = require('@slack/web-api');
 
 // This returns all Syllabot instances
@@ -80,7 +81,17 @@ async function createSlackBot(primary_token, ss_token, socket_token){
 }
 
 async function createDiscordBot(primary_token){
-
+  console.log(primary_token);
+  try
+  {
+    bot = new discordBot.DiscordBot(primary_token);
+    return true;
+  }
+  catch(error)
+  {
+    console.log(error);
+    throw error;
+  }
 }
 
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
