@@ -1,4 +1,5 @@
 const OpenAIApi = require("openai");
+const ResourceDAO = require ("./src/data/ResourceDAO");
 require("dotenv").config();
 
 // Creating an instance of OpenAIApi with API key from the environment variables
@@ -7,6 +8,8 @@ const openai = new OpenAIApi({
 });
 
 async function askQuestion(question_content) {
+
+  var results = ResourceDAO.getCourseFiles();
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
