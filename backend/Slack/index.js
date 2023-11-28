@@ -27,6 +27,8 @@ class SlackBot{
       await ack({response_type: 'in_channel'});
     
       // TODO Make API call to get response
+      console.log(command);
+      console.log(client);
     
       //console.log(JSON.stringify(command))
       //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`

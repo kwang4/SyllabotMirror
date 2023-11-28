@@ -9,7 +9,7 @@ const openai = new OpenAIApi({
 
 async function askQuestion(question_content) {
 
-  var results = ResourceDAO.getCourseFiles();
+  //var results = ResourceDAO.getCourseFiles();
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
