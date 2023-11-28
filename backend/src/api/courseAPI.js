@@ -85,6 +85,10 @@ router.post("/", async (req,res) => {
     let user = await UserDAO.getUserByUnityID(unityid);
     // Check if user can create course (flag needs to be added to database)
     console.log(user);
+    if(!user.is_teacher){
+        res.status(404).json({error: 'User cannot add a course'});
+        return;
+    }
 
     // Check if course with same name already exists in the semester
     let course = await CourseDAO.getCourseByName(courseName, semesterid);

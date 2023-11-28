@@ -479,6 +479,7 @@ CREATE TABLE `user` (
   `usr_formal_name` varchar(75) NOT NULL,
   `usr_preferred_name` varchar(75) DEFAULT NULL,
   `usr_unity_id` varchar(45) NOT NULL,
+  `usr_is_teacher` tinyint NOT NULL,
   PRIMARY KEY (`usr_id`),
   UNIQUE KEY `unity_id_UNIQUE` (`usr_unity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
@@ -490,7 +491,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin'),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs'),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23'),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9'),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin',1),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs', 1),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23',1),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9', 1),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan', 1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
