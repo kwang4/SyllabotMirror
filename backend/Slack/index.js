@@ -1,6 +1,7 @@
 const { App } = require('@slack/bolt')
 require("dotenv").config();
 const  APIModule = require('./modules/APIModule');
+const OpenAI = require('../OpenAI.js');
 class SlackBot{
 
   //app;
@@ -28,7 +29,10 @@ class SlackBot{
       // TODO Make API call to get response
     
       //console.log(JSON.stringify(command))
-      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
+      //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
+      OpenAI.startupAI();
+      var aiResponse = OpenAI.askQuestion(command.text);
+      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\n Your response is: ${aiResponse}!\n`
     
       // Send message back 
       await client.chat.postMessage({
