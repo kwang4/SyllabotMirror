@@ -21,7 +21,7 @@ exports.loadJsCommands = (client) => {
             if(`data` in command && `execute` in command)
             {
                 client.commands.set(command.data.name,command);
-                console.log(`Read ${command.data.name}`);
+               // console.log(`Read ${command.data.name}`);
             }
             else
             {
