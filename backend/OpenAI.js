@@ -13,13 +13,15 @@ async function askQuestion(question_content) {
 
   const chatCompletion = await openai.chat.completions.create({
     messages: [
-      { "role": "system", "content": "You are an instructor at NC State University aiming to provide helpful answers to student questions."},
+      { "role": "system", "content": `Roleplay with you being a teacher in this course and me being a student. 
+      You want to be helpful and provide a short and concise, but accurate answer.
+      If the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`},
       { "role": "user", "content": question_content }
     ],
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-3.5-turbo', temperature: 0.2
   });
 
-  console.log(chatCompletion.choices[0]);
+  console.log(chatCompletion);
   return chatCompletion.choices[0].message.content;
 
 }
