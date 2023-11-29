@@ -1,5 +1,6 @@
 const db = require('./DBConnection');
 const File = require('./models/File');
+const Deploy = require('./models/Deploy');
 const Resource = require('./models/Resource');
 
 // const multer  = require('multer');
@@ -10,7 +11,6 @@ const UserDAO = require('./UserDAO');
 const fs = require('fs');
 
 function getCourseFiles(scr_sec_number, scr_crs_id) {
-  console.log(scr_sec_number);
     //return db.query('SELECT fil_id, fil_link FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ?', [scr_sec_number, scr_crs_id]).then(({results}) => {
     return db.query('SELECT * FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ?;', [scr_sec_number, scr_crs_id]).then(({results}) => {
         return results.map(file => new File(file));
@@ -18,7 +18,6 @@ function getCourseFiles(scr_sec_number, scr_crs_id) {
   }
 
   function getResourcePath(scr_sec_number, scr_crs_id,scr_fil_id) {
-    console.log(scr_sec_number);
       //return db.query('SELECT fil_id, fil_link FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ?', [scr_sec_number, scr_crs_id]).then(({results}) => {
       return db.query('SELECT fil_link FROM section_resource JOIN file ON scr_fil_id = fil_id WHERE scr_sec_number = ? AND scr_crs_id = ? AND fil_id=?;', [scr_sec_number, scr_crs_id,scr_fil_id]).then(({results}) => {
           return results[0];
@@ -94,6 +93,18 @@ function getUniqueFile(fileName, courseid, sectionNumber){
 
 }
 
+async function getDeployByServer(server_id) {
+  try {
+    result = await db.query('SELECT * from deploy WHERE dep_server_id = ?', [server_id]);
+    //console.log(result);
+    if (!result.results) return false;
+    return new Deploy(result.results[0]);
+  } catch (err) {
+    throw err
+  }
+  
+}
+
 module.exports = {
     getCourseFiles: getCourseFiles,
     getResourcePath: getResourcePath,
@@ -101,5 +112,6 @@ module.exports = {
     deleteFile: deleteFile,
     getFile: getFile,
     getResources: getResources,
-    getUniqueFile: getUniqueFile
+    getUniqueFile: getUniqueFile,
+    getDeployByServer: getDeployByServer
 }

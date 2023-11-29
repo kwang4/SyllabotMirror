@@ -20,8 +20,6 @@ const SemesterDAO = require('../data/SemesterDAO.js');
  *  returns: semester object with given semesterid
  */
 router.get("/:semesterid",(req,res,next)=>{
-    console.log("URL: " + req.originalUrl)
-    console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
     SemesterDAO.getSemester().then(semester => {
@@ -39,7 +37,6 @@ router.get("/:semesterid",(req,res,next)=>{
  * Get a list of semesters
  */
 router.get("/",(req,res,next)=>{
-    // console.log(req);
     SemesterDAO.getSemesters().then(semesters => {
         if (semesters) {
             // get list of semesters for each semester

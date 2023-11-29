@@ -25,8 +25,6 @@ router.get("/:userid/courses", async (req, res, next) => {
                         section['semesterID'] = course.semesterID;
                     }
                     const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
-                    console.log("Instructors:");
-                    console.log(instructors);
                     section['instructors'] = [];
                     if(instructors?.length > 0) {
                         let instructorList = [];

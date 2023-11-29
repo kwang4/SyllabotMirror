@@ -54,7 +54,6 @@ function getInstructors(ros_crs_id, ros_sec_number){
 function createSection(sec_crs_id, sec_number){
   return db.query('INSERT INTO section (sec_crs_id, sec_number) VALUES (?, ?);', [sec_crs_id, sec_number], function (err, result) {
     if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
     return result.affectedRows;
   });
 }
@@ -62,7 +61,6 @@ function createSection(sec_crs_id, sec_number){
 function deleteSection(sec_crs_id, sec_number){
   return db.query('DELETE FROM section WHERE sec_crs_id = ? AND sec_number = ?', [sec_crs_id, sec_number], function (err, result) {
     if (err) throw err;
-    console.log("Number of records deleted: " + result.affectedRows);
     return result.affectedRows;
   })
 }

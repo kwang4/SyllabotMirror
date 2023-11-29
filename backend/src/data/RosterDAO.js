@@ -86,7 +86,6 @@ function updateUserRole(ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id){
 // This deletes the ENTIRE Roster for a section of a course
 function deleteEntireRoster(ros_crs_id, ros_sec_number){
   return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
-    console.log("Number of records deleted: " + results.affectedRows);
     return results.affectedRows;
   })
 }
@@ -94,7 +93,6 @@ function deleteEntireRoster(ros_crs_id, ros_sec_number){
 // This deletes a SINGLE user from a Roster (may want to rename)
 function deleteUserFromRoster(ros_crs_id, ros_sec_number, ros_usr_id){
   return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
-    console.log("Number of records deleted: " + results.affectedRows);
     return results.affectedRows;
   })
 }

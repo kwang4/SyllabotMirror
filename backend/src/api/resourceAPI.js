@@ -70,8 +70,6 @@ router.post("/", upload.single('file'), (req,res, next) => {
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;
     file = req.file;
-    console.log(req.body);
-    console.log(req.file);
 
     if (file){
       if (file.mimetype == 'application/pdf') {

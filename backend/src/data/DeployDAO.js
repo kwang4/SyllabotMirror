@@ -64,9 +64,6 @@ async function verifyToken(primary_token) {
 }
 
 async function createSlackBot(primary_token, ss_token, socket_token){
-  console.log(primary_token);
-  console.log(ss_token);
-  console.log(socket_token);
   if (await verifyToken(primary_token)) {
     try{
       console.log(primary_token);
@@ -81,7 +78,6 @@ async function createSlackBot(primary_token, ss_token, socket_token){
 }
 
 async function createDiscordBot(primary_token){
-  console.log(primary_token);
   try
   {
     bot = new discordBot.DiscordBot(primary_token);
@@ -92,17 +88,6 @@ async function createDiscordBot(primary_token){
     console.log(error);
     throw error;
   }
-}
-
-async function getDeployByServer(server_id) {
-  try {
-    result = await db.query('SELECT * from deploy WHERE dep_server_id = ?', [server_id]);
-    if (!result) return false;
-    return new Deploy(result[0]);
-  } catch (err) {
-    throw err
-  }
-  
 }
 
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, server_id, crs_id, sec_num) {
@@ -153,6 +138,5 @@ module.exports = {
   updateDeploy: updateDeploy,
   createDeploy: createDeploy,
   createSlackBot: createSlackBot,
-  createDiscordBot: createDiscordBot,
-  getDeployByServer: getDeployByServer
+  createDiscordBot: createDiscordBot
 }

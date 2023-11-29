@@ -1,7 +1,6 @@
 const { App } = require('@slack/bolt')
 require("dotenv").config();
 const APIModule = require('./modules/APIModule');
-const DeployDAO = require('../src/data/DeployDAO.js');
 const SectionDAO = require('../src/data/SectionDAO.js');
 const ResourceDAO = require('../src/data/ResourceDAO.js');
 const OpenAI = require('../OpenAI.js');
@@ -29,17 +28,16 @@ class SlackBot{
       // The parameter is what prevents user message from being deleted
       await ack({response_type: 'in_channel'});
     
-      console.log(DeployDAO);
-      console.log(ResourceDAO);
-
       var server_id = command.team_id;
-      var deploy = await DeployDAO.getDeployByServer(server_id);
+      var deploy = await ResourceDAO.getDeployByServer(server_id);
       var section = await SectionDAO.getSectionByDeploy(deploy.deployID);
       var resources = await ResourceDAO.getCourseFiles(section.sectionNum, section.courseID);
 
       console.log(resources);
+      for (const file of resources) {
+        console.log(file.fil_parsed_link);
+      }
     
-      //console.log(JSON.stringify(command))
       //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
       var aiResponse = await OpenAI.askQuestion(command.text);
       var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\n Your response is: ${aiResponse}\n`

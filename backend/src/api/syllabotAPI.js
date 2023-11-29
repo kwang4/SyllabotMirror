@@ -28,7 +28,6 @@ router.post("/deploys", (req, res, next) => {
   // console.log(`syl_id: ${syl_id}\ntyp_id: ${typ_id}\nprimary: ${primary_token}\nsecondary: ${secondary_token}\nsocket: ${socket_token}\n`);
 
   DeployDAO.createDeploy(syl_id, typ_id, primary_token, secondary_token, socket_token, server_id, crs_id, sec_num).then(response => {
-    console.log(response);
     res.json(response);
   });
 });
@@ -39,11 +38,9 @@ router.post("/botStartup", async (req, res, next) => {
   const app_token = req.body.app_token;
   try{
     let results = await DeployDAO.createSlackBot(primary_token, ss_token, app_token);
-    console.log(results);
     res.send(results);
   }
   catch(error){
-    console.log(error);
     res.send(error);
   }
 })

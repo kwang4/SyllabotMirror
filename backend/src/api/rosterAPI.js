@@ -19,8 +19,6 @@ const RosterDAO = require('../data/RosterDAO.js');
  *  returns: roster object with given sectionid
  */
 router.get("/:sectionid",(req,res,next)=>{
-    console.log("URL: " + req.originalUrl)
-    console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
     RosterDAO.getRoster(req.params.sectionid).then(roster => {
