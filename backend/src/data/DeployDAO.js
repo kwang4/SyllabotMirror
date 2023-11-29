@@ -94,6 +94,17 @@ async function createDiscordBot(primary_token){
   }
 }
 
+async function getDeployByServer(server_id) {
+  try {
+    result = await db.query('SELECT * from deploy WHERE dep_server_id = ?', [server_id]);
+    if (!result) return false;
+    return new Deploy(result[0]);
+  } catch (err) {
+    throw err
+  }
+  
+}
+
 async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, server_id, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
@@ -142,5 +153,6 @@ module.exports = {
   updateDeploy: updateDeploy,
   createDeploy: createDeploy,
   createSlackBot: createSlackBot,
-  createDiscordBot: createDiscordBot
+  createDiscordBot: createDiscordBot,
+  getDeployByServer: getDeployByServer
 }
