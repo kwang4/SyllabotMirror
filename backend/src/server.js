@@ -38,10 +38,10 @@ app.listen(PORT, async () => {
       }
     }
     else if (deploy.typeID == 2) {
-      console.log("Discord bot");
+      console.log("Discord bot: " + deploy.secondary_token);
       try
       {
-        DeployDAO.createDiscordBot(deploy.primary_token);
+        DeployDAO.createDiscordBot(deploy.primary_token,deploy.secondary_token);
       }
       catch(error)
       {
