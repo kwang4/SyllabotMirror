@@ -1,8 +1,9 @@
-const db = require('./DBConnection')
-const SyllabotDAO = require('./SyllabotDAO')
-const Deploy = require('./models/Deploy')
-const slackBot = require('./../../Slack/index');
-const discordBot = require('./../../Discord/index');
+const db = require('./DBConnection.js')
+const SyllabotDAO = require('./SyllabotDAO.js')
+const Deploy = require('./models/Deploy.js')
+const slackBot = require('./../../Slack/index.js');
+const discordBot = require('./../../Discord/index.js');
+const DeployCommands = require('./../../Discord/deploy-commands.js');
 const { WebClient } = require('@slack/web-api');
 
 // This returns all Syllabot instances
@@ -77,11 +78,20 @@ async function createSlackBot(primary_token, ss_token, socket_token){
   return false;
 }
 
-async function createDiscordBot(primary_token){
+async function createDiscordBot(primary_token,secondary_token){
   try
   {
     bot = new discordBot.DiscordBot(primary_token);
-    return true;
+    //If an error isn't thrown, the bot is logged in properly, and we run the deploy commands script on startup
+    let deployStatus = await DeployCommands.deployCommands(primary_token,secondary_token);
+    console.log("DEPLOY STATUS: " + deployStatus);
+    if(deployStatus)
+    {
+
+      return true;
+    }
+    console.log("Error deploying commands");
+    return false;
   }
   catch(error)
   {

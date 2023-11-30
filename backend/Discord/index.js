@@ -1,7 +1,7 @@
 const { Client, Events, GatewayIntentBits, ActivityType } = require('discord.js');
 // require("dotenv").config();
 // const token = process.env.DISCORD_TOKEN;
-const token = ''; // If this is a global variable, ensure it's correctly assigned
+
 
 class DiscordBot {
     constructor(p_token) {
@@ -59,12 +59,12 @@ class DiscordBot {
 
     async botStartup() {
         try {
-            await this.client.login(this.token); // Corrected to use 'this.token'
+            await this.client.login(this.token);
         } catch (error) {
             console.log("Invalid discord token");
         }
         // Load commands if logged in properly
-        this.commandHandler.loadJsCommands(this.client); // Corrected to use 'this.client'
+        this.commandHandler.loadJsCommands(this.client);
     }
 }
 
