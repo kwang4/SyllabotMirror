@@ -2,6 +2,7 @@ const { App } = require('@slack/bolt')
 require("dotenv").config();
 const APIModule = require('./modules/APIModule');
 const SectionDAO = require('../src/data/SectionDAO.js');
+const LogDAO = require('../src/data/LogDAO.js');
 const ResourceDAO = require('../src/data/ResourceDAO.js');
 const OpenAI = require('../OpenAI.js');
 const fs = require('fs')
@@ -74,6 +75,8 @@ class SlackBot{
       console.log(aiResponse);
       var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nYour response is: \n${aiResponse}\nThis information was found in the file \"${fileName}\"\n`
     
+      LogDAO.createLog(section.courseID, section.sectionNum, command.user_name, command.text, aiResponse);
+
       // Send message back 
       await client.chat.postMessage({
         channel: command.channel_id,
@@ -88,7 +91,7 @@ class SlackBot{
     
       // The parameter is what prevents user message from being deleted
       await ack({response_type: 'in_channel'});
-    console.log("Pre response");
+      console.log("Pre response");
       let response = await APIModule.get('/shib');
       if(response?.status != 200)
       {

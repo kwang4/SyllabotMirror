@@ -74,11 +74,17 @@ CREATE TABLE `conversation` (
   `con_id` int NOT NULL AUTO_INCREMENT,
   `con_usr_id` int NOT NULL,
   `con_qst_id` int NOT NULL,
+  `con_sec_number` int NOT NULL,
+  `con_sec_crs_id` int NOT NULL,
   PRIMARY KEY (`con_id`),
+  KEY `conversationSecNum` (`con_sec_number`),
+  KEY `conversationCrsID` (`con_sec_crs_id`),
   KEY `questionID_idx` (`con_qst_id`),
   KEY `conversation_roster_userID_idx` (`con_usr_id`),
   CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`con_usr_id`) REFERENCES `user` (`usr_id`) ON DELETE CASCADE,
-  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE
+  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE,
+  CONSTRAINT `section_num_conversation` FOREIGN KEY (`con_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
+  CONSTRAINT `course_num_conversation` FOREIGN KEY (`con_sec_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -88,7 +94,7 @@ CREATE TABLE `conversation` (
 
 LOCK TABLES `conversation` WRITE;
 /*!40000 ALTER TABLE `conversation` DISABLE KEYS */;
-INSERT INTO `conversation` VALUES (7,2,3),(8,2,2),(9,3,1),(10,4,4),(11,5,5);
+INSERT INTO `conversation` VALUES (7,2,3,1,1),(8,2,2,1,1),(9,3,1,1,1),(10,4,4,1,1),(11,5,5,1,1);
 /*!40000 ALTER TABLE `conversation` ENABLE KEYS */;
 UNLOCK TABLES;
 
