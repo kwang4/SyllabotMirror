@@ -3,6 +3,7 @@ require("dotenv").config();
 const APIModule = require('./modules/APIModule');
 const SectionDAO = require('../src/data/SectionDAO.js');
 const LogDAO = require('../src/data/LogDAO.js');
+const UserDAO = require('../src/data/UserDAO.js');
 const ResourceDAO = require('../src/data/ResourceDAO.js');
 const OpenAI = require('../OpenAI.js');
 const fs = require('fs')
@@ -66,7 +67,7 @@ class SlackBot{
       if(aiResponse.includes("NOT AVAILABLE")){
         aiResponse = "I could not find the answer to your question in the given resources for this course.\nI recommend asking an instructor when they are available if you still need the answer to this question.";
       }
-
+      var unfilteredAIResponse = aiResponse;
       //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
       //var aiResponse = await OpenAI.askQuestion(command.text);
       aiResponse = `*${aiResponse}*`;
@@ -74,14 +75,16 @@ class SlackBot{
       aiResponse = aiResponse.replaceAll("**", "");
       console.log(aiResponse);
       var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nYour response is: \n${aiResponse}\nThis information was found in the file \"${fileName}\"\n`
-    
-      LogDAO.createLog(section.courseID, section.sectionNum, command.user_name, command.text, aiResponse);
 
       // Send message back 
       await client.chat.postMessage({
         channel: command.channel_id,
         text: responseMessage
       });
+
+      var userId = await UserDAO.getUserByUnityID(command.user_name);
+      var logResponse = await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
+      //console.log(logResponse);
     });
 
     this.app.command('/apitest', async({command, ack, client}) => {

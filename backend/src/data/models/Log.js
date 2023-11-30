@@ -6,6 +6,6 @@ module.exports = class {
         this.usr_id = data.con_usr_id;
         this.con_id = data.con_id;
         this.crs_id = data.con_sec_crs_id;
-        this.sec_id = data.con_sec_id;
+        this.sec_number = data.con_sec_number;
     }
 };
