@@ -42,21 +42,44 @@ class SlackBot{
       var aiResponse = "";
       var fileName = "Not Found";
       //var prompt; // STARTING PROMPT
+
+      var batch_size = 1000
+
+      // const responses = await Promise.all(
+      //   resources.map(async (resources) => {
       for (const file of resources) {
         var tempPrompt = "The information you have at your disposal is this:\n";
 
         filePath = file.fil_parsed_link;
         var tempText = fs.readFileSync(filePath, "utf8");
-        tempPrompt = tempPrompt + tempText;
+        var script_tokens  = tempText.split(" ");
+        for(var i = 0; i < script_tokens.length; i+=batch_size){
+          var before_context = "";
+          if(i < batch_size){
+            
+          }
+          else{
+            before_context =script_tokens.splice(i+batch_size, i+batch_size*2).join(" ");
+          }
+          console.log("before_context = " + before_context);
+        }
+        /// var textSegments = tempText.match(/.{1,batch_size}/g);
+        /// console.log("textSegments:");
+        /// console.log(textSegments)
+
+        
+
+
+        //tempPrompt = tempPrompt + tempText;
 
         tempPrompt = tempPrompt + "\nMy question is: ";
         tempPrompt = tempPrompt + command.text;
 
-        //tempPrompt = tempPrompt + `\nIf the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`;
+        tempPrompt = tempPrompt + `\nIf the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`;
 
-        console.log(tempPrompt);
+        //console.log(tempPrompt);
 
-        aiResponse = await OpenAI.askQuestion(tempPrompt);
+        //aiResponse = await OpenAI.askQuestion(tempPrompt);
 
         if(!aiResponse.includes("NOT AVAILABLE")){
           fileName = file.fil_name;
@@ -83,7 +106,7 @@ class SlackBot{
       });
 
       var userId = await UserDAO.getUserByUnityID(command.user_name);
-      var logResponse = await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
+      //var logResponse = await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
       //console.log(logResponse);
     });
 

@@ -65,7 +65,7 @@ router.get("/:resourceid/download",(req,res,next)=>{
   });
 })
 
-router.post("/", upload.single('file'), (req,res, next) => {
+router.post("/", upload.single('file'), async (req,res, next) => {
     
     const scr_sec_number = req.params.sectionNum;
     const scr_crs_id = req.params.courseid;
@@ -76,7 +76,9 @@ router.post("/", upload.single('file'), (req,res, next) => {
         let dataBuffer = fs.readFileSync(file.path);
         pdf(dataBuffer).then(function(data) {
         //console.log(data.text);
-          fs.appendFile(file.path + "_parsed.txt", data.text, function(err) {
+          var noPunctuationText = data.text;
+          noPunctuationText = noPunctuationText.replace(/[\.,?!]/g, "");
+          fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log('PDF File Saved!');
           });
@@ -85,15 +87,21 @@ router.post("/", upload.single('file'), (req,res, next) => {
       else if (file.mimetype == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
         let dataBuffer = fs.readFileSync(file.path);
         const extracted = extractor.extract(dataBuffer);
-        extracted.then(function(doc) { 
-          fs.appendFile(file.path + "_parsed.txt", doc.getBody(), function(err) {
+        extracted.then(function(doc) {
+          var noPunctuationText = doc.getBody();
+          noPunctuationText = noPunctuationText.replace(/[\.,?!]/g, "");
+          fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log("DOCX File Saved!");
           });
         });
       }
       else if (file.mimetype == 'text/plain') {
-          fs.copyFile(file.path, file.path + "_parsed.txt", function(err) {
+          var noPunctuationText;
+          console.log(file.path);
+          var readText = fs.readFileSync(file.path, "utf8");
+          noPunctuationText = readText.replace(/[\.,?!]/g, "");
+          fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log('TXT File Saved!');
           });
