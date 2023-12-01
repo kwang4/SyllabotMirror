@@ -4,7 +4,8 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const SectionDAO = require('../data/SectionDAO.js');
-const CourseDAO = require('../data/CourseDAO.js')
+const CourseDAO = require('../data/CourseDAO.js');
+const LogDAO = require('../data/LogDAO.js');
 
 router.use(express.json());
 
@@ -112,6 +113,25 @@ router.get("/", async (req, res, next) => {
     UserDAO.getUsers().then(users=>{
         res.json(users);
     });
+});
+
+/**
+ * Get the logs for a specific user given unity id (Restricted to admin)
+ */
+router.get("/:unityid/logs", async (req, res, next) => {
+    const unityid = req.params.unityid;
+    try{
+        const results = await LogDAO.getUserLog(unityid);
+        if (results) {
+            // get list of instructors for semester
+            res.json(results)
+        } else {
+            res.json(404).json({error: 'results not found'})
+        }
+    } catch (error){
+        console.error("Error retrieving user logs:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 

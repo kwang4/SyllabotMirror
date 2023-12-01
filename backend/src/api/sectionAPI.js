@@ -7,6 +7,7 @@ const SectionDAO = require('../data/SectionDAO.js');
 const CourseDAO = require('../data/CourseDAO.js');
 const SyllabotDAO = require('../data/SyllabotDAO.js');
 const DeployDAO = require('../data/DeployDAO.js');
+const LogDAO = require('../data/LogDAO.js');
 
 router.use(express.json());
 
@@ -37,6 +38,21 @@ router.get("/:sectionNum",(req,res,next)=>{
 
     
 })
+
+/**
+ * Gets the logs for a specific section of a course
+ */
+router.get("/:sectionNum/logs", async (req, res, next) => {
+    var sectionNum = req.params.sectionNum;
+    var courseid = req.params.courseid;
+    if(!courseid || !sectionNum){
+        res.status(404).send({error: 'Request must contain course id and section number'})
+    }
+    LogDAO.getLogs(courseid, sectionNum).then((logs) => {
+        res.json(logs);
+    });
+});
+    
 
 /**
  * remove a specific section of a course
