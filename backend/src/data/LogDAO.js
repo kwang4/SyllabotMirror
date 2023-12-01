@@ -17,7 +17,7 @@ async function createLog(sec_crs_id, sec_number, usr_id, qst_question, qst_respo
 
 async function getUserLog(unityID){
   const user = await UserDAO.getUserByUnityID(unityID);
-  await db.query('SELECT * FROM conversation JOIN question ON qst_id = con_qst_id WHERE con_usr_id = ?', user.id).then(({results}) => {
+  return db.query('SELECT * FROM conversation JOIN question ON qst_id = con_qst_id WHERE con_usr_id = ?', user.id).then(({results}) => {
     return results.map(log => new Log(log));
   })
 }
