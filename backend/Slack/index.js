@@ -43,7 +43,7 @@ class SlackBot{
       var fileName = "Not Found";
       //var prompt; // STARTING PROMPT
 
-      var batch_size = 1000
+      var batch_size = 10;
 
       // const responses = await Promise.all(
       //   resources.map(async (resources) => {
@@ -53,22 +53,37 @@ class SlackBot{
         filePath = file.fil_parsed_link;
         var tempText = fs.readFileSync(filePath, "utf8");
         var script_tokens  = tempText.split(" ");
-        for(var i = 0; i < script_tokens.length; i+=batch_size){
+        var fileArray = [];
+        var beforeArray = [];
+        var contentArray = [];
+        var afterArray = [];
+        for(var i = 0; i < (script_tokens.length / batch_size); i++){
           var before_context = "";
-          if(i < batch_size){
-            
+          if((i * batch_size) >= batch_size){
+            before_context = script_tokens.slice((i * batch_size)-Math.floor(batch_size/5), i * batch_size).join(" ");
           }
-          else{
-            before_context =script_tokens.splice(i+batch_size, i+batch_size*2).join(" ");
+          var content = script_tokens.slice((i * batch_size), (i * batch_size) + batch_size).join(" ");
+          var after_context = "";
+          if((i * batch_size + batch_size) < script_tokens.length){
+            after_context = script_tokens.slice((i * batch_size) + batch_size, ((i * batch_size) + batch_size) + Math.floor(batch_size/5)).join(" ");
           }
-          console.log("before_context = " + before_context);
+          var full_context = before_context + " " + content + " " + after_context;
+          full_context = full_context.trim();
+          beforeArray.push(before_context);
+          contentArray.push(content);
+          afterArray.push(after_context);
+          fileArray.push(full_context);
+          //console.log("before_context = " + before_context);
         }
         /// var textSegments = tempText.match(/.{1,batch_size}/g);
         /// console.log("textSegments:");
         /// console.log(textSegments)
 
-        
-
+        console.log(beforeArray);
+        console.log(contentArray);
+        console.log(afterArray);
+        console.log(fileArray);
+        //console.log(fileArray.length);
 
         //tempPrompt = tempPrompt + tempText;
 
@@ -86,7 +101,7 @@ class SlackBot{
           break;
         }
       }
-      
+
       if(aiResponse.includes("NOT AVAILABLE")){
         aiResponse = "I could not find the answer to your question in the given resources for this course.\nI recommend asking an instructor when they are available if you still need the answer to this question.";
       }
