@@ -78,6 +78,7 @@ router.post("/", upload.single('file'), async (req,res, next) => {
         //console.log(data.text);
           var noPunctuationText = data.text;
           noPunctuationText = noPunctuationText.replace(/[\.,?!]/g, "");
+          noPunctuationText = noPunctuationText.replaceAll("\r\n", " ");
           fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log('PDF File Saved!');
@@ -90,6 +91,7 @@ router.post("/", upload.single('file'), async (req,res, next) => {
         extracted.then(function(doc) {
           var noPunctuationText = doc.getBody();
           noPunctuationText = noPunctuationText.replace(/[\.,?!]/g, "");
+          noPunctuationText = noPunctuationText.replaceAll("\r\n", " ");
           fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log("DOCX File Saved!");
@@ -101,6 +103,7 @@ router.post("/", upload.single('file'), async (req,res, next) => {
           console.log(file.path);
           var readText = fs.readFileSync(file.path, "utf8");
           noPunctuationText = readText.replace(/[\.,?!]/g, "");
+          noPunctuationText = noPunctuationText.replaceAll("\r\n", " ");
           fs.appendFile(file.path + "_parsed.txt", noPunctuationText, function(err) {
             if (err) throw err;
             console.log('TXT File Saved!');

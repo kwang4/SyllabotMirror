@@ -43,7 +43,7 @@ class SlackBot{
       var fileName = "Not Found";
       //var prompt; // STARTING PROMPT
 
-      var batch_size = 10;
+      var batch_size = 1500;
 
       // const responses = await Promise.all(
       //   resources.map(async (resources) => {
@@ -53,11 +53,8 @@ class SlackBot{
         filePath = file.fil_parsed_link;
         var tempText = fs.readFileSync(filePath, "utf8");
         var script_tokens  = tempText.split(" ");
-        var fileArray = [];
-        var beforeArray = [];
-        var contentArray = [];
-        var afterArray = [];
         for(var i = 0; i < (script_tokens.length / batch_size); i++){
+          tempPrompt = "The information you have at your disposal is this:\n";
           var before_context = "";
           if((i * batch_size) >= batch_size){
             before_context = script_tokens.slice((i * batch_size)-Math.floor(batch_size/5), i * batch_size).join(" ");
@@ -69,32 +66,26 @@ class SlackBot{
           }
           var full_context = before_context + " " + content + " " + after_context;
           full_context = full_context.trim();
-          beforeArray.push(before_context);
-          contentArray.push(content);
-          afterArray.push(after_context);
-          fileArray.push(full_context);
-          //console.log("before_context = " + before_context);
+
+          tempPrompt = tempPrompt + full_context;
+
+          tempPrompt = tempPrompt + "\nMy question is: ";
+          tempPrompt = tempPrompt + command.text;
+  
+          tempPrompt = tempPrompt + `\nIf the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`;
+
+          try {
+            aiResponse = await OpenAI.askQuestion(tempPrompt);
+          }
+          catch (error) {
+            aiResponse = "RATE LIMIT ERROR";
+          }
+
+          if(!aiResponse.includes("NOT AVAILABLE")){
+            fileName = file.fil_name;
+            break;
+          }
         }
-        /// var textSegments = tempText.match(/.{1,batch_size}/g);
-        /// console.log("textSegments:");
-        /// console.log(textSegments)
-
-        console.log(beforeArray);
-        console.log(contentArray);
-        console.log(afterArray);
-        console.log(fileArray);
-        //console.log(fileArray.length);
-
-        //tempPrompt = tempPrompt + tempText;
-
-        tempPrompt = tempPrompt + "\nMy question is: ";
-        tempPrompt = tempPrompt + command.text;
-
-        tempPrompt = tempPrompt + `\nIf the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`;
-
-        //console.log(tempPrompt);
-
-        //aiResponse = await OpenAI.askQuestion(tempPrompt);
 
         if(!aiResponse.includes("NOT AVAILABLE")){
           fileName = file.fil_name;
@@ -104,6 +95,9 @@ class SlackBot{
 
       if(aiResponse.includes("NOT AVAILABLE")){
         aiResponse = "I could not find the answer to your question in the given resources for this course.\nI recommend asking an instructor when they are available if you still need the answer to this question.";
+      }
+      if(aiResponse.includes("RATE LIMIT ERROR")){
+        aiResponse = "Sorry! I am getting too many messages at this current time and cannot answer this question.\nPlease try to ask your question again in a minute.";
       }
       var unfilteredAIResponse = aiResponse;
       //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
