@@ -1,12 +1,9 @@
 const { App } = require('@slack/bolt')
 require("dotenv").config();
 const APIModule = require('./modules/APIModule');
-const SectionDAO = require('../src/data/SectionDAO.js');
 const LogDAO = require('../src/data/LogDAO.js');
 const UserDAO = require('../src/data/UserDAO.js');
-const ResourceDAO = require('../src/data/ResourceDAO.js');
 const OpenAI = require('../OpenAI.js');
-const fs = require('fs')
 class SlackBot{
 
   //app;
@@ -31,82 +28,17 @@ class SlackBot{
       // The parameter is what prevents user message from being deleted
       await ack({response_type: 'in_channel'});
     
-      var server_id = command.team_id;
-      var deploy = await ResourceDAO.getDeployByServer(server_id);
-      var section = await SectionDAO.getSectionByDeploy(deploy.deployID);
-      var resources = await ResourceDAO.getCourseFiles(section.sectionNum, section.courseID);
+      var values = await OpenAI.getCourseResources(command.team_id);
+      var resources = values[0]
+      var section = values[1];
 
-      console.log(resources);
-      //const reader = new FileReader();
-      var filePath;
-      var aiResponse = "";
-      var fileName = "Not Found";
-      //var prompt; // STARTING PROMPT
+      var values2 = await OpenAI.getAIResponse(resources, 1500, command.text);
+      var aiResponse = values2[0];
+      var fileName = values2[1];
 
-      var batch_size = 1500;
-
-      // const responses = await Promise.all(
-      //   resources.map(async (resources) => {
-      for (const file of resources) {
-        var tempPrompt = "The information you have at your disposal is this:\n";
-
-        filePath = file.fil_parsed_link;
-        var tempText = fs.readFileSync(filePath, "utf8");
-        var script_tokens  = tempText.split(" ");
-        for(var i = 0; i < (script_tokens.length / batch_size); i++){
-          tempPrompt = "The information you have at your disposal is this:\n";
-          var before_context = "";
-          if((i * batch_size) >= batch_size){
-            before_context = script_tokens.slice((i * batch_size)-Math.floor(batch_size/5), i * batch_size).join(" ");
-          }
-          var content = script_tokens.slice((i * batch_size), (i * batch_size) + batch_size).join(" ");
-          var after_context = "";
-          if((i * batch_size + batch_size) < script_tokens.length){
-            after_context = script_tokens.slice((i * batch_size) + batch_size, ((i * batch_size) + batch_size) + Math.floor(batch_size/5)).join(" ");
-          }
-          var full_context = before_context + " " + content + " " + after_context;
-          full_context = full_context.trim();
-
-          tempPrompt = tempPrompt + full_context;
-
-          tempPrompt = tempPrompt + "\nMy question is: ";
-          tempPrompt = tempPrompt + command.text;
-  
-          tempPrompt = tempPrompt + `\nIf the answer can not be found in the information provided, respond with the exact string in all uppercase: 'NOT AVAILABLE'.`;
-
-          try {
-            aiResponse = await OpenAI.askQuestion(tempPrompt);
-          }
-          catch (error) {
-            aiResponse = "RATE LIMIT ERROR";
-          }
-
-          if(!aiResponse.includes("NOT AVAILABLE")){
-            fileName = file.fil_name;
-            break;
-          }
-        }
-
-        if(!aiResponse.includes("NOT AVAILABLE")){
-          fileName = file.fil_name;
-          break;
-        }
-      }
-
-      if(aiResponse.includes("NOT AVAILABLE")){
-        aiResponse = "I could not find the answer to your question in the given resources for this course.\nI recommend asking an instructor when they are available if you still need the answer to this question.";
-      }
-      if(aiResponse.includes("RATE LIMIT ERROR")){
-        aiResponse = "Sorry! I am getting too many messages at this current time and cannot answer this question.\nPlease try to ask your question again in a minute.";
-      }
-      var unfilteredAIResponse = aiResponse;
-      //var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
-      //var aiResponse = await OpenAI.askQuestion(command.text);
-      aiResponse = `*${aiResponse}*`;
-      aiResponse = aiResponse.replaceAll("\n", "*\n*");
-      aiResponse = aiResponse.replaceAll("**", "");
-      console.log(aiResponse);
-      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nYour response is: \n${aiResponse}\nThis information was found in the file \"${fileName}\"\n`
+      var values3  = await OpenAI.getResponseMessage(aiResponse, fileName, command.text, command.user_name);
+      var responseMessage = values3[0];
+      var unfilteredAIResponse = values3[1];
 
       // Send message back 
       await client.chat.postMessage({
@@ -115,8 +47,7 @@ class SlackBot{
       });
 
       var userId = await UserDAO.getUserByUnityID(command.user_name);
-      //var logResponse = await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
-      //console.log(logResponse);
+      await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
     });
 
     this.app.command('/apitest', async({command, ack, client}) => {

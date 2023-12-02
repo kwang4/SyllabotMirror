@@ -79,7 +79,7 @@ async function createUser(user){
 async function updateUser(user){
   // Must have user id
   try{
-    let update_results = await db.query('UPDATE user SET usr_formal_name = ?, usr_preferred_name = ?, usr_unity_id = ?, usr_is_teacher = ? WHERE usr_id = ?', [user.formal_name, user.preferred_name, user.unity_id, user.is_teacher, user.id]);
+    let update_results = await db.query('UPDATE user SET usr_formal_name = ?, usr_preferred_name = ?, usr_unity_id = ?, usr_is_teacher = ?, usr_is_admin = ? WHERE usr_id = ?', [user.formal_name, user.preferred_name, user.unity_id, user.is_teacher, user.is_admin, user.id]);
     if (update_results.results.affectedRows == 0) {
       throw new Error('Error updating user. Make sure to include the user id in the request');
     }
