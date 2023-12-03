@@ -1,0 +1,37 @@
+display_information:
+  name: Syllabot
+features:
+  bot_user:
+    display_name: Syllabot
+    always_online: false
+  slash_commands:
+    - command: /ask
+      description: Ask a question to Syllabot!
+      usage_hint: Use '/ask [question]' and replace [question] with your question.
+      should_escape: false
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:history
+      - channels:join
+      - channels:read
+      - chat:write
+      - chat:write.customize
+      - chat:write.public
+      - commands
+      - dnd:read
+      - users.profile:read
+      - users:read
+      - users:write
+      - groups:history
+settings:
+  event_subscriptions:
+    bot_events:
+      - message.channels
+      - message.groups
+  interactivity:
+    is_enabled: true
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false
