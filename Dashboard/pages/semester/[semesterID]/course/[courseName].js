@@ -27,7 +27,7 @@ export default function CourseInfo() {
   const [slackToken, setSlackToken] = useState('');
   const [signingSecret, setSigningSecret] = useState('');
   const [socketToken, setSocketToken] = useState('');
-
+  const [courseObject, setCourseObject] = useState(null);
   const optionData = [ 
       {name: 'Manage Resources', path:'resources'},
       {name: 'Manage Roster', path:'roster'},
@@ -35,6 +35,33 @@ export default function CourseInfo() {
       {name: 'Settings', path:'settings'},
   ];
 
+  /**
+ * Method to hit an API endpoint for the whole course Object (mostly needed for courseID)
+ * If the courseObject state variable is already populated, it just returns that.
+ * @returns courseObject with course ID, name, and other fields
+ */
+async function getCourseObj()
+{
+  if(courseObject)
+    return courseObject;
+
+  if(semesterID != null && courseName != null)
+  {
+    const splitIdx = courseName.lastIndexOf('-');
+    const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+    const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+    const courseResponse = await APIModule.get(`/semesters/${semesterID}/courses/courseName/${splitCourseName}`);
+    if(courseResponse?.status != 200)
+    {
+      console.log("Error getting course object by name");
+      return;
+    }
+    setCourseObject(courseResponse.data);
+    return courseResponse.data; 
+  }
+}
+
+  //TODO validate that this course actually exists before displaying config page
   async function validateCourse()
   {
     return;
@@ -52,8 +79,22 @@ export default function CourseInfo() {
       'socketToken': socketToken
     }
     // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
+    if(!courseName)
+    return;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+ let courseObj = null;
+ if(!courseObject)
+ {
+  courseObj = await getCourseObj();
+ }
+ else
+ {
+  courseObj = courseObject;
+ }
 
-    const response = slackData;
+    const response = `/semester/${semesterID}/course/${courseObj.id}/sections/${splitCourseSection}/syllabot/deploy`;
     console.log(response);
     setSlackLinkedStatus(true);
 

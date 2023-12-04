@@ -53,12 +53,33 @@ router.put("/deploy/:typeid", async (req, res, next) => {
   const primary_token = req.body.primary_token;
   const secondary_token = req.body.secondary_token;
   const socket_token = req.body.socket_token;
-
+  const dep_server_id = req.body.dep_server_id;
   deploy = await DeployDAO.getDeployBySectionAndType(crs_id, sec_num, typ_id);
   if (!deploy) {
     res.json({error: `Deploy not found with parameters courseid=${crs_id}, sectionNum=${sec_num}, typeid=${typ_id}`});
   }
-  result = await DeployDAO.updateDeploy(primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id);
+  result = await DeployDAO.updateDeploy(primary_token, secondary_token, socket_token, dep_server_id, crs_id, sec_num, typ_id);
+  if(typ_id == 1)
+  {
+    try {
+      DeployDAO.createSlackBot(primary_token,secondary_token, socket_token);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+  else if(typ_id==2)
+  {
+    try
+    {
+      DeployDAO.createDiscordBot(primary_token,dep_server_id);
+    }
+    catch(error)
+    {
+      console.log("Invalid Discord login");
+    }
+  }
+  
   res.json(result);
 });
 
