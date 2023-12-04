@@ -1,0 +1,115 @@
+const db = require('./DBConnection');
+const Roster = require('./models/Roster');
+const User = require('./models/User');
+const UserDAO = require('./UserDAO');
+
+
+
+// NOT TESTED
+// This gets all users from every roster
+function getRosters() {
+  return db.query('SELECT * FROM roster').then(({ results }) => {
+    return results.map(roster => new Roster(roster));
+  })
+}
+//SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=1 AND ros_sec_number=2
+
+
+// This gets ALL users in a section's roster (Currently refactoring bc it blows)
+function getRoster(ros_crs_id, ros_sec_number){
+  return db.query('SELECT usr_id,usr_formal_name,usr_preferred_name,usr_unity_id FROM roster JOIN user ON ros_usr_id=usr_id WHERE ros_crs_id=? AND ros_sec_number=?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return results.map(user => new User(user));
+  })
+}
+
+// Not TESTED (This one is going to need some serious work [It'll need to read through a file, create users, add users to roster])
+// This should currently only work for adding 1 user to the roster at a time
+// Router doesn't give ros_usr_id, so idk how that'll work currently
+function setRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
+  return db.query('INSERT INTO roster WHERE ros_id = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
+    return results.map(roster => new Roster(roster));
+  })
+}
+
+// ros_crs_id, ros_sec_number, ros_rol_id, usr_first_name, usr_last_name, usr_unity_id
+async function addUserToRoster(ros_crs_id, ros_sec_number, user, role_id) {
+  // Check if user already exists
+  let user_obj = await UserDAO.getUserByUnityID(user.unity_id);
+  if (!user_obj) {
+    user_obj = await UserDAO.createUser(user);
+  }
+
+  // Add user to roster
+  // TODO add DAO function to get user from roster (to check for dupes)
+  let insert_results = await db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, user_obj.id, role_id]);
+  if (insert_results.results.affectedRows == 0) {
+    throw new Error("Error adding user to roster");
+  }
+
+  // Return roster
+  let roster = await getRoster(ros_crs_id, ros_sec_number);
+  return roster;
+
+
+  // // Insert new user
+  // // TODO is there a better way to search for duplicates Call USER DAO to create a new user
+  // return UserDAO.createUser(user).then(results => {
+  //   //console.log(results);
+  //   new_user = results;
+  //   //console.log(new_user.id);
+  //   return db.query('INSERT INTO roster (ros_crs_id, ros_sec_number, ros_usr_id, ros_rol_id) VALUES (?, ?, ?, ?)', [ros_crs_id, ros_sec_number, new_user.id, role_id]).catch(function(error){
+  //     console.log(error);
+  //   }).then(results =>{
+  //     //console.log(results);
+  //     return db.query('SELECT * FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(result=>{
+  //       //console.log(result);
+  //       return result.results.map(roster => new Roster(roster));
+  //     });
+  //   });
+  // });
+}
+  
+function updateUserRole(ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id){
+  return db.query('UPDATE roster SET ros_rol_id = ? WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_rol_id, ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
+    //return results.map(roster => new Roster(roster));
+    return results.affectedRows;
+  })
+}
+
+// // SAME AS setRoster, but may want different naming convention for editing/adding a roster
+// function addRoster(rosterID, ros_usr_id, ros_sec_number, ros_rol_id){
+//   return db.query('INSERT INTO roster WHERE rosterID = ? and ros_usr_id = ? and ros_sec_number = ? and ros_rol_id = ?', [rosterID, ros_usr_id, ros_sec_number, ros_rol_id]).then(({ results }) => {
+//     return results.map(roster => new Roster(roster));
+//   })
+// }
+
+// This deletes the ENTIRE Roster for a section of a course
+function deleteEntireRoster(ros_crs_id, ros_sec_number){
+  return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ?', [ros_crs_id, ros_sec_number]).then(({ results }) => {
+    return results.affectedRows;
+  })
+}
+
+// This deletes a SINGLE user from a Roster (may want to rename)
+function deleteUserFromRoster(ros_crs_id, ros_sec_number, ros_usr_id){
+  return db.query('DELETE FROM roster WHERE ros_crs_id = ? AND ros_sec_number = ? AND ros_usr_id = ?', [ros_crs_id, ros_sec_number, ros_usr_id]).then(({ results }) => {
+    return results.affectedRows;
+  })
+}
+
+// NOT TESTED (This one might need to be in a UserDAO class since it is returning a list of users)
+// function getRoleInRoster(ros_sec_number, ros_rol_id){
+//   return db.query('SELECT u.ros_usr_id, u.name FROM `syllabot`.`user` u JOIN `syllabot`.`roster` r ON u.ros_usr_id = r.ros_usr_id WHERE r.ros_sec_number = ? AND r.ros_rol_id = ?;', [ros_sec_number, ros_rol_id]).then(({ results }) => {
+//     return results.map(roster => new Roster(roster));
+//   })
+// }
+
+module.exports = {
+  getRosters: getRosters,
+  getRoster: getRoster,
+  setRoster: setRoster,
+  deleteEntireRoster: deleteEntireRoster,
+  deleteUserFromRoster: deleteUserFromRoster,
+  updateUserRole: updateUserRole,
+  addUserToRoster: addUserToRoster
+}

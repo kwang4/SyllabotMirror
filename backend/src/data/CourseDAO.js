@@ -1,0 +1,104 @@
+const db = require('./DBConnection');
+const Course = require('./models/Course');
+const Roles = require('./models/RoleEnum');
+
+function getCourses() {
+  //console.log(Roles.TEACHER);
+  return db.query('SELECT * FROM course').then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+
+function getCourse(crs_sem_id, crs_id){
+  return db.query('SELECT * FROM course WHERE crs_sem_id = ? and crs_id = ?', [crs_sem_id, crs_id]).then(({ results }) => {
+    return new Course(results[0]);
+  })
+}
+
+async function getCourseByID(crs_id) {
+  try {
+    let result = await db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]);
+    let courses = result.results.map(course => new Course(course));
+    if (courses.length == 0) {
+      return false;
+    }
+    return courses[0];
+  } catch (err) {
+    throw err;
+  }
+  // return db.query('SELECT * FROM course WHERE crs_id = ?', [crs_id]).then(({ results }) => {
+  //   return new Course(results[0]);
+  // })
+}
+
+function checkIfCourseExists(crs_sem_id, crs_name){
+  return db.query('SELECT * FROM course WHERE crs_sem_id = ? and crs_name= ?', [crs_sem_id, crs_name]).then(({ results }) => {
+    return results.map(course => new Course(course));
+  })
+}
+async function createCourse(crs_sem_id, crs_name) {
+  try {
+    let insert_results = await db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name]);
+    return insert_results
+  } catch (err) { 
+    throw err;
+  }
+
+  // return db.query('INSERT INTO course (crs_sem_id, crs_name) VALUES (?, ?);', [crs_sem_id, crs_name], function (err, result) {
+  //   if (err) throw err;
+  //   //console.log("Number of records inserted: " + result.affectedRows);
+  //   return result.affectedRows;
+  // });
+}
+
+// //Not TESTED
+// function setCourse(crs_sem_id, crs_name){
+//   return db.query('INSERT INTO course WHERE crs_sem_id = ? and crs_name = ?', [crs_id, crs_name]).then(({ results }) => {
+//     return results.map(course => new Course(course));
+//   })
+// }
+
+function deleteCourse(crs_sem_id, crs_name){
+  
+  return db.query('DELETE FROM course WHERE crs_sem_id = ? AND crs_name = ?', [crs_sem_id, crs_name], function (err, result) {
+    if (err) throw err;
+    return result.affectedRows;
+  });
+}
+
+// function getInstructors(crs_id, sectionNum){
+//   // crs_id = 1
+//     return db.query('SELECT u.userID, u.name FROM user u NATURAL JOIN roster r WHERE r.crs_id = ? AND r.sectionNum = ? AND r.roleID = 2;', [crs_id, sectionNum]).then(({ results }) => {
+//         return results.map(user => new User(user));
+//       })
+
+// }
+
+async function getCourseByName(crs_name, crs_sem_id) {
+  try {
+    let courses = await db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]);
+    let courses_obj = courses.results.map(course => new Course(course));
+    if (courses_obj.length == 0) {
+      return false;
+    }
+    // Assumes multiple courses can not have same name in one semester
+    return courses_obj[0];
+  } catch (err) {
+    throw err;
+  }
+
+  // return db.query('SELECT * FROM course WHERE crs_name = ? AND crs_sem_id = ?', [crs_name, crs_sem_id]).then(({results}) => {
+  //   return new Course(results[0]);
+  // })
+}
+
+module.exports = {
+  getCourses: getCourses,
+  getCourse: getCourse,
+  getCourseByID: getCourseByID,
+  createCourse: createCourse,
+  checkIfCourseExists: checkIfCourseExists,
+  deleteCourse: deleteCourse,
+  getCourseByName:getCourseByName,
+  // getInstructors: getInstructors
+}
