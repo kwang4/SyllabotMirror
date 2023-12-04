@@ -29,23 +29,39 @@ import APIModule from '@components/APIModule';
 export default function Roster() {
   const router = useRouter();
   const { semesterID, courseName } = router.query;
-  const studentData = [ 
-      {name: 'Jackson Hall', unityId: 'jdhall9'},
-      {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-      {name: 'Brandon Partin', unityId: 'blpartin'},
-      {name: 'Collin Riggs', unityId: 'cmriggs'},
-      {name: 'Kai-En Wang', unityId: 'kwang23'},
-      {name: 'Jackson Hall', unityId: 'jdhall9'},
-      {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-      {name: 'Brandon Partin', unityId: 'blpartin'},
-      {name: 'Collin Riggs', unityId: 'cmriggs'},
-      {name: 'Kai-En Wang', unityId: 'kwang23'},
-  ];
+  // const studentData = [ 
+  //     {name: 'Jackson Hall', unityId: 'jdhall9'},
+  //     {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
+  //     {name: 'Brandon Partin', unityId: 'blpartin'},
+  //     {name: 'Collin Riggs', unityId: 'cmriggs'},
+  //     {name: 'Kai-En Wang', unityId: 'kwang23'},
+  //     {name: 'Jackson Hall', unityId: 'jdhall9'},
+  //     {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
+  //     {name: 'Brandon Partin', unityId: 'blpartin'},
+  //     {name: 'Collin Riggs', unityId: 'cmriggs'},
+  //     {name: 'Kai-En Wang', unityId: 'kwang23'},
+  // ];
 
   const [uploadStudentDialog,setUploadStudentDialog] = useState(false);
   const [uploadCSVDialog,setUploadCSVDialog] = useState(false);
   const [courseObject, setCourseObject] = useState(null);
   const [roster,setRoster] = useState([]);
+  const [formalName, setFormalName] = useState('');
+  const [preferredName, setPreferredName] = useState('');
+  const [unityID, setUnityID] = useState('');
+
+  const handleFormalName = (event) =>{
+    setFormalName(event.target.value);
+  }
+  const handlePreferredName = (event) =>{
+    setPreferredName(event.target.value);
+  }
+  const handleUnityID = (event) =>{
+    setUnityID(event.target.value);
+  }
+  // const [formalName, setCourseObject] = useState(null);
+  // const [preferredName, setCourseObject] = useState(null);
+  // const [unityID, setCourseObject] = useState(null);
   const toggleStudentDialog = ()=>
 {
   if(uploadStudentDialog)
@@ -114,6 +130,43 @@ async function getRoster()
   setRoster(rosterResponse.data);
 }
 
+async function handleNewStudent(){
+  let response = addStudentObj();
+  toggleStudentDialog();
+  return response;
+}
+/**
+ * Method to hit an API endpoint for the whole course Object (mostly needed for courseID)
+ * If the courseObject state variable is already populated, it just returns that.
+ * @returns courseObject with course ID, name, and other fields
+ */
+async function addStudentObj(){
+  const studentData  = {
+    "user": {
+      'is_admin': 0,
+      'formal_name': formalName,
+      'preferred_name': preferredName,
+      'unity_id': unityID,
+      'is_teacher': 0
+    },
+    'role_id': 4 // this should be the ENUM for Student
+  }
+  let courseObj = null;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+  if(!courseObject)
+  {
+    courseObj = await getCourseObj();
+  }
+  else
+  {
+    courseObj = courseObject;
+  }
+  // /semesters/:semesterid/courses/:courseid/sections/:sectionNum/roster
+  const rosterResponse = await APIModule.post(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/roster`, studentData);
+  window.location.reload();
+  return rosterResponse;
+}
 useEffect(()=>{
   getRoster();
 },[semesterID]);
@@ -184,26 +237,39 @@ useEffect(()=>{
               autoFocus
               fullWidth
               margin="dense"
-              id="courseName"
-              label="Course Name"
+              id="formalName"
+              label="Formal name"
               variant="standard"
+              onChange={handleFormalName}
             />
           </Grid>
           <Grid>
             <TextField
               margin="dense"
               fullWidth
-              id="sectionNum"
-              label="Section"
+              id="preferredName"
+              label="Preferred name"
               variant="standard"
-              type="number"
+              onChange={handlePreferredName}
             />
           </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="unityID"
+              label="unity id"
+              variant="standard"
+              onChange={handleUnityID}
+            />
+          </Grid>
+         
         </Grid>
   </DialogContent>
     <DialogActions>
+      
       <Button onClick={toggleStudentDialog} color="secondary">Cancel</Button>
-      <Button onClick={toggleStudentDialog} color="primary">Add</Button>
+      <Button onClick={handleNewStudent} color="primary">Add</Button>
     </DialogActions>
 </Dialog>
 

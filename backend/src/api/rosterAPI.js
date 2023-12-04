@@ -45,7 +45,6 @@ router.get("/",(req,res,next)=>{
    });
 })
 
-// NOT TESTED
 /**
  * Create roster with the attributes given in the request body
  *  body: keys          values
@@ -61,7 +60,7 @@ router.post("/",function(req,res){
     const ros_crs_id = req.params.courseid;
     const ros_sec_number = req.params.sectionNum;
     if(req.body && req.body.user){
-        let user = JSON.parse(req.body.user);
+        let user = req.body.user;
         
         if (user && user.formal_name && user.unity_id){
             RosterDAO.addUserToRoster(ros_crs_id, ros_sec_number, user, req.body.role_id).then(roster =>{
