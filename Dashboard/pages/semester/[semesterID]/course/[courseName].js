@@ -74,9 +74,9 @@ async function getCourseObj()
   async function linkToSlack()
   {
     const slackData  = {
-      'primary_token': slackToken,
-      'secondary_token': signingSecret,
-      'socket_token': socketToken
+      "primary_token": slackToken,
+      "secondary_token": signingSecret,
+      "socket_token": socketToken
     }
     // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
     if(!courseName)
@@ -93,10 +93,8 @@ async function getCourseObj()
  {
   courseObj = courseObject;
  }
-
     const updateSlackEndpoint = `/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/syllabot/deploy/1`;
     const response = await APIModule.put(updateSlackEndpoint,slackData);
-    console.log(response);
     setSlackLinkedStatus(true);
 
     window.location.reload();
@@ -222,8 +220,8 @@ async function getCourseObj()
               autoFocus
               fullWidth
               margin="dense"
-              id="slackToken"
-              label="Slack Token"
+              id="discordToken"
+              label="Discord Token"
               variant="standard"
               onChange={handleSlackToken}
             />
@@ -232,8 +230,8 @@ async function getCourseObj()
             <TextField
               margin="dense"
               fullWidth
-              id="signingSecret"
-              label="Signing Secret"
+              id="discordAppID"
+              label="Application ID"
               variant="standard"
               onChange={handleSigningSecret}
             />
@@ -242,8 +240,8 @@ async function getCourseObj()
             <TextField
               margin="dense"
               fullWidth
-              id="socketToken"
-              label="Socket Token"
+              id="discordServerID"
+              label="Server ID"
               variant="standard"
               onChange={handleSocketToken}
             />
