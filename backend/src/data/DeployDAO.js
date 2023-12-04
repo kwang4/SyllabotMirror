@@ -92,7 +92,7 @@ async function createDiscordBot(primary_token,secondary_token){
     }
     console.log("Error deploying commands");
     return false;
-  }
+  } 
   catch(error)
   {
     console.log(error);

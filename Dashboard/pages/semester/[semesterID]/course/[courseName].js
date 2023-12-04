@@ -74,9 +74,9 @@ async function getCourseObj()
   async function linkToSlack()
   {
     const slackData  = {
-      'slackToken': slackToken,
-      'signingSecret': signingSecret,
-      'socketToken': socketToken
+      'primary_token': slackToken,
+      'secondary_token': signingSecret,
+      'socket_token': socketToken
     }
     // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
     if(!courseName)
@@ -94,7 +94,8 @@ async function getCourseObj()
   courseObj = courseObject;
  }
 
-    const response = `/semester/${semesterID}/course/${courseObj.id}/sections/${splitCourseSection}/syllabot/deploy`;
+    const updateSlackEndpoint = `/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/syllabot/deploy/1`;
+    const response = await APIModule.put(updateSlackEndpoint,slackData);
     console.log(response);
     setSlackLinkedStatus(true);
 

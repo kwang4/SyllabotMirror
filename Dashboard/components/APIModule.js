@@ -16,6 +16,15 @@ const APIModule = {
             });
             return response;
         },
+        put: async (endpoint, data) => {   
+            console.log(`PUT request to: ${BASE_API_URL + endpoint}`);
+            const response = await axios.put(BASE_API_URL + endpoint, data).catch(error => { console.log(error);
+            return {
+                status: error.response ? error.response.status : 500
+            };
+            });
+            return response;
+        },
         delete: async (endpoint) =>{
             console .log(BASE_API_URL+endpoint);
             const response = await axios.delete(BASE_API_URL+endpoint).catch(error=>{console.log(error)});

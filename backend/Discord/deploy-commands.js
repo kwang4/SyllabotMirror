@@ -35,7 +35,7 @@ async function deployCommands(primary_token,application_id)
     const rest = new REST().setToken(token);
     return await (async () => {
         try {
-        console.log("Refreshing slash commands...");    
+        console.log("Refreshing slash commands...");   
         const data = await rest.put(Routes.applicationCommands(clientId),{body:commands});
         
     
