@@ -66,7 +66,8 @@ function deleteSection(sec_crs_id, sec_number){
 }
 
 function getSectionByDeploy(dep_id){
-  return db.query('SELECT sec_number, sec_crs_id, sec_name FROM section_syllabot JOIN deploy ON dep_id = scl_dep_id JOIN section ON sec_crs_id = scl_crs_id AND sec_number = scl_sec_number WHERE dep_id = ?;', [dep_id]).then(({ results }) => {
+  //Original : SELECT sec_number, sec_crs_id, sec_name FROM section_syllabot JOIN deploy ON dep_id = scl_dep_id JOIN section ON sec_crs_id = scl_crs_id AND sec_number = scl_sec_number WHERE dep_id = ?;
+  return db.query('SELECT scl_sec_number AS sec_number, scl_crs_id AS sec_crs_id FROM section_syllabot JOIN deploy ON dep_id=scl_dep_id WHERE dep_id = 1;', [dep_id]).then(({ results }) => {
     return (new Section(results[0]));
   });
 }
