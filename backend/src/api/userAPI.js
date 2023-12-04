@@ -4,9 +4,11 @@
 const express = require('express');
 const router = express.Router({mergeParams: true});
 const SectionDAO = require('../data/SectionDAO.js');
-const CourseDAO = require('../data/CourseDAO.js')
+const CourseDAO = require('../data/CourseDAO.js');
+const LogDAO = require('../data/LogDAO.js');
 
 router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 const UserDAO = require('../data/UserDAO.js');
 
@@ -25,8 +27,6 @@ router.get("/:userid/courses", async (req, res, next) => {
                         section['semesterID'] = course.semesterID;
                     }
                     const instructors = await SectionDAO.getInstructors(section.courseID, section.sectionNum);
-                    console.log("Instructors:");
-                    console.log(instructors);
                     section['instructors'] = [];
                     if(instructors?.length > 0) {
                         let instructorList = [];
@@ -115,6 +115,70 @@ router.get("/", async (req, res, next) => {
         res.json(users);
     });
 });
+
+/**
+ * Get the logs for a specific user given unity id (Restricted to admin)
+ */
+router.get("/:unityid/logs", async (req, res, next) => {
+    const unityid = req.params.unityid;
+    try{
+        const results = await LogDAO.getUserLog(unityid);
+        if (results) {
+            // get list of instructors for semester
+            res.json(results)
+        } else {
+            res.json(404).json({error: 'results not found'})
+        }
+    } catch (error){
+        console.error("Error retrieving user logs:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+// Create a new user 
+router.post("/",async (req, res, next) => {
+    if(req.body && req.body.user){
+        let user = JSON.parse(req.body.user);
+        try{
+            const new_user = await UserDAO.createUser(user);
+            if (new_user) {
+                // return the teacher created
+                res.json(new_user);
+            } else {
+                res.json(404).json({error: 'user could not be created'})
+            }
+        } catch (error){
+            console.error("Error creating user:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    } else {
+        res.status(404).json({error: "post must have user obejct"});
+    }
+});
+
+
+// update a user
+router.put("/", async (req, res, next) => {
+    if(req.body && req.body.user){
+        let user = JSON.parse(req.body.user);
+        try{
+            const updated_user = await UserDAO.updateUser(user);
+            if (updated_user) {
+                // return the teacher created
+                res.json(updated_user);
+            } else {
+                res.json(404).json({error: 'user could not be updated'})
+            }
+        } catch (error){
+            console.error("Error updating user:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }else {
+        res.status(404).json({error: "put must have user obejct"});
+    }
+});
+
+
 
 
 module.exports = router;

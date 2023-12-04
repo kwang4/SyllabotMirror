@@ -54,7 +54,6 @@ function getInstructors(ros_crs_id, ros_sec_number){
 function createSection(sec_crs_id, sec_number){
   return db.query('INSERT INTO section (sec_crs_id, sec_number) VALUES (?, ?);', [sec_crs_id, sec_number], function (err, result) {
     if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
     return result.affectedRows;
   });
 }
@@ -62,9 +61,15 @@ function createSection(sec_crs_id, sec_number){
 function deleteSection(sec_crs_id, sec_number){
   return db.query('DELETE FROM section WHERE sec_crs_id = ? AND sec_number = ?', [sec_crs_id, sec_number], function (err, result) {
     if (err) throw err;
-    console.log("Number of records deleted: " + result.affectedRows);
     return result.affectedRows;
   })
+}
+
+function getSectionByDeploy(dep_id){
+  //Original : SELECT sec_number, sec_crs_id, sec_name FROM section_syllabot JOIN deploy ON dep_id = scl_dep_id JOIN section ON sec_crs_id = scl_crs_id AND sec_number = scl_sec_number WHERE dep_id = ?;
+  return db.query('SELECT scl_sec_number AS sec_number, scl_crs_id AS sec_crs_id FROM section_syllabot JOIN deploy ON dep_id=scl_dep_id WHERE dep_id = 1;', [dep_id]).then(({ results }) => {
+    return (new Section(results[0]));
+  });
 }
 
 module.exports = {
@@ -74,5 +79,6 @@ module.exports = {
     getSectionsByUserID: getSectionsByUserID,
     getInstructors: getInstructors,
     createSection: createSection,
-    deleteSection: deleteSection
+    deleteSection: deleteSection,
+    getSectionByDeploy: getSectionByDeploy
   }

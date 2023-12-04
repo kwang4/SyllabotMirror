@@ -38,17 +38,26 @@ app.listen(PORT, async () => {
       }
     }
     else if (deploy.typeID == 2) {
-      console.log("Discord bot");
+      console.log("Discord bot: " + deploy.secondary_token);
       try
       {
-        DeployDAO.createDiscordBot(deploy.primary_token);
+        DeployDAO.createDiscordBot(deploy.primary_token,deploy.secondary_token);
       }
       catch(error)
       {
-        console.log(error);
+        console.log("Invalid login");
       }
     }
   }
+  // try
+  // {
+  //   DeployDAO.createDiscordBot('MTE0Mzk0MDgyMDU2Nzg1NTE0NQ.GAFg3k.8DUS4Bxm2bsfw4Pff7Ji2Ep8AlVah8J-dIR1RQ');
+  //   DeployDAO.createDiscordBot('MTE3ODcyMDM5MzkwNTg0NDMxNQ.GPGlm7.Z2NKJenoSSR-mpf2IAHvrS3qDwea5QxKCTLlzA');
+  // }
+  // catch(error)
+  // {
+  //   console.log(error);
+  // }
 
 });
 

@@ -30,16 +30,6 @@ CREATE TABLE `api` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `api`
---
-
-LOCK TABLES `api` WRITE;
-/*!40000 ALTER TABLE `api` DISABLE KEYS */;
-INSERT INTO `api` VALUES (1,'Link to API 1 Location');
-/*!40000 ALTER TABLE `api` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `calendar`
 --
 
@@ -53,15 +43,6 @@ CREATE TABLE `calendar` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `calendar`
---
-
-LOCK TABLES `calendar` WRITE;
-/*!40000 ALTER TABLE `calendar` DISABLE KEYS */;
-INSERT INTO `calendar` VALUES (1,'Link to Calendar 1 Location');
-/*!40000 ALTER TABLE `calendar` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `conversation`
@@ -74,23 +55,20 @@ CREATE TABLE `conversation` (
   `con_id` int NOT NULL AUTO_INCREMENT,
   `con_usr_id` int NOT NULL,
   `con_qst_id` int NOT NULL,
+  `con_sec_number` int NOT NULL,
+  `con_sec_crs_id` int NOT NULL,
   PRIMARY KEY (`con_id`),
+  KEY `conversationSecNum` (`con_sec_number`),
+  KEY `conversationCrsID` (`con_sec_crs_id`),
   KEY `questionID_idx` (`con_qst_id`),
   KEY `conversation_roster_userID_idx` (`con_usr_id`),
   CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`con_usr_id`) REFERENCES `user` (`usr_id`) ON DELETE CASCADE,
-  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE
+  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE,
+  CONSTRAINT `section_num_conversation` FOREIGN KEY (`con_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
+  CONSTRAINT `course_num_conversation` FOREIGN KEY (`con_sec_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `conversation`
---
-
-LOCK TABLES `conversation` WRITE;
-/*!40000 ALTER TABLE `conversation` DISABLE KEYS */;
-INSERT INTO `conversation` VALUES (7,2,3),(8,2,2),(9,3,1),(10,4,4),(11,5,5);
-/*!40000 ALTER TABLE `conversation` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `course`
@@ -109,15 +87,6 @@ CREATE TABLE `course` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `course`
---
-
-LOCK TABLES `course` WRITE;
-/*!40000 ALTER TABLE `course` DISABLE KEYS */;
-INSERT INTO `course` VALUES (1,1,'Senior Design'),(2,2,'Data Structures'),(3,3,'Junior Design'),(4,4,'Network Security'),(5,5,'Software Development');
-/*!40000 ALTER TABLE `course` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `deploy`
@@ -133,6 +102,7 @@ CREATE TABLE `deploy` (
   `dep_primary_token` varchar(100) NOT NULL,
   `dep_ss_token` VARCHAR(100) NULL,
   `dep_socket_token` VARCHAR(150) NULL,
+  `dep_server_id` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`dep_id`),
   KEY `typeID_idx` (`dep_typ_id`),
   KEY `syllabotID_idx` (`dep_syl_id`),
@@ -140,17 +110,6 @@ CREATE TABLE `deploy` (
   CONSTRAINT `typeID` FOREIGN KEY (`dep_typ_id`) REFERENCES `type` (`typ_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `deploy`
---
-
-LOCK TABLES `deploy` WRITE;
-/*!40000 ALTER TABLE `deploy` DISABLE KEYS */;
-INSERT INTO `deploy` VALUES (1,1,1,'xoxb-5808049658741-5943322501495-aknId4txsOqPQCmEbmmTR0BQ', '212a2b125e69b412a55c16326c878cb4', 'xapp-1-A05U5NWGW82-5943289940567-f64907e4039f362875f6aee3860c005a38a906fbef47224d96334f7855dbd08a'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'xoxb-6204296349143-6218840809474-CCsNmrZqYoCwl4D5F6vDEkJ1', 'ca4f9b10a6cb0fc7f1aa948f9e75fae0', 'xapp-1-A066EQQJEPL-6204308546055-873bf07f250d850f8904eae6661ffad26ad6005384afd59c4d03e052269fb111'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
-/*,(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5')*/
-/*!40000 ALTER TABLE `deploy` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `file`
@@ -167,16 +126,6 @@ CREATE TABLE `file` (
   PRIMARY KEY (`fil_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `file`
---
-
-LOCK TABLES `file` WRITE;
-/*!40000 ALTER TABLE `file` DISABLE KEYS */;
-INSERT INTO `file` VALUES (1,'Link to File 1 Location', 'file_name_1','Parsed_link_here'),(2,'Link to File 2 Location', 'file_name_2','Parsed_link2_here');
-/*!40000 ALTER TABLE `file` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `period`
@@ -216,15 +165,6 @@ CREATE TABLE `question` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `question`
---
-
-LOCK TABLES `question` WRITE;
-/*!40000 ALTER TABLE `question` DISABLE KEYS */;
-INSERT INTO `question` VALUES (1,'Who am I?','You are Brandon Partin'),(2,'What are you?','A very intelligent robot'),(3,'Where am I?','NCSU'),(4,'When is lunch?','Typically around Noon'),(5,'Why do we exist?','IDK bro...');
-/*!40000 ALTER TABLE `question` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `role`
@@ -276,15 +216,6 @@ CREATE TABLE `roster` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `roster`
---
-
-LOCK TABLES `roster` WRITE;
-/*!40000 ALTER TABLE `roster` DISABLE KEYS */;
-INSERT INTO `roster` VALUES (1,1,1,2,1),(2,2,2,2,1),(3,3,3,3,2),(4,4,100,4,3),(5,5,100,5,4),(6,5,1,2,2),(7,4,3,2,4),(8,3,2,2,3),(9,2,100,2,5);
-/*!40000 ALTER TABLE `roster` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `section`
@@ -303,15 +234,6 @@ CREATE TABLE `section` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `section`
---
-
-LOCK TABLES `section` WRITE;
-/*!40000 ALTER TABLE `section` DISABLE KEYS */;
-INSERT INTO `section` VALUES (1,1,'001'),(2,1,'001'),(3,2,'002'),(4,3,'003'),(5,100,'100');
-/*!40000 ALTER TABLE `section` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `section_resource`
@@ -344,15 +266,6 @@ CREATE TABLE `section_resource` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `section_resource`
---
-
-LOCK TABLES `section_resource` WRITE;
-/*!40000 ALTER TABLE `section_resource` DISABLE KEYS */;
-INSERT INTO `section_resource` VALUES (7,1,1,1,NULL,NULL,NULL),(8,2,1,NULL,1,NULL,NULL),(9,3,2,NULL,NULL,1,NULL),(10,100,2,NULL,NULL,NULL,1),(11,100,3,2,NULL,NULL,NULL);
-/*!40000 ALTER TABLE `section_resource` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `section_syllabot`
@@ -376,15 +289,6 @@ CREATE TABLE `section_syllabot` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `section_syllabot`
---
-
-LOCK TABLES `section_syllabot` WRITE;
-/*!40000 ALTER TABLE `section_syllabot` DISABLE KEYS */;
-INSERT INTO `section_syllabot` VALUES (7,1,1,1),(8,2,2,2),(9,3,3,3),(10,4,100,4),(11,5,100,5);
-/*!40000 ALTER TABLE `section_syllabot` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `semester`
@@ -403,15 +307,6 @@ CREATE TABLE `semester` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `semester`
---
-
-LOCK TABLES `semester` WRITE;
-/*!40000 ALTER TABLE `semester` DISABLE KEYS */;
-INSERT INTO `semester` VALUES (1,'Maymester',2023),(2,'Summer 1',2024),(3,'Summer 2',2025),(4,'Fall',2026),(5,'Spring',2027);
-/*!40000 ALTER TABLE `semester` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `syllabot`
@@ -432,15 +327,6 @@ CREATE TABLE `syllabot` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `syllabot`
---
-
-LOCK TABLES `syllabot` WRITE;
-/*!40000 ALTER TABLE `syllabot` DISABLE KEYS */;
-INSERT INTO `syllabot` VALUES (1,1,'Sylla_1','prompt flavor 1','link to profile pic for Sylla 1'),(2,2,'Sylla_2','prompt flavor 2','link to profile pic for Sylla 2'),(3,3,'Sylla_3','prompt flavor 3','link to profile pic for Sylla 3'),(4,4,'Sylla_4','prompt flavor 4','link to profile pic for Sylla 4'),(5,5,'Sylla_5','prompt flavor 5','link to profile pic for Sylla 5');
-/*!40000 ALTER TABLE `syllabot` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `type`
@@ -485,15 +371,6 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin',1),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs', 1),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23',1),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9', 1),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan', 1);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `website`
@@ -509,15 +386,7 @@ CREATE TABLE `website` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `website`
---
 
-LOCK TABLES `website` WRITE;
-/*!40000 ALTER TABLE `website` DISABLE KEYS */;
-INSERT INTO `website` VALUES (1,'Link to Website 1 Location');
-/*!40000 ALTER TABLE `website` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

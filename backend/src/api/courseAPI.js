@@ -27,11 +27,8 @@ const DeployDAO = require('.././data/DeployDAO.js');
  *  returns: Course object with given courseid
  */
 router.get("/:courseid",(req,res,next)=>{
-    //console.log("URL: " + req.originalUrl)
-   // console.log("Request parameters: " + JSON.stringify(req.params))
     // Check if id exists
     // else return 404 error
-   // console.log("I'm inside the get endpoint for Courses");
     CourseDAO.getCourse(req.params.semesterid, req.params.courseid).then(course => {
         if (course) {
             // get list of instructors for course
@@ -84,7 +81,6 @@ router.post("/", async (req,res) => {
     // Get user making the request
     let user = await UserDAO.getUserByUnityID(unityid);
     // Check if user can create course (flag needs to be added to database)
-    console.log(user);
     if(!user.is_teacher){
         res.status(404).json({error: 'User cannot add a course'});
         return;
@@ -106,10 +102,8 @@ router.post("/", async (req,res) => {
 
     // Get section for the courseid and sectionNum, if already exists then throw error
     // NOTE: Doesn't matter that we create course immediately before since the new course won't have sections yet
-    console.log(course);
     let section = await SectionDAO.getSectionByCourse(course.courseID, sectionNum);
     if (section) {
-        console.log("CHECK!");
         res.status(400).json({error: 'Course/section combination already exists'});
         return;
     }

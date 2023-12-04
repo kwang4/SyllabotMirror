@@ -74,11 +74,17 @@ CREATE TABLE `conversation` (
   `con_id` int NOT NULL AUTO_INCREMENT,
   `con_usr_id` int NOT NULL,
   `con_qst_id` int NOT NULL,
+  `con_sec_number` int NOT NULL,
+  `con_sec_crs_id` int NOT NULL,
   PRIMARY KEY (`con_id`),
+  KEY `conversationSecNum` (`con_sec_number`),
+  KEY `conversationCrsID` (`con_sec_crs_id`),
   KEY `questionID_idx` (`con_qst_id`),
   KEY `conversation_roster_userID_idx` (`con_usr_id`),
   CONSTRAINT `conversation_roster_userID` FOREIGN KEY (`con_usr_id`) REFERENCES `user` (`usr_id`) ON DELETE CASCADE,
-  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE
+  CONSTRAINT `questionID` FOREIGN KEY (`con_qst_id`) REFERENCES `question` (`qst_id`) ON DELETE CASCADE,
+  CONSTRAINT `section_num_conversation` FOREIGN KEY (`con_sec_number`) REFERENCES `section` (`sec_number`) ON DELETE CASCADE,
+  CONSTRAINT `course_num_conversation` FOREIGN KEY (`con_sec_crs_id`) REFERENCES `section` (`sec_crs_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -88,7 +94,7 @@ CREATE TABLE `conversation` (
 
 LOCK TABLES `conversation` WRITE;
 /*!40000 ALTER TABLE `conversation` DISABLE KEYS */;
-INSERT INTO `conversation` VALUES (7,2,3),(8,2,2),(9,3,1),(10,4,4),(11,5,5);
+INSERT INTO `conversation` VALUES (7,2,3,1,1),(8,2,2,1,1),(9,3,1,1,1),(10,4,4,1,1),(11,5,5,1,1);
 /*!40000 ALTER TABLE `conversation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,6 +139,7 @@ CREATE TABLE `deploy` (
   `dep_primary_token` varchar(100) NOT NULL,
   `dep_ss_token` VARCHAR(100) NULL,
   `dep_socket_token` VARCHAR(150) NULL,
+  `dep_server_id` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`dep_id`),
   KEY `typeID_idx` (`dep_typ_id`),
   KEY `syllabotID_idx` (`dep_syl_id`),
@@ -147,7 +154,10 @@ CREATE TABLE `deploy` (
 
 LOCK TABLES `deploy` WRITE;
 /*!40000 ALTER TABLE `deploy` DISABLE KEYS */;
-INSERT INTO `deploy` VALUES (1,1,1,'Slack Primary Token for Deploy 1', 'SS1', 'ST1'),(2,2,2,'Discord Primary Token for Deploy 2', null, null),(3,3,1,'Slack Primary Token for Deploy 3', 'SS3', 'ST3'),(4,4,2,'Discord Primary Token for Deploy 4', null, null),(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5');
+
+INSERT INTO `deploy` VALUES (1,1,1,'xoxb-5808049658741-5943322501495-aknId4txsOqPQCmEbmmTR0BQ', '212a2b125e69b412a55c16326c878cb4', 'xapp-1-A05U5NWGW82-5943289940567-f64907e4039f362875f6aee3860c005a38a906fbef47224d96334f7855dbd08a', 'T05PS1FKCMT'),(2,2,2,'MTE0Mzk0MDgyMDU2Nzg1NTE0NQ.GAFg3k.8DUS4Bxm2bsfw4Pff7Ji2Ep8AlVah8J-dIR1RQ','1143940820567855145', null, 'random'),(3,3,1,'xoxb-6204296349143-6218840809474-CCsNmrZqYoCwl4D5F6vDEkJ1', 'ca4f9b10a6cb0fc7f1aa948f9e75fae0', 'xapp-1-A066EQQJEPL-6204308546055-873bf07f250d850f8904eae6661ffad26ad6005384afd59c4d03e052269fb111', 'random'),(4,4,2,'MTE3ODcyMDM5MzkwNTg0NDMxNQ.GPGlm7.Z2NKJenoSSR-mpf2IAHvrS3qDwea5QxKCTLlzA', '1178720393905844315', null, 'random'),(5,5,1,'xoxb-6204296349143-6218840809474-OijzTZ6UhcD3eGFyL7qdRXqk', 'ca4f9b10a6cb0fc7f1aa948f9e75fae0', 'xapp-1-A066EQQJEPL-6204308546055-873bf07f250d850f8904eae6661ffad26ad6005384afd59c4d03e052269fb111', 'T06608QA947');
+
+/*,(5,5,1,'Slack Primary Token for Deploy 5', 'SS5', 'ST5')*/
 /*!40000 ALTER TABLE `deploy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,6 +488,7 @@ CREATE TABLE `user` (
   `usr_formal_name` varchar(75) NOT NULL,
   `usr_preferred_name` varchar(75) DEFAULT NULL,
   `usr_unity_id` varchar(45) NOT NULL,
+  `usr_is_teacher` tinyint NOT NULL,
   PRIMARY KEY (`usr_id`),
   UNIQUE KEY `unity_id_UNIQUE` (`usr_unity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ;
@@ -489,7 +500,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin'),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs'),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23'),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9'),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan');
+INSERT INTO `user` VALUES (1,1,'Partin,Brandon','P_Partin,Brandon','blpartin',1),(2,1,'Riggs,Collin','P_Riggs,Collin','cmriggs', 1),(3,1,'Wang,Kai-En','P_Wang,Kai-En','kwang23',1),(4,1,'Hall,Jackson','P_Hall,Jackson','jdhall9', 1),(5,1,'Buchanan,Daniel','P_Buchanan,Daniel','dbuchanan', 1);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 

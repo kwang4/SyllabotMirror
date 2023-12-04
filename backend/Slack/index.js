@@ -1,6 +1,9 @@
 const { App } = require('@slack/bolt')
 require("dotenv").config();
-const  APIModule = require('./modules/APIModule');
+const APIModule = require('./modules/APIModule');
+const LogDAO = require('../src/data/LogDAO.js');
+const UserDAO = require('../src/data/UserDAO.js');
+const OpenAI = require('../OpenAI.js');
 class SlackBot{
 
   //app;
@@ -25,16 +28,26 @@ class SlackBot{
       // The parameter is what prevents user message from being deleted
       await ack({response_type: 'in_channel'});
     
-      // TODO Make API call to get response
-    
-      //console.log(JSON.stringify(command))
-      var responseMessage = `Q: \"${command.text}\" asked by <@${command.user_name}>\nA: This is the answer to your question MODIFIED!`
-    
+      var values = await OpenAI.getCourseResources(command.team_id);
+      var resources = values[0]
+      var section = values[1];
+
+      var values2 = await OpenAI.getAIResponse(resources, 1500, command.text);
+      var aiResponse = values2[0];
+      var fileName = values2[1];
+
+      var values3  = await OpenAI.getResponseMessage(aiResponse, fileName, command.text, command.user_name);
+      var responseMessage = values3[0];
+      var unfilteredAIResponse = values3[1];
+
       // Send message back 
       await client.chat.postMessage({
         channel: command.channel_id,
         text: responseMessage
       });
+
+      var userId = await UserDAO.getUserByUnityID(command.user_name);
+      await LogDAO.createLog(section.courseID, section.sectionNum, userId.id, command.text, unfilteredAIResponse);
     });
 
     this.app.command('/apitest', async({command, ack, client}) => {
@@ -44,7 +57,7 @@ class SlackBot{
     
       // The parameter is what prevents user message from being deleted
       await ack({response_type: 'in_channel'});
-    console.log("Pre response");
+      console.log("Pre response");
       let response = await APIModule.get('/shib');
       if(response?.status != 200)
       {

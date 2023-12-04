@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "@mui/material": "^5.14.16",
-    "@mui/styles": "^5.14.16",
-    "@slack/web-api": "^6.10.0",
-    "material-ui-dropzone": "^3.5.0"
-  }
-}

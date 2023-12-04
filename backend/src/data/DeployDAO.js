@@ -1,7 +1,9 @@
-const db = require('./DBConnection')
-const SyllabotDAO = require('./SyllabotDAO')
-const Deploy = require('./models/Deploy')
-const slackBot = require('./../../Slack/index')
+const db = require('./DBConnection.js')
+const SyllabotDAO = require('./SyllabotDAO.js')
+const Deploy = require('./models/Deploy.js')
+const slackBot = require('./../../Slack/index.js');
+const discordBot = require('./../../Discord/index.js');
+const DeployCommands = require('./../../Discord/deploy-commands.js');
 const { WebClient } = require('@slack/web-api');
 
 // This returns all Syllabot instances
@@ -32,9 +34,9 @@ async function getDeployBySectionAndType(sec_crs_id, sec_num, typ_id) {
   }
 }
 
-async function updateDeploy(primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id) {
+async function updateDeploy(primary_token, secondary_token, socket_token,dep_server_id, crs_id, sec_num, typ_id) {
   try {
-    result = await db.query("UPDATE deploy JOIN section_syllabot ON scl_dep_id = dep_id SET dep_primary_token = ?, dep_ss_token=?, dep_socket_token=? WHERE scl_crs_id = ? AND scl_sec_number = ? AND dep_typ_id = ?", [primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id]);
+    result = await db.query("UPDATE deploy JOIN section_syllabot ON scl_dep_id = dep_id SET dep_primary_token = ?, dep_ss_token=?, dep_socket_token=?, dep_server_id=? WHERE scl_crs_id = ? AND scl_sec_number = ? AND dep_typ_id = ?", [primary_token, secondary_token, socket_token,dep_server_id, crs_id, sec_num, typ_id]);
     return result;
   } catch (err) {
     throw err;
@@ -63,9 +65,6 @@ async function verifyToken(primary_token) {
 }
 
 async function createSlackBot(primary_token, ss_token, socket_token){
-  console.log(primary_token);
-  console.log(ss_token);
-  console.log(socket_token);
   if (await verifyToken(primary_token)) {
     try{
       console.log(primary_token);
@@ -79,11 +78,29 @@ async function createSlackBot(primary_token, ss_token, socket_token){
   return false;
 }
 
-async function createDiscordBot(primary_token){
+async function createDiscordBot(primary_token,secondary_token){
+  try
+  {
+    bot = new discordBot.DiscordBot(primary_token);
+    //If an error isn't thrown, the bot is logged in properly, and we run the deploy commands script on startup
+    let deployStatus = await DeployCommands.deployCommands(primary_token,secondary_token);
+    console.log("DEPLOY STATUS: " + deployStatus);
+    if(deployStatus)
+    {
 
+      return true;
+    }
+    console.log("Error deploying commands");
+    return false;
+  } 
+  catch(error)
+  {
+    console.log(error);
+    throw error;
+  }
 }
 
-async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, crs_id, sec_num) {
+async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_token, server_id, crs_id, sec_num) {
   // Check if syllabot exists, if not create default syllabot
   try {
 
@@ -105,7 +122,7 @@ async function createDeploy(syl_id, typ_id, primary_token, ss_token, socket_toke
     dep_ss_token = ss_token
     dep_socket_token = socket_token
     */
-    insert_results = await db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token) VALUES (?, ?, ?, ?, ?)', [syllabot.syllabotID, typ_id, primary_token, ss_token, socket_token]);
+    insert_results = await db.query('INSERT INTO deploy (dep_syl_id, dep_typ_id, dep_primary_token, dep_ss_token, dep_socket_token, dep_server_id) VALUES (?, ?, ?, ?, ?, ?)', [syllabot.syllabotID, typ_id, primary_token, ss_token, socket_token, server_id]);
     new_deploy = await getDeployById(insert_results.results.insertId);
 
     /* Add to syllabot_section
