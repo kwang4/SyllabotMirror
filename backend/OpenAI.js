@@ -88,6 +88,10 @@ async function getAIResponse(resources, batch_size, question){
         }
       }
 
+      if(aiResponse == "") {
+        aiResponse = "I could not find the answer to your question in the given resources for this course.\nI recommend asking an instructor when they are available if you still need the answer to this question.";
+      }
+
       return [aiResponse, fileName];
 }
 
