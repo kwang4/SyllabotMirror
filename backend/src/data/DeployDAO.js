@@ -34,9 +34,9 @@ async function getDeployBySectionAndType(sec_crs_id, sec_num, typ_id) {
   }
 }
 
-async function updateDeploy(primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id) {
+async function updateDeploy(primary_token, secondary_token, socket_token,dep_server_id, crs_id, sec_num, typ_id) {
   try {
-    result = await db.query("UPDATE deploy JOIN section_syllabot ON scl_dep_id = dep_id SET dep_primary_token = ?, dep_ss_token=?, dep_socket_token=? WHERE scl_crs_id = ? AND scl_sec_number = ? AND dep_typ_id = ?", [primary_token, secondary_token, socket_token, crs_id, sec_num, typ_id]);
+    result = await db.query("UPDATE deploy JOIN section_syllabot ON scl_dep_id = dep_id SET dep_primary_token = ?, dep_ss_token=?, dep_socket_token=?, dep_server_id=? WHERE scl_crs_id = ? AND scl_sec_number = ? AND dep_typ_id = ?", [primary_token, secondary_token, socket_token,dep_server_id, crs_id, sec_num, typ_id]);
     return result;
   } catch (err) {
     throw err;

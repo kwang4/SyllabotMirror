@@ -8,7 +8,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-export default function DiscordCard() {
+export default function SlackCard() {
     return (
       <Card variant='outlined' sx={{
         display: 'flex', 
