@@ -24,10 +24,14 @@ export default function CourseInfo() {
   const [slackLinked,setSlackLinkedStatus] = useState(false);
   const [discordDialogStatus,setDiscordDialogStatus] = useState(false);
   const [discordLinked,setDiscordLinkedStatus] = useState(false);
+  const [discordToken, setDiscordToken] = useState('');
+  const [discordAppID, setDiscordAppID] = useState('');
+  const [discordServerID, setDiscordServerID] = useState('');
   const [slackToken, setSlackToken] = useState('');
   const [signingSecret, setSigningSecret] = useState('');
   const [socketToken, setSocketToken] = useState('');
   const [courseObject, setCourseObject] = useState(null);
+  const [linkMessage, setLinkMessage] = useState('');
   const optionData = [ 
       {name: 'Manage Resources', path:'resources'},
       {name: 'Manage Roster', path:'roster'},
@@ -73,6 +77,11 @@ async function getCourseObj()
 
   async function linkToSlack()
   {
+    if(slackToken.trim() == '' || signingSecret.trim() == '' || socketToken.trim() == '')
+    {
+      setLinkMessage('Please fill out all fields');
+      return;
+    }
     const slackData  = {
       "primary_token": slackToken,
       "secondary_token": signingSecret,
@@ -97,7 +106,7 @@ async function getCourseObj()
     const response = await APIModule.put(updateSlackEndpoint,slackData);
     setSlackLinkedStatus(true);
 
-    window.location.reload();
+    setLinkMessage("Slack link updated");
   }
 
   async function unlinkToSlack()
@@ -114,23 +123,42 @@ async function getCourseObj()
     console.log(response);
     setSlackLinkedStatus(false);
 
-    window.location.reload();
+    setLinkMessage("Slack link removed");
   }
 
   async function linkToDiscord()
   {
-    const discordData  = {
-      'slackToken': slackToken,
-      'signingSecret': signingSecret,
-      'socketToken': socketToken
+    if(discordToken.trim() == '' || discordAppID.trim() == '' || discordServerID.trim() == '')
+    {
+      setLinkMessage('Please fill out all fields');
+      return;
     }
-    // const response = await APIModule.get(`https://localhost/api/semesters/${semesterSelector}/courses`,slackData);
-
-    const response = discordData;
-    console.log(response);
+    const discordData  = {
+      'primary_token': discordToken,
+      'secondary_token': discordAppID,
+      'dep_server_id': discordServerID
+    }
+    //Section to get course object (course id, etc) for api route 
+    if(!courseName)
+    return;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseName = encodeURIComponent(courseName.slice(0,splitIdx));
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+ let courseObj = null;
+ if(!courseObject)
+ {
+  courseObj = await getCourseObj();
+ }
+ else
+ {
+  courseObj = courseObject;
+ }
+ //Endpoint to hit
+    const updateDiscordEndpoint = `/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/syllabot/deploy/2`;
+    const response = await APIModule.put(updateDiscordEndpoint,discordData);
     setDiscordLinkedStatus(true);
+    setLinkMessage("Discord link updated");
 
-    window.location.reload();
   }
 
   async function unlinkToDiscord()
@@ -146,8 +174,7 @@ async function getCourseObj()
 
     console.log(response);
     setDiscordLinkedStatus(false);
-
-    window.location.reload();
+    setLinkMessage("Discord link removed");
   }
 
   function toggleSlackDialog()
@@ -156,6 +183,7 @@ async function getCourseObj()
     setSlackDialogStatus(false);
   else
     setSlackDialogStatus(true);
+  setLinkMessage("");
   }
   function toggleDiscordDialog()
   {
@@ -163,6 +191,17 @@ async function getCourseObj()
     setDiscordDialogStatus(false);
   else
     setDiscordDialogStatus(true);
+  setLinkMessage("");
+  }
+  //Section for setters within discord and slack popups
+  const handleDiscordToken = (event) =>{
+    setDiscordToken(event.target.value);
+  }
+  const handleDiscordAppID = (event) =>{
+    setDiscordAppID(event.target.value);
+  }
+  const handleDiscordServer = (event) =>{
+    setDiscordServerID(event.target.value);
   }
   const handleSlackToken = (event) =>{
     setSlackToken(event.target.value);
@@ -223,7 +262,7 @@ async function getCourseObj()
               id="discordToken"
               label="Discord Token"
               variant="standard"
-              onChange={handleSlackToken}
+              onChange={handleDiscordToken}
             />
           </Grid>
           <Grid>
@@ -233,7 +272,7 @@ async function getCourseObj()
               id="discordAppID"
               label="Application ID"
               variant="standard"
-              onChange={handleSigningSecret}
+              onChange={handleDiscordAppID}
             />
           </Grid>
           <Grid>
@@ -243,9 +282,10 @@ async function getCourseObj()
               id="discordServerID"
               label="Server ID"
               variant="standard"
-              onChange={handleSocketToken}
+              onChange={handleDiscordServer}
             />
           </Grid>
+          <p style={{color:'black'}} id="linkMessage">{linkMessage}</p>
         </Grid>
   </DialogContent>
     <DialogActions>
@@ -293,6 +333,7 @@ async function getCourseObj()
               onChange={handleSocketToken}
             />
           </Grid>
+          <p style={{color:'black'}} id="linkMessage">{linkMessage}</p>
         </Grid>
   </DialogContent>
     <DialogActions>
