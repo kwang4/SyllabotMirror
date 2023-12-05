@@ -29,18 +29,6 @@ import APIModule from '@components/APIModule';
 export default function Roster() {
   const router = useRouter();
   const { semesterID, courseName } = router.query;
-  // const studentData = [ 
-  //     {name: 'Jackson Hall', unityId: 'jdhall9'},
-  //     {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-  //     {name: 'Brandon Partin', unityId: 'blpartin'},
-  //     {name: 'Collin Riggs', unityId: 'cmriggs'},
-  //     {name: 'Kai-En Wang', unityId: 'kwang23'},
-  //     {name: 'Jackson Hall', unityId: 'jdhall9'},
-  //     {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-  //     {name: 'Brandon Partin', unityId: 'blpartin'},
-  //     {name: 'Collin Riggs', unityId: 'cmriggs'},
-  //     {name: 'Kai-En Wang', unityId: 'kwang23'},
-  // ];
 
   const [uploadStudentDialog,setUploadStudentDialog] = useState(false);
   const [uploadCSVDialog,setUploadCSVDialog] = useState(false);
@@ -49,6 +37,7 @@ export default function Roster() {
   const [formalName, setFormalName] = useState('');
   const [preferredName, setPreferredName] = useState('');
   const [unityID, setUnityID] = useState('');
+  const [confirmDeleteDialog,setConfirmDeleteDialog] = useState(false);
 
   const handleFormalName = (event) =>{
     setFormalName(event.target.value);
@@ -59,9 +48,23 @@ export default function Roster() {
   const handleUnityID = (event) =>{
     setUnityID(event.target.value);
   }
-  // const [formalName, setCourseObject] = useState(null);
-  // const [preferredName, setCourseObject] = useState(null);
-  // const [unityID, setCourseObject] = useState(null);
+
+  /**
+   * Toggles state variable for whether the the delete confirmation dialog is open or closed. Resets resource to delete on close, and removes error messages.
+   */
+  const toggleDeleteDialog = ()=>{
+  if(confirmDeleteDialog)
+  {
+    setConfirmDeleteDialog(false);
+    setResToDelete(null);
+    setDeleteErr('');
+  }
+  else
+  {
+    setConfirmDeleteDialog(true);
+  }
+}
+
   const toggleStudentDialog = ()=>
 {
   if(uploadStudentDialog)
@@ -212,9 +215,15 @@ useEffect(()=>{
         <Divider sx={{borderBottomWidth: 3,borderColor:'black'}}/>
       {roster.map((student,index)=>(
             <ListItem key={index}>
-              <ListItemText primary={student.formal_name.split(',').reverse().join(' ')}/>
-              <ListItemText primary = {student.unity_id}/>
-              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
+               <Grid container spacing={0} sx={{width:'100%'}}>
+                <Grid xs={7}>
+                  <ListItemText primary={student.formal_name.split(',').reverse().join(' ')}/>
+                </Grid>
+                <Grid xs={4}>
+                  <ListItemText primary = {student.unity_id}/>
+                </Grid>
+                <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
+              </Grid>
             </ListItem>
         ))}
     </List>
@@ -227,7 +236,18 @@ useEffect(()=>{
         <Button onClick={toggleUploadCSVDialog} variant="contained">Upload CSV</Button>
         </Grid>
     </Grid>
-    
+  
+{/* <Dialog fullWidth open={confirmDeleteDialog} onClose={toggleDeleteDialog}>
+  <DialogTitle id="del-res-dialog">Are you sure you want to delete <span style={{color:'#3366CC'}}>{resToDelete?.fil_name}</span>?</DialogTitle>
+  <DialogContent dividers>
+  <p style={{color:'red'}} id="errorMSG">{deleteErr}</p>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleDeleteDialog} color="secondary">Cancel</Button>
+      <Button onClick={deleteFile} color="primary">Delete</Button>
+    </DialogActions>
+</Dialog> */}
+
 <Dialog fullWidth open={uploadStudentDialog} onClose={toggleStudentDialog}>
   <DialogTitle id="add-course-dialog">Add Student</DialogTitle>
   <DialogContent dividers>
