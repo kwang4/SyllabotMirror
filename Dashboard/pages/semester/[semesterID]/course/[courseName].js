@@ -251,7 +251,7 @@ async function getCourseObj()
 <Box sx={{ minWidth: 14/18, minHeight: 80, }} onClick={toggleSlackDialog}><SlackCard></SlackCard></Box>
 
 <Dialog fullWidth open={discordDialogStatus} onClose={toggleDiscordDialog}>
-  <DialogTitle id="link-to-slack-dialog">Manage Discord Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/blob/slack/Slack/README.md" color="primary">Discord Setup Tutorial</Link></DialogTitle>
+  <DialogTitle id="link-to-discord-dialog">Manage Discord Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/wiki/Discord-Bot-Installation-Guide" color="primary">Discord Setup Tutorial</Link></DialogTitle>
   <DialogContent dividers>
   <Grid container direction="column" spacing={2}>
           <Grid>
@@ -299,7 +299,7 @@ async function getCourseObj()
 
 
 <Dialog fullWidth open={slackDialogStatus} onClose={toggleSlackDialog}>
-  <DialogTitle id="link-to-slack-dialog">Manage Slack Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/blob/slack/Slack/README.md" color="primary">Slack Setup Tutorial</Link></DialogTitle>
+  <DialogTitle id="link-to-slack-dialog">Manage Slack Connection - <Link target = "_blank" href="https://github.ncsu.edu/engr-csc-sdc/2023FallTeam06-Syllabot/wiki/Slack-Bot-Installation-Guide" color="primary">Slack Setup Tutorial</Link></DialogTitle>
   <DialogContent dividers>
   <Grid container direction="column" spacing={2}>
           <Grid>
