@@ -29,23 +29,42 @@ import APIModule from '@components/APIModule';
 export default function Roster() {
   const router = useRouter();
   const { semesterID, courseName } = router.query;
-  const studentData = [ 
-      {name: 'Jackson Hall', unityId: 'jdhall9'},
-      {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-      {name: 'Brandon Partin', unityId: 'blpartin'},
-      {name: 'Collin Riggs', unityId: 'cmriggs'},
-      {name: 'Kai-En Wang', unityId: 'kwang23'},
-      {name: 'Jackson Hall', unityId: 'jdhall9'},
-      {name: 'Daniel Buchanan', unityId: 'dsbuchan'},
-      {name: 'Brandon Partin', unityId: 'blpartin'},
-      {name: 'Collin Riggs', unityId: 'cmriggs'},
-      {name: 'Kai-En Wang', unityId: 'kwang23'},
-  ];
 
   const [uploadStudentDialog,setUploadStudentDialog] = useState(false);
   const [uploadCSVDialog,setUploadCSVDialog] = useState(false);
   const [courseObject, setCourseObject] = useState(null);
   const [roster,setRoster] = useState([]);
+  const [formalName, setFormalName] = useState('');
+  const [preferredName, setPreferredName] = useState('');
+  const [unityID, setUnityID] = useState('');
+  const [confirmDeleteDialog,setConfirmDeleteDialog] = useState(false);
+
+  const handleFormalName = (event) =>{
+    setFormalName(event.target.value);
+  }
+  const handlePreferredName = (event) =>{
+    setPreferredName(event.target.value);
+  }
+  const handleUnityID = (event) =>{
+    setUnityID(event.target.value);
+  }
+
+  /**
+   * Toggles state variable for whether the the delete confirmation dialog is open or closed. Resets resource to delete on close, and removes error messages.
+   */
+  const toggleDeleteDialog = ()=>{
+  if(confirmDeleteDialog)
+  {
+    setConfirmDeleteDialog(false);
+    setResToDelete(null);
+    setDeleteErr('');
+  }
+  else
+  {
+    setConfirmDeleteDialog(true);
+  }
+}
+
   const toggleStudentDialog = ()=>
 {
   if(uploadStudentDialog)
@@ -114,6 +133,43 @@ async function getRoster()
   setRoster(rosterResponse.data);
 }
 
+async function handleNewStudent(){
+  let response = addStudentObj();
+  toggleStudentDialog();
+  return response;
+}
+/**
+ * Method to hit an API endpoint for the whole course Object (mostly needed for courseID)
+ * If the courseObject state variable is already populated, it just returns that.
+ * @returns courseObject with course ID, name, and other fields
+ */
+async function addStudentObj(){
+  const studentData  = {
+    "user": {
+      'is_admin': 0,
+      'formal_name': formalName,
+      'preferred_name': preferredName,
+      'unity_id': unityID,
+      'is_teacher': 0
+    },
+    'role_id': 4 // this should be the ENUM for Student
+  }
+  let courseObj = null;
+  const splitIdx = courseName.lastIndexOf('-');
+  const splitCourseSection = encodeURIComponent(courseName.slice(splitIdx+1));
+  if(!courseObject)
+  {
+    courseObj = await getCourseObj();
+  }
+  else
+  {
+    courseObj = courseObject;
+  }
+  // /semesters/:semesterid/courses/:courseid/sections/:sectionNum/roster
+  const rosterResponse = await APIModule.post(`/semesters/${semesterID}/courses/${courseObj.courseID}/sections/${splitCourseSection}/roster`, studentData);
+  window.location.reload();
+  return rosterResponse;
+}
 useEffect(()=>{
   getRoster();
 },[semesterID]);
@@ -159,9 +215,15 @@ useEffect(()=>{
         <Divider sx={{borderBottomWidth: 3,borderColor:'black'}}/>
       {roster.map((student,index)=>(
             <ListItem key={index}>
-              <ListItemText primary={student.formal_name.split(',').reverse().join(' ')}/>
-              <ListItemText primary = {student.unity_id}/>
-              <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
+               <Grid container spacing={0} sx={{width:'100%'}}>
+                <Grid xs={7}>
+                  <ListItemText primary={student.formal_name.split(',').reverse().join(' ')}/>
+                </Grid>
+                <Grid xs={4}>
+                  <ListItemText primary = {student.unity_id}/>
+                </Grid>
+                <Avatar sx={{ width: 24, height: 24 }} src="/redx.png"/>
+              </Grid>
             </ListItem>
         ))}
     </List>
@@ -174,7 +236,18 @@ useEffect(()=>{
         <Button onClick={toggleUploadCSVDialog} variant="contained">Upload CSV</Button>
         </Grid>
     </Grid>
-    
+  
+{/* <Dialog fullWidth open={confirmDeleteDialog} onClose={toggleDeleteDialog}>
+  <DialogTitle id="del-res-dialog">Are you sure you want to delete <span style={{color:'#3366CC'}}>{resToDelete?.fil_name}</span>?</DialogTitle>
+  <DialogContent dividers>
+  <p style={{color:'red'}} id="errorMSG">{deleteErr}</p>
+  </DialogContent>
+    <DialogActions>
+      <Button onClick={toggleDeleteDialog} color="secondary">Cancel</Button>
+      <Button onClick={deleteFile} color="primary">Delete</Button>
+    </DialogActions>
+</Dialog> */}
+
 <Dialog fullWidth open={uploadStudentDialog} onClose={toggleStudentDialog}>
   <DialogTitle id="add-course-dialog">Add Student</DialogTitle>
   <DialogContent dividers>
@@ -184,26 +257,39 @@ useEffect(()=>{
               autoFocus
               fullWidth
               margin="dense"
-              id="courseName"
-              label="Course Name"
+              id="formalName"
+              label="Formal name"
               variant="standard"
+              onChange={handleFormalName}
             />
           </Grid>
           <Grid>
             <TextField
               margin="dense"
               fullWidth
-              id="sectionNum"
-              label="Section"
+              id="preferredName"
+              label="Preferred name"
               variant="standard"
-              type="number"
+              onChange={handlePreferredName}
             />
           </Grid>
+          <Grid>
+            <TextField
+              margin="dense"
+              fullWidth
+              id="unityID"
+              label="unity id"
+              variant="standard"
+              onChange={handleUnityID}
+            />
+          </Grid>
+         
         </Grid>
   </DialogContent>
     <DialogActions>
+      
       <Button onClick={toggleStudentDialog} color="secondary">Cancel</Button>
-      <Button onClick={toggleStudentDialog} color="primary">Add</Button>
+      <Button onClick={handleNewStudent} color="primary">Add</Button>
     </DialogActions>
 </Dialog>
 
