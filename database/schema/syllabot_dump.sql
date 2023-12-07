@@ -102,7 +102,7 @@ CREATE TABLE `deploy` (
   `dep_primary_token` varchar(100) NOT NULL,
   `dep_ss_token` VARCHAR(100) NULL,
   `dep_socket_token` VARCHAR(150) NULL,
-  `dep_server_id` VARCHAR(100) NOT NULL,
+  `dep_server_id` VARCHAR(100)  NULL,
   PRIMARY KEY (`dep_id`),
   KEY `typeID_idx` (`dep_typ_id`),
   KEY `syllabotID_idx` (`dep_syl_id`),

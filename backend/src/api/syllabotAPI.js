@@ -54,11 +54,14 @@ router.put("/deploy/:typeid", async (req, res, next) => {
   const secondary_token = req.body.secondary_token;
   const socket_token = req.body.socket_token;
   const dep_server_id = req.body.dep_server_id;
+  console.log("START HERE");
   deploy = await DeployDAO.getDeployBySectionAndType(crs_id, sec_num, typ_id);
   if (!deploy) {
     res.json({error: `Deploy not found with parameters courseid=${crs_id}, sectionNum=${sec_num}, typeid=${typ_id}`});
   }
+  console.log("Deployed");
   result = await DeployDAO.updateDeploy(primary_token, secondary_token, socket_token, dep_server_id, crs_id, sec_num, typ_id);
+  console.log("Updated deploy");
   if(typ_id == 1)
   {
     try {
