@@ -57,7 +57,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `section_syllabot` WRITE;
 /*!40000 ALTER TABLE `section_syllabot` DISABLE KEYS */;
-INSERT INTO `section_syllabot` VALUES (7,1,1,1),(8,2,2,2),(9,3,3,3),(10,4,100,4),(11,5,100,5);
+INSERT INTO `section_syllabot` VALUES (7,1,1,1),(8,2,1,1),(9,3,2,1),(10,4,2,1),(11,5,100,5);
 /*!40000 ALTER TABLE `section_syllabot` ENABLE KEYS */;
 UNLOCK TABLES;
 
