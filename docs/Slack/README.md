@@ -1,5 +1,3 @@
-# SAMPLE SAMPLE SAMPLE
-
 # Installation Guide
 This is a guide on how to install the Syllabot Slack app onto your Slack's workspace. Installing the Syllabot Slack app will allow users in your Slack workspace to use the '/ask' command to ask questions about your course and receive answers form an AI.
 
@@ -31,31 +29,25 @@ After reviewing the information click the "Create" button
 1. Visit the [Slack Api site](https://api.slack.com/) and select "Syllabot" from the "Your apps" dropdown in the top right of the page. If you are continuing from the previous section you should already be at this page.
 <br><img src="imgs/setting_up_1.png"><br>
 5. Click the "Basic Information" tab from the left sidebar
-   // Add Image
-6. Click "Show" under the "Signing Secret" and place the value in the "Signing Secret" section of your course's Syllabot page.
-   // Add Image showing how to reveal token
-   // Add Image showing the Syllabot web interface token section
-7. Click the "Basic Information" tab from the left sidebar
-   // Add Image
-8. Scroll down to "App-Level Tokens" and click "Generate Token and Scopes"
-   // Add Image
-9. In the "Token Name" field add "SOCKET_TOKEN", click  the "Add Scope" button and click "connections:write". Click "Generate"
-10. Copy the token and place the value in the "Socket Token" section of your course's Syllabot page.
-11. Click the "OAuth & Permissions tab from the left sidebar
-   // Add Image
-12. Copy the "Bot User OAuth Token" and place the value in the "Slack Token" section of your course's Syllabot page.
-   // Add Image showing how to copy token
-   // Add Image showing the Syllabot web interface token section
-
-
-// Last 3 steps
-2. Click the "Basic Information" tab from the left sidebar
 <br><img src="imgs/setting_up_2.png"><br>
-3. Click "Install to Workspace" under the "Install your app" header.
+6. Click "Show" under the "Signing Secret" and place the value in the "Signing Secret" section of your course's Syllabot page.
+<br><img src="imgs/signing_secret.png"><br>
+7. Scroll down to "App-Level Tokens" and click "Generate Token and Scopes"
+<br><img src="imgs/app_level_tokens.png"><br>
+8. In the "Token Name" field add "SOCKET_TOKEN", click  the "Add Scope" button and click "connections:write". Click "Generate"
+<br><img src="imgs/socket_token.png"><br>
+9.   Copy the newly created SOCKET_TOKEN token and place the value in the "Socket Token" section of your course's Syllabot page.
+10.    Click the "OAuth & Permissions tab from the left sidebar
+<br><img src="imgs/OAUTH_token.png"><br>
+11.    Copy the "Bot User OAuth Token" and place the value in the "Slack Token" section of your course's Syllabot page.
+12.    Click "Confirm" on the course's Syllabot page.
+13. Click the "Basic Information" tab from the left sidebar
+<br><img src="imgs/setting_up_2.png"><br>
+14. Click "Install to Workspace" under the "Install your app" header.
 <br><img src="imgs/setting_up_3.png"><br>
-4. Click "Allow"
+15. Click "Allow"
 <br><img src="imgs/setting_up_4.png"><br>
-5. Navigate to the Slack Workspace where you added the Slack app
-6. In every channel you want students to be able to ask questions to Syllabot type the command "/invite @Syllabot"
+16. Navigate to the Slack Workspace where you added the Slack app
+17. In every channel you want students to be able to ask questions to Syllabot type the command "/invite @Syllabot"
 <br>
 Congrations! Syllabot is now completely added to your classes' Slack workspace!
